@@ -1,3 +1,6 @@
+-- fixed timestep so love.update() and love.draw() are not based on fps
+require 'run'
+
 Concord = require("libs/concord").init()
 Entity = require 'libs/concord.entity'
 Component = require 'libs/concord.component'

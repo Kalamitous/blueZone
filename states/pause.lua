@@ -1,0 +1,3 @@
+local pause = {}
+
+return pause

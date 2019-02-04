@@ -40,6 +40,9 @@ function menu:init()
     settings_button:alignH("center")
     settings_button:setStyle(button_style)
     settings_button:updatePosition()
+    settings_button.onRelease = function()
+        Gamestate.switch(settings)
+    end
 
     local exit_button = menu.panel:create("Button", "exit-button")
     exit_button:setParent(container)

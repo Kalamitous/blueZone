@@ -13,7 +13,7 @@ Gamestate = require 'libs/gamestate'
 game = require 'states/game'
 menu = require 'states/menu'
 pause = require 'states/pause'
-localsettings = require 'states/settings'
+settings = require 'states/settings'
 
 function love.load()
     instance = Instance()

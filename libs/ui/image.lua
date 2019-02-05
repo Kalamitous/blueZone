@@ -1,8 +1,10 @@
 local DIR = (...):match('(.-)[^%.]+$')
+local element = require(DIR .. "element")
 
 return {
     create = function(self, id)
-        self.elements[id] = setmetatable({
+        self.elements[id] = element.new({
+            id = id,
             setSize = function(self, x, y)
                 self.scale_x = x
                 self.scale_y = y
@@ -19,7 +21,7 @@ return {
 
                 self:updateOuterSize()
             end
-        }, {__index = require(DIR .. "elements")})
+        })
 
         local attributes = self.elements[id]
 

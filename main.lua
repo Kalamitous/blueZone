@@ -19,7 +19,8 @@ menu = require 'states.menu'
 pause = require 'states.pause'
 settings = require 'states.settings'
 
-lume = require 'lume'
+document = require 'libs/ui'
+lume = require 'libs/lume'
 baton = require 'libs/baton'
 input = baton.new {
     controls = {

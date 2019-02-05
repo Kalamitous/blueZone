@@ -1,8 +1,11 @@
 local DIR = (...):match('(.-)[^%.]+$')
+local element = require(DIR .. "element")
 
 return {
     create = function(self, id)
-        self.elements[id] = setmetatable({
+        self.elements[id] = element.new({
+            id = id,
+            text = "Button",
             style = {
                 corner_radius = 4,
 
@@ -25,12 +28,13 @@ return {
             getState = function()
                 return self:getState(id)
             end
-        }, {__index = require(DIR .. "elements")})
+        })
 
         local attributes = self.elements[id]
         local style = attributes.style
 
         table.insert(self.update_table, function()
+            -- update w/ baton
             local x, y = love.mouse.getPosition()
             local pressing = love.mouse.isDown(1)
 

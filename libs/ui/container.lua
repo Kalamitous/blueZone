@@ -1,8 +1,10 @@
 local DIR = (...):match('(.-)[^%.]+$')
+local element = require(DIR .. "element")
 
 return {
     create = function(self, id, invisible)
-        self.elements[id] = setmetatable({
+        self.elements[id] = element.new({
+            id = id,
             style = {
                 corner_radius = 4,
         
@@ -13,8 +15,12 @@ return {
                 border_thickness = 4,
                 border_color = {0.5, 0, 0, 1},
             }
-        }, {__index = require(DIR .. "elements")})
+        })
 
+        for k, v in pairs(self.elements[id]) do
+            print(k)
+        end
+        
         if invisible then return end
 
         local attributes = self.elements[id]

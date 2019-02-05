@@ -1,8 +1,7 @@
 local menu = {}
 
 function menu:init()
-    local Document = require 'libs/ui'
-    menu.panel = Document.new()
+    menu.panel = document.new()
 
     local button_style = {
         corner_radius = 0,

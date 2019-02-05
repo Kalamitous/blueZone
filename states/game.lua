@@ -24,6 +24,11 @@ function game:update(dt)
 
     local player_position = player:get(Position)
     player_position:translate(dx, dy)
+
+    -- pause functionality
+    if input:down("pause") then
+        Gamestate.switch(pause)
+    end
 end
 
 function game:draw()

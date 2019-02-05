@@ -16,10 +16,6 @@ return {
                 border_color = {0.5, 0, 0, 1},
             }
         })
-
-        for k, v in pairs(self.elements[id]) do
-            print(k)
-        end
         
         if invisible then return end
 

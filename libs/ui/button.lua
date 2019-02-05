@@ -34,7 +34,7 @@ return {
         local style = attributes.style
 
         table.insert(self.update_table, function()
-            -- update w/ baton
+            -- create system where users can externally create inputs for use here (like we can use baton without hardcoding it into this library)
             local x, y = love.mouse.getPosition()
             local pressing = love.mouse.isDown(1)
 

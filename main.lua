@@ -10,6 +10,7 @@ Instance = require 'libs.concord.instance'
 -- automate these requires
 Position = require 'components.position'
 Size = require 'components.size'
+Health = require 'components.health'
 player = require 'entities.player'
 
 Gamestate = require 'libs.gamestate'

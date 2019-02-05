@@ -6,18 +6,20 @@ function game:update(dt)
     dx = 0
     dy = 0
 
-    -- implement Baton input library
-    -- also we're using arrow keys
-    if love.keyboard.isDown("w") then
-        dy = -1
-    elseif love.keyboard.isDown("s") then
-        dy = 1
+    if input:down("up") then
+        dy = dy - 1
     end
 
-    if love.keyboard.isDown("a") then
-        dx = -1
-    elseif love.keyboard.isDown("d") then
-        dx = 1
+    if input:down("down") then
+        dy = dy + 1
+    end
+
+    if input:down("left") then
+        dx = dx - 1
+    end
+
+    if input:down("right") then
+        dx = dx + 1
     end
 
     local player_position = player:get(Position)

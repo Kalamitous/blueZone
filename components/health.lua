@@ -1,7 +1,9 @@
-local Health = Component(function(e, health)
-    e.max = health
-    e.value = e.max
-end)
+local Health = class()
+
+function Health:init(health)
+    self.max = health
+    self.value = self.max
+end
 
 function Health:offset(value)
     self.value = lume.clamp(self.value + value, 0, self.max)

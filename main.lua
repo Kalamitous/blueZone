@@ -1,11 +1,13 @@
 -- fixed timestep so love.update() and love.draw() are not based on fps
+require 'class'
 require 'run'
 
-Concord = require("libs.concord").init()
-Entity = require 'libs.concord.entity'
-Component = require 'libs.concord.component'
-System = require 'libs.concord.system'
-Instance = require 'libs.concord.instance'
+tiny = require("libs.tiny/tiny")
+--Concord = require("libs.concord").init()
+--Entity = require 'libs.concord.entity'
+--Component = require 'libs.concord.component'
+--System = require 'libs.concord.system'
+--Instance = require 'libs.concord.instance'
 
 -- automate these requires
 Position = require 'components.position'

@@ -1,6 +1,8 @@
-local Size = Component(function(e, w, h)
-    e.w = w
-    e.h = h
-end)
+local Size = class()
+
+function Size:init(w, h)
+    self.w = w
+    self.h = h
+end
 
 return Size

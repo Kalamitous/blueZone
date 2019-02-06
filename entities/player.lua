@@ -1,7 +1,7 @@
-local player = Entity()
-
-player:give(Position, 0, 0)
-player:give(Size, 50, 50)
-player:give(Health, 100)
+local player = {
+    position = Position(0,0),
+    size = Size(50, 50),
+    health = Health(100)
+}
 
 return player

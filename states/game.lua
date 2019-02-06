@@ -22,7 +22,7 @@ function game:update(dt)
         dx = dx + 1
     end
 
-    local player_position = player:get(Position)
+    local player_position = player.position
     player_position:translate(dx, dy)
 
     -- pause functionality
@@ -32,8 +32,8 @@ function game:update(dt)
 end
 
 function game:draw()
-    local player_position = player:get(Position)
-    local player_size = player:get(Size)
+    local player_position = player.position
+    local player_size = player.size
 
     love.graphics.rectangle("fill", player_position.x, player_position.y, player_size.w, player_size.h)
 end

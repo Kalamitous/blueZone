@@ -39,17 +39,18 @@ input = baton.new {
 }
 
 function love.load()
-    instance = Instance()
+    instance = tiny.world()
     Gamestate.switch(menu)
 end
 
 function love.update(dt)
     input:update()
-    instance:emit("update", dt)
+    --instance:emit("update", dt)
+    instance:update(dt)
     Gamestate:update()
 end
 
 function love.draw()
-    instance:emit("draw")
+    --instance:emit("draw")
     Gamestate:draw()
 end

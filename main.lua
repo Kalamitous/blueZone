@@ -3,13 +3,6 @@ require 'class'
 require 'run'
 
 tiny = require("libs.tiny/tiny")
---Concord = require("libs.concord").init()
---Entity = require 'libs.concord.entity'
---Component = require 'libs.concord.component'
---System = require 'libs.concord.system'
---Instance = require 'libs.concord.instance'
-
--- automate these requires
 Position = require 'components.position'
 Size = require 'components.size'
 Health = require 'components.health'
@@ -45,12 +38,10 @@ end
 
 function love.update(dt)
     input:update()
-    --instance:emit("update", dt)
     instance:update(dt)
     Gamestate:update()
 end
 
 function love.draw()
-    --instance:emit("draw")
     Gamestate:draw()
 end

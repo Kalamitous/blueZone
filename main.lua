@@ -1,5 +1,5 @@
 -- fixed timestep so love.update() and love.draw() are not based on fps
-require 'class'
+require 'libs/class'
 require 'run'
 
 tiny = require("libs.tiny/tiny")

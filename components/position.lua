@@ -1,9 +1,7 @@
-local Position = class()
-
-function Position:init(x, y)
+Position = class(function(self, x, y)
     self.x = x
     self.y = y
-end
+end)
 
 function Position:translate(dx, dy)
     self.x = self.x + dx

@@ -3,9 +3,7 @@ PlayerControlSystem.filter = tiny.requireAll("controllable")
 
 function PlayerControlSystem:process(e, dt)
     -- make gravity a system
-    if not e:isInAir() then
-        e.velocity.x = 0
-    else
+    if e:isInAir() then
         e.velocity.y = e.velocity.y + 0.2
     end
 
@@ -13,7 +11,7 @@ function PlayerControlSystem:process(e, dt)
         if not e:isInAir() then
             e.velocity.x = e.velocity.x - e.speed
         else
-            e.velocity.x = lume.clamp(e.velocity.x - 0.2, -e.speed, 0)
+            e.velocity.x = lume.clamp(e.velocity.x - e.speed / 24, -e.speed, e.speed)
         end
     end
 
@@ -21,7 +19,7 @@ function PlayerControlSystem:process(e, dt)
         if not e:isInAir() then
             e.velocity.x = e.velocity.x + e.speed
         else
-            e.velocity.x = lume.clamp(e.velocity.x + 0.2, 0, e.speed)
+            e.velocity.x = lume.clamp(e.velocity.x + e.speed / 24, -e.speed, e.speed)
         end
     end
 
@@ -31,8 +29,19 @@ function PlayerControlSystem:process(e, dt)
         end
     end
 
+    -- player will jump higher the longer they hold up by increasing gravity when they let go
+    if not input:down("up") and e:isInAir() then
+        if e.velocity.y < 0 then
+            e.velocity.y = e.velocity.y + 0.1
+        end
+    end
+
     e.x = e.x + e.velocity.x
     e.y = e.y + e.velocity.y
+
+    if not e:isInAir() then
+        e.velocity.x = 0
+    end
 
     -- this will be the ground for now...
     if e.y > 300 then

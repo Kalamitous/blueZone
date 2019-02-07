@@ -3,7 +3,7 @@ require 'run'
 
 Object = require 'libs.classic'
 tiny = require 'libs.tiny'
-Player = require 'entities.player'
+Player = require 'entities.Player'
 PlayerControlSystem = require 'systems.PlayerControlSystem'
 SpriteSystem = require 'systems.SpriteSystem'
 

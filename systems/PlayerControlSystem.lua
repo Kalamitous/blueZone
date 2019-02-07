@@ -2,25 +2,33 @@ local PlayerControlSystem = tiny.processingSystem(Object:extend())
 PlayerControlSystem.filter = tiny.requireAll("controllable")
 
 function PlayerControlSystem:process(e, dt)
-    e.velocity.x = 0
-    
     -- make gravity a system
-    if e.velocity.y ~= 0 then
+    if not e:isInAir() then
+        e.velocity.x = 0
+    else
         e.velocity.y = e.velocity.y + 0.2
     end
 
-    if input:down("up") then
-        if e.velocity.y == 0 then
-            e.velocity.y = e.velocity.y - e.jump_height
+    if input:down("left") then
+        if not e:isInAir() then
+            e.velocity.x = e.velocity.x - e.speed
+        else
+            e.velocity.x = lume.clamp(e.velocity.x - 0.2, -e.speed, 0)
         end
     end
 
-    if input:down("left") then
-        e.velocity.x = e.velocity.x - e.speed
+    if input:down("right") then
+        if not e:isInAir() then
+            e.velocity.x = e.velocity.x + e.speed
+        else
+            e.velocity.x = lume.clamp(e.velocity.x + 0.2, 0, e.speed)
+        end
     end
 
-    if input:down("right") then
-        e.velocity.x = e.velocity.x + e.speed
+    if input:pressed("up") then
+        if not e:isInAir() then
+            e.velocity.y = e.velocity.y - e.jump_height
+        end
     end
 
     e.x = e.x + e.velocity.x

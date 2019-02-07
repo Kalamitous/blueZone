@@ -13,4 +13,8 @@ function Player:new(x, y)
     self.controllable = true
 end
 
+function Player:isInAir()
+    return self.velocity.y ~= 0
+end
+
 return Player

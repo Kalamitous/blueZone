@@ -1,25 +1,26 @@
 local PlayerControlSystem = tiny.processingSystem(Object:extend())
 PlayerControlSystem.filter = tiny.requireAll("controllable")
 
+local GRAVITY = 0.2
 function PlayerControlSystem:process(e, dt)
     -- make gravity a system
     if e:isInAir() then
-        e.velocity.y = e.velocity.y + 0.2
+        e.velocity.y = e.velocity.y + GRAVITY
     end
 
     if input:down("left") then
         if not e:isInAir() then
-            e.velocity.x = e.velocity.x - e.speed
+            e.velocity.x = lume.clamp(e.velocity.x - e.acceleration, -e.max_speed, 0)
         else
-            e.velocity.x = lume.clamp(e.velocity.x - e.speed / 24, -e.speed, e.speed)
+            e.velocity.x = lume.clamp(e.velocity.x - e.acceleration, -e.max_speed, e.max_speed)
         end
     end
 
     if input:down("right") then
         if not e:isInAir() then
-            e.velocity.x = e.velocity.x + e.speed
+            e.velocity.x = lume.clamp(e.velocity.x + e.acceleration, 0, e.max_speed)
         else
-            e.velocity.x = lume.clamp(e.velocity.x + e.speed / 24, -e.speed, e.speed)
+            e.velocity.x = lume.clamp(e.velocity.x + e.acceleration, -e.max_speed, e.max_speed)
         end
     end
 
@@ -32,15 +33,20 @@ function PlayerControlSystem:process(e, dt)
     -- player will jump higher the longer they hold up by increasing gravity when they let go
     if not input:down("up") and e:isInAir() then
         if e.velocity.y < 0 then
-            e.velocity.y = e.velocity.y + 0.1
+            e.velocity.y = e.velocity.y + GRAVITY / 2
         end
     end
 
     e.x = e.x + e.velocity.x
     e.y = e.y + e.velocity.y
 
-    if not e:isInAir() then
-        e.velocity.x = 0
+    -- sliding
+    if not input:down("left") and not input:down("right") and not e:isInAir() then
+        if e.velocity.x < 0 then
+            e.velocity.x = lume.clamp(e.velocity.x + e.acceleration, -e.max_speed, 0)
+        elseif e.velocity.x > 0 then
+            e.velocity.x = lume.clamp(e.velocity.x - e.acceleration, 0, e.max_speed)
+        end
     end
 
     -- this will be the ground for now...

@@ -1,7 +1,13 @@
-local player = {
-    position = Position(0,0),
-    size = Size(50, 50),
-    health = Health(100)
-}
+local Player = Object:extend()
 
-return player
+function Player:new(x, y)
+    self.x = x or 0
+    self.y = y or 0
+    self.w = 50
+    self.h = 50
+    self.health = 100
+    self.sprite = true
+    self.controllable = true
+end
+
+return Player

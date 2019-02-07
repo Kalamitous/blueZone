@@ -1,12 +1,11 @@
 -- fixed timestep so love.update() and love.draw() are not based on fps
-require 'libs/class'
 require 'run'
 
-tiny = require("libs.tiny/tiny")
-Position = require 'components.position'
-Size = require 'components.size'
-Health = require 'components.health'
-player = require 'entities.player'
+Object = require 'libs.classic'
+tiny = require 'libs.tiny'
+Player = require 'entities.player'
+PlayerControl = require 'systems.PlayerControl'
+Sprite = require 'systems.Sprite'
 
 Gamestate = require 'libs.gamestate'
 game = require 'states.game'
@@ -17,6 +16,8 @@ settings = require 'states.settings'
 document = require 'libs/ui'
 lume = require 'libs/lume'
 baton = require 'libs/baton'
+
+world = tiny.world(PlayerControl, Sprite)
 input = baton.new {
     controls = {
         left = {'key:left', 'axis:leftx-', 'button:dpleft'},
@@ -31,17 +32,22 @@ input = baton.new {
     joystick = love.joystick.getJoysticks()[1],
 }
 
+local updateFilter = tiny.rejectAny("isDrawSystem")
+local drawFilter = tiny.requireAll("isDrawSystem")
+
 function love.load()
-    instance = tiny.world()
     Gamestate.switch(menu)
 end
 
 function love.update(dt)
+    world:update(dt, updateFilter)
     input:update()
-    instance:update(dt)
+
     Gamestate:update()
 end
 
 function love.draw()
+    world:update(dt, drawFilter)
+
     Gamestate:draw()
 end

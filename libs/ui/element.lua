@@ -1,6 +1,5 @@
 local element = {}
 
--- there should be an easier way to do this without having the create a function
 function element.new(attributes)
     return setmetatable(attributes, {__index = {
         x = 0,

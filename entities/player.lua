@@ -9,7 +9,7 @@ function Player:new(x, y)
     self.max_speed = 5
     self.velocity = {x = 0, y = 0}
     self.acceleration = 0.2
-    self.jump_height = 8
+    self.jump_height = 10
     self.sprite = true
     self.controllable = true
 end

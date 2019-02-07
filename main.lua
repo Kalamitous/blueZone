@@ -4,6 +4,7 @@ require 'run'
 Object = require 'libs.classic'
 tiny = require 'libs.tiny'
 Player = require 'entities.Player'
+Enemy = require 'entities.Enemy'
 PlayerControlSystem = require 'systems.PlayerControlSystem'
 SpriteSystem = require 'systems.SpriteSystem'
 
@@ -32,22 +33,17 @@ input = baton.new {
     joystick = love.joystick.getJoysticks()[1],
 }
 
-local updateFilter = tiny.rejectAny("isDrawSystem")
-local drawFilter = tiny.requireAll("isDrawSystem")
-
 function love.load()
-    Gamestate.switch(menu)
+    --Gamestate.switch(menu)
+    Gamestate.switch(game)
 end
 
 function love.update(dt)
-    world:update(dt, updateFilter)
     input:update()
 
     Gamestate:update()
 end
 
 function love.draw()
-    world:update(dt, drawFilter)
-
     Gamestate:draw()
 end

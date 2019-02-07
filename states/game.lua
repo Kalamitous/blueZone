@@ -1,7 +1,7 @@
 local game = {}
 
 function game:init()
-    world:add(Player())
+    world:add(Player(0, 300))
 end
 
 function game:update(dt)

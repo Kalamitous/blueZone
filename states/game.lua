@@ -5,7 +5,6 @@ function game:init()
 end
 
 function game:update(dt)
-    -- pause functionality
     if input:down("pause") then
         Gamestate.switch(pause)
     end

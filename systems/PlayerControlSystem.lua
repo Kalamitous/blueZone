@@ -1,7 +1,7 @@
-local PlayerControl = tiny.processingSystem(Object:extend())
-PlayerControl.filter = tiny.requireAll("controllable")
+local PlayerControlSystem = tiny.processingSystem(Object:extend())
+PlayerControlSystem.filter = tiny.requireAll("controllable")
 
-function PlayerControl:process(e, dt)
+function PlayerControlSystem:process(e, dt)
     dx = 0
     dy = 0
 
@@ -25,4 +25,4 @@ function PlayerControl:process(e, dt)
     e.y = e.y + dy
 end
 
-return PlayerControl
+return PlayerControlSystem

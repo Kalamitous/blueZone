@@ -4,8 +4,8 @@ require 'run'
 Object = require 'libs.classic'
 tiny = require 'libs.tiny'
 Player = require 'entities.player'
-PlayerControl = require 'systems.PlayerControl'
-Sprite = require 'systems.Sprite'
+PlayerControlSystem = require 'systems.PlayerControlSystem'
+SpriteSystem = require 'systems.SpriteSystem'
 
 Gamestate = require 'libs.gamestate'
 game = require 'states.game'
@@ -17,7 +17,7 @@ document = require 'libs/ui'
 lume = require 'libs/lume'
 baton = require 'libs/baton'
 
-world = tiny.world(PlayerControl, Sprite)
+world = tiny.world(PlayerControlSystem, SpriteSystem)
 input = baton.new {
     controls = {
         left = {'key:left', 'axis:leftx-', 'button:dpleft'},

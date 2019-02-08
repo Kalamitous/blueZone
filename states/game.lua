@@ -1,7 +1,8 @@
 local game = {
-    world = tiny.world(PlayerControlSystem, SpriteSystem),
-    map = nil
+    map = nil,
+    camera = Camera()
 }
+game.world = tiny.world(PlayerControlSystem, SpriteSystem, CameraTrackingSystem(game.camera))
 
 local updateFilter = tiny.rejectAny("isDrawSystem")
 local drawFilter = tiny.requireAll("isDrawSystem")
@@ -16,6 +17,7 @@ function game:stage(file)
 end
 
 function game:update(dt)
+    self.camera:update(dt)
     self.map:update(dt)
     self.world:update(dt, updateFilter)
 
@@ -25,8 +27,12 @@ function game:update(dt)
 end
 
 function game:draw()
-    self.map:draw()
-    self.world:update(dt, drawFilter)
+    -- sti resets draw to origin
+    self.map:draw(-self.camera.x, -self.camera.y, self.camera.scale, self.camera.scale)
+
+    self.camera:attach()
+        self.world:update(dt, drawFilter)
+    self.camera:detach()
 end
 
 return game

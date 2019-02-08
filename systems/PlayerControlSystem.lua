@@ -1,6 +1,6 @@
 local PlayerControlSystem = tiny.processingSystem(Object:extend())
 local GRAVITY = 0.2
-PlayerControlSystem.filter = tiny.requireAll("controllable")
+PlayerControlSystem.filter = tiny.requireAll("is_player")
 
 function PlayerControlSystem:process(e, dt)
     if e:isInAir() then

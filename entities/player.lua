@@ -11,7 +11,7 @@ function Player:new(x, y)
     self.acceleration = 0.2
     self.jump_height = 10
     self.sprite = true
-    self.controllable = true
+    self.is_player = true
     self.hitbox = true
 end
 

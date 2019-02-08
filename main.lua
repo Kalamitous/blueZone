@@ -5,6 +5,7 @@ Object = require 'libs.classic'
 tiny = require 'libs.tiny'
 Player = require 'entities.Player'
 Enemy = require 'entities.Enemy'
+Projectile = require 'entities.Projectile'
 PlayerControlSystem = require 'systems.PlayerControlSystem'
 SpriteSystem = require 'systems.SpriteSystem'
 

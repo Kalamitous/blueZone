@@ -1,9 +1,8 @@
 local PlayerControlSystem = tiny.processingSystem(Object:extend())
+local GRAVITY = 0.2
 PlayerControlSystem.filter = tiny.requireAll("controllable")
 
-local GRAVITY = 0.2
 function PlayerControlSystem:process(e, dt)
-    -- make gravity a system
     if e:isInAir() then
         e.velocity.y = e.velocity.y + GRAVITY
     end

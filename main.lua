@@ -16,12 +16,12 @@ menu = require 'states.menu'
 pause = require 'states.pause'
 settings = require 'states.settings'
 
+sti = require 'libs.sti'
 bump = require 'libs.bump'
 document = require 'libs.ui'
 lume = require 'libs.lume'
 baton = require 'libs.baton'
 
-world = tiny.world(PlayerControlSystem, SpriteSystem)
 input = baton.new {
     controls = {
         left = {'key:left', 'axis:leftx-', 'button:dpleft'},

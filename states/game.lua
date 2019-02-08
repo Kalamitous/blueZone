@@ -1,14 +1,23 @@
-local game = {}
+local game = {
+    world = tiny.world(PlayerControlSystem, SpriteSystem),
+    map = nil
+}
 
 local updateFilter = tiny.rejectAny("isDrawSystem")
 local drawFilter = tiny.requireAll("isDrawSystem")
 
 function game:init()
-    world:add(Player(0, 300), Enemy(300, 275))
+    self.world:add(Player(0, 300), Enemy(300, 275))
+    self:stage("assets/maps/test.lua")
+end
+
+function game:stage(file)
+    self.map = sti(file, {"bump"})
 end
 
 function game:update(dt)
-    world:update(dt, updateFilter)
+    self.map:update(dt)
+    self.world:update(dt, updateFilter)
 
     if input:down("pause") then
         Gamestate.switch(pause)
@@ -16,7 +25,8 @@ function game:update(dt)
 end
 
 function game:draw()
-    world:update(dt, drawFilter)
+    self.map:draw()
+    self.world:update(dt, drawFilter)
 end
 
 return game

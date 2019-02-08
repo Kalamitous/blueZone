@@ -6,6 +6,7 @@ tiny = require 'libs.tiny'
 Player = require 'entities.Player'
 Enemy = require 'entities.Enemy'
 Projectile = require 'entities.Projectile'
+CollisionSystem = require 'systems.CollisionSystem'
 PlayerControlSystem = require 'systems.PlayerControlSystem'
 SpriteSystem = require 'systems.SpriteSystem'
 
@@ -15,9 +16,10 @@ menu = require 'states.menu'
 pause = require 'states.pause'
 settings = require 'states.settings'
 
-document = require 'libs/ui'
-lume = require 'libs/lume'
-baton = require 'libs/baton'
+bump = require 'libs.bump'
+document = require 'libs.ui'
+lume = require 'libs.lume'
+baton = require 'libs.baton'
 
 world = tiny.world(PlayerControlSystem, SpriteSystem)
 input = baton.new {

@@ -10,6 +10,7 @@ function Enemy:new(x, y)
     self.velocity = {x = 0, y = 0}
     self.acceleration = 0.2
     self.sprite = true
+    self.hitbox = true
 end
 
 return Enemy

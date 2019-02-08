@@ -12,6 +12,7 @@ function Player:new(x, y)
     self.jump_height = 10
     self.sprite = true
     self.controllable = true
+    self.hitbox = true
 end
 
 function Player:isInAir()

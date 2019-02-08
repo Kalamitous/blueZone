@@ -1,4 +1,4 @@
-local Projectile = object:extend()
+local Projectile = Object:extend()
 
 function Projectile:new(x, y)
     self.x = x or 0

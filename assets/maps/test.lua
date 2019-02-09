@@ -1,14 +1,13 @@
 return {
-  version = "1.2",
+  version = "1.1",
   luaversion = "5.1",
-  tiledversion = "1.2.2",
+  tiledversion = "1.0.3",
   orientation = "orthogonal",
   renderorder = "right-down",
   width = 20,
   height = 20,
   tilewidth = 64,
   tileheight = 64,
-  nextlayerid = 7,
   nextobjectid = 1,
   properties = {},
   tilesets = {
@@ -20,7 +19,6 @@ return {
       tileheight = 64,
       spacing = 0,
       margin = 0,
-      columns = 1,
       image = "../tilesets/test.png",
       imagewidth = 64,
       imageheight = 64,
@@ -42,7 +40,6 @@ return {
   layers = {
     {
       type = "tilelayer",
-      id = 1,
       name = "Tile Layer 1",
       x = 0,
       y = 0,
@@ -74,9 +71,9 @@ return {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
       }
     }
   }

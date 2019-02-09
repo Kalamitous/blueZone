@@ -10,13 +10,10 @@ function Player:new(x, y)
     self.velocity = {x = 0, y = 0}
     self.acceleration = 0.2
     self.jump_height = 10
+    self.on_ground = false
     self.sprite = true
     self.is_player = true
     self.hitbox = true
-end
-
-function Player:isInAir()
-    return self.velocity.y ~= 0
 end
 
 return Player

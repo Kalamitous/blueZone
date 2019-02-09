@@ -1,17 +1,47 @@
 local PhysicsSystem = tiny.processingSystem(Object:extend())
 PhysicsSystem.filter = tiny.requireAll("hitbox")
 
+local GRAVITY = 0.2
+
 function PhysicsSystem:new(bumpWorld)
     self.bumpWorld = bumpWorld
 end
 
 function PhysicsSystem:process(e, dt)
-    e.x, e.y, cols, lens = self.bumpWorld:move(e, e.x + e.velocity.x, e.y + e.velocity.y)
+    e.x, e.y, cols, len = self.bumpWorld:move(e, e.x + e.velocity.x, e.y + e.velocity.y)
 
-    if lens == 0 then
-        e.velocity.y = e.velocity.y + 0.2
+    if len == 0 then
+        e.velocity.y = e.velocity.y + GRAVITY
     else
-        e.velocity.y = 0
+        -- sliding
+        if e.velocity.x ~= 0 then
+            local dir = e.velocity.x / math.abs(e.velocity.x)
+            local max = 0
+            local min = 0
+
+            if dir == -1 then
+                max = 0
+                min = -e.max_speed
+            else
+                max = e.max_speed
+                min = 0
+            end
+
+            e.velocity.x = lume.clamp(e.velocity.x - dir * e.acceleration, min, max)
+        end
+    end
+
+    for i = 1, len do
+        if cols[i].normal.x == 0 then
+            e.velocity.y = 0
+
+            if cols[i].normal.y < 0 then
+                e.on_ground = true
+            end
+        else
+            -- stop horizontal motion if hit vertical surface
+            e.velocity.x = 0
+        end
     end
 end
 

@@ -3,9 +3,13 @@ local game = {
     camera = Camera(),
     bumpWorld = bump.newWorld()
 }
-game.world = tiny.world(PlayerControlSystem, SpriteSystem, CameraTrackingSystem(game.camera), PhysicsSystem(game.bumpWorld))
+game.world = tiny.world(
+    PhysicsSystem(game.bumpWorld),
+    PlayerControlSystem,
+    SpriteSystem,
+    CameraTrackingSystem(game.camera)
+)
 game.camera:setFollowLerp(0.2)
-game.camera:setFollowLead(8)
 game.camera:setFollowStyle('LOCKON')
 
 local updateFilter = tiny.rejectAny("isDrawSystem")
@@ -33,8 +37,9 @@ end
 
 function game:draw()
     -- sti resets draw to origin
-    self.map:draw(-self.camera.x, -self.camera.y, self.camera.scale, self.camera.scale)
-    self.map:bump_draw(self.bumpWorld, -self.camera.x, -self.camera.y, self.camera.scale, self.camera.scale)
+    -- clean this up later
+    self.map:draw(-self.camera.x + love.graphics.getWidth() / 2, -self.camera.y + love.graphics.getHeight() / 2, self.camera.scale, self.camera.scale)
+    self.map:bump_draw(self.bumpWorld, -self.camera.x + love.graphics.getWidth() / 2, -self.camera.y + love.graphics.getHeight() / 2, self.camera.scale, self.camera.scale)
     
     self.camera:attach()
         self.world:update(dt, drawFilter)

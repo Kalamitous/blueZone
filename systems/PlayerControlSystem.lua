@@ -4,9 +4,9 @@ PlayerControlSystem.filter = tiny.requireAll("is_player")
 
 function PlayerControlSystem:process(e, dt)
     if e:isInAir() then
-        e.velocity.y = e.velocity.y + GRAVITY
+        --e.velocity.y = e.velocity.y + GRAVITY
     end
-
+    
     if input:down("left") then
         if not e:isInAir() then
             e.velocity.x = lume.clamp(e.velocity.x - e.acceleration, -e.max_speed, 0)
@@ -36,8 +36,8 @@ function PlayerControlSystem:process(e, dt)
         end
     end
 
-    e.x = e.x + e.velocity.x
-    e.y = e.y + e.velocity.y
+    --e.x = e.x + e.velocity.x
+    --e.y = e.y + e.velocity.y
 
     -- sliding
     if not input:down("left") and not input:down("right") and not e:isInAir() then
@@ -46,12 +46,6 @@ function PlayerControlSystem:process(e, dt)
         elseif e.velocity.x > 0 then
             e.velocity.x = lume.clamp(e.velocity.x - e.acceleration, 0, e.max_speed)
         end
-    end
-
-    -- this will be the ground for now...
-    if e.y > 300 then
-        e.velocity.y = 0
-        e.y = 300
     end
 end
 

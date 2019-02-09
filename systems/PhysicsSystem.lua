@@ -30,35 +30,29 @@ function collisionFilter(e1, e2)
 end
 
 function PhysicsSystem:process(e, dt)
-    e.pos.x, e.pos.y, cols, len = self.bump_world:move(e, e.pos.x + e.vel.x, e.pos.y + e.vel.y, collisionFilter)
-
-    if len == 0 then
-        e.vel.y = e.vel.y + GRAVITY
-
-        e.hit_vertical_surface = false
-    else
-        -- sliding
-        if e.vel.x < 0 then
-            e.vel.x = math.min(e.vel.x + e.acc, 0)
-        elseif e.vel.x > 0 then
-            e.vel.x = math.max(e.vel.x - e.acc, 0)
-        end
+    if e.is_player then
+        e.vel.y = e.vel.y + e.gravity
     end
 
-    for i = 1, len do
-        if cols[i].normal.x == 0 then
-            e.vel.y = 0
+    e.pos.x, e.pos.y, cols, len = self.bump_world:move(e, e.pos.x + e.vel.x, e.pos.y + e.vel.y, collisionFilter)
+    
+    if e.is_player then
+        e.grounded = false
+        e.hit_vertical_surface = false
 
-            if cols[i].normal.y < 0 then
-                e.on_ground = true
+        for i = 1, len do
+            if cols[i].normal.x == 0 then
+                e.vel.y = 0
+
+                if cols[i].normal.y < 0 then
+                    e.grounded = true
+                end
+            else
+                -- stop horizontal motion if hit vertical surface
+                e.vel.x = 0
+                
+                e.hit_vertical_surface = true  
             end
-
-            e.hit_vertical_surface = false
-        else
-            -- stop horizontal motion if hit vertical surface
-            e.vel.x = 0
-            
-            e.hit_vertical_surface = true  
         end
     end
 end

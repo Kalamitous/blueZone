@@ -6,7 +6,6 @@ function Enemy:new(x, y)
 
     self.max_speed = 2
     self.vel = {x = 0, y = 0}
-    self.acc = 0.2
 
     self.health = 100
     self.target = nil

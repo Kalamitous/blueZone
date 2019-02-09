@@ -7,8 +7,9 @@ function Player:new(x, y)
     self.max_speed = 5
     self.vel = {x = 0, y = 0}
     self.acc = 0.2
+    self.gravity = 0.2
     self.jump_height = 10
-    self.on_ground = false
+    self.grounded = false
     self.hit_vertical_surface = false
 
     self.health = 100

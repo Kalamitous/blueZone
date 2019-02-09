@@ -4,21 +4,28 @@ require 'run'
 bump = require 'libs.bump'
 Object = require 'libs.classic'
 tiny = require 'libs.tiny'
+
 Player = require 'entities.Player'
 Enemy = require 'entities.Enemy'
 Projectile = require 'entities.Projectile'
+
 CameraTrackingSystem = require 'systems.CameraTrackingSystem'
 CollisionSystem = require 'systems.CollisionSystem'
 HUDSystem = require 'systems.HUDSystem'
 PlayerControlSystem = require 'systems.PlayerControlSystem'
 SpriteSystem = require 'systems.SpriteSystem'
 PhysicsSystem = require 'systems.PhysicsSystem'
+AISystem = require 'systems.AISystem'
+ProjectileSystem = require 'systems.ProjectileSystem'
+
 Camera = require 'libs.camera'
 Gamestate = require 'libs.gamestate'
+
 game = require 'states.game'
 menu = require 'states.menu'
 pause = require 'states.pause'
 settings = require 'states.settings'
+
 sti = require 'libs.sti'
 document = require 'libs.ui'
 lume = require 'libs.lume'

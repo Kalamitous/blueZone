@@ -1,3 +1,4 @@
+
 local game = {
     map = nil,
     camera = Camera(),
@@ -8,8 +9,10 @@ game.world = tiny.world(
     PlayerControlSystem,
     SpriteSystem,
     CameraTrackingSystem(game.camera),
-    HUDSystem
+    HUDSystem,
+    ProjectileSystem
 )
+game.world:add(AISystem(game.world))
 game.camera:setFollowLerp(0.2)
 game.camera:setFollowStyle('LOCKON')
 

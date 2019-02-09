@@ -4,7 +4,7 @@ SpriteSystem.isCameraBased = true
 SpriteSystem.filter = tiny.requireAll("sprite")
 
 function SpriteSystem:process(e, dt)
-    love.graphics.rectangle("fill", e.x, e.y, e.w, e.h)
+    e:draw()
 end
 
 return SpriteSystem

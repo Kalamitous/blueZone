@@ -12,6 +12,12 @@ function Enemy:new(x, y)
     self.sprite = true
     self.hitbox = true
     self.is_enemy = true
+    self.target = nil
+    self.projectile = nil
+end
+
+function Enemy:draw()
+    love.graphics.rectangle("fill", self.x, self.y, self.w, self.h)
 end
 
 return Enemy

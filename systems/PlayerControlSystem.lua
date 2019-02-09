@@ -30,6 +30,13 @@ function PlayerControlSystem:process(e, dt)
             e.on_ground = false
         end
     end
+
+    -- player will jump higher the longer they hold up by increasing gravity when they let go
+    if not input:down("up") and not e.on_ground then
+        if e.velocity.y < 0 then
+           e.velocity.y = e.velocity.y + GRAVITY
+        end
+    end
 end
 
 return PlayerControlSystem

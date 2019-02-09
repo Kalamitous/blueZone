@@ -7,19 +7,20 @@ game.world = tiny.world(
     PhysicsSystem(game.bumpWorld),
     PlayerControlSystem,
     SpriteSystem,
-    CameraTrackingSystem(game.camera)
+    CameraTrackingSystem(game.camera),
+    HUDSystem
 )
 game.camera:setFollowLerp(0.2)
 game.camera:setFollowStyle('LOCKON')
 
-local updateFilter = tiny.rejectAny("isDrawSystem")
-local drawFilter = tiny.requireAll("isDrawSystem")
+local updateFilter = tiny.filter("!isDrawSystem")
+local drawFilter = tiny.filter("isDrawSystem&!isCameraBased")
+local cameraDrawFilter = tiny.filter("isDrawSystem&isCameraBased")
 
 function game:init()
     self.world:add(
-        Player(0, 300)
-        --Player(0, 300), 
-        --Enemy(300, 275)
+        Player(0, 300), 
+        Enemy(300, 275)
     )
     self:stage("assets/maps/test.lua")
 end
@@ -45,8 +46,10 @@ function game:draw()
     self.map:draw(-self.camera.x + love.graphics.getWidth() / 2, -self.camera.y + love.graphics.getHeight() / 2, self.camera.scale, self.camera.scale)
     --self.map:bump_draw(self.bumpWorld, -self.camera.x + love.graphics.getWidth() / 2, -self.camera.y + love.graphics.getHeight() / 2, self.camera.scale, self.camera.scale)
     
+    self.world:update(dt, drawFilter)
+
     self.camera:attach()
-        self.world:update(dt, drawFilter)
+        self.world:update(dt, cameraDrawFilter)
     self.camera:detach()
 end
 

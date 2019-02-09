@@ -3,6 +3,9 @@ local game = {
     camera = Camera()
 }
 game.world = tiny.world(PlayerControlSystem, SpriteSystem, CameraTrackingSystem(game.camera))
+game.camera:setFollowLerp(0.2)
+game.camera:setFollowLead(8)
+game.camera:setFollowStyle('LOCKON')
 
 local updateFilter = tiny.rejectAny("isDrawSystem")
 local drawFilter = tiny.requireAll("isDrawSystem")

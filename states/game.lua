@@ -16,7 +16,11 @@ local updateFilter = tiny.rejectAny("isDrawSystem")
 local drawFilter = tiny.requireAll("isDrawSystem")
 
 function game:init()
-    self.world:add(Player(0, 300), Enemy(300, 275))
+    self.world:add(
+        Player(0, 300)
+        --Player(0, 300), 
+        --Enemy(300, 275)
+    )
     self:stage("assets/maps/test.lua")
 end
 
@@ -44,8 +48,6 @@ function game:draw()
     self.camera:attach()
         self.world:update(dt, drawFilter)
     self.camera:detach()
-
-    
 end
 
 return game

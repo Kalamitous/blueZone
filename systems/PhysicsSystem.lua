@@ -12,6 +12,8 @@ function PhysicsSystem:process(e, dt)
 
     if len == 0 then
         e.velocity.y = e.velocity.y + GRAVITY
+
+        e.hit_vertical_surface = false
     else
         -- sliding
         if e.velocity.x ~= 0 then
@@ -38,9 +40,13 @@ function PhysicsSystem:process(e, dt)
             if cols[i].normal.y < 0 then
                 e.on_ground = true
             end
+
+            e.hit_vertical_surface = false
         else
             -- stop horizontal motion if hit vertical surface
             e.velocity.x = 0
+            
+            e.hit_vertical_surface = true  
         end
     end
 end

@@ -7,7 +7,9 @@ function PlayerControlSystem:process(e, dt)
         if e.on_ground then
             e.velocity.x = lume.clamp(e.velocity.x - e.acceleration, -e.max_speed, e.max_speed)
         else
-            e.velocity.x = lume.clamp(e.velocity.x - e.acceleration, -e.max_speed, e.max_speed)
+            if not e.hit_vertical_surface then
+                e.velocity.x = lume.clamp(e.velocity.x - e.acceleration, -e.max_speed, e.max_speed)
+            end
         end
     end
 
@@ -15,7 +17,9 @@ function PlayerControlSystem:process(e, dt)
         if e.on_ground then
             e.velocity.x = lume.clamp(e.velocity.x + e.acceleration, -e.max_speed, e.max_speed)
         else
-            e.velocity.x = lume.clamp(e.velocity.x + e.acceleration, -e.max_speed, e.max_speed)
+            if not e.hit_vertical_surface then
+                e.velocity.x = lume.clamp(e.velocity.x + e.acceleration, -e.max_speed, e.max_speed)
+            end
         end
     end
 
@@ -28,11 +32,11 @@ function PlayerControlSystem:process(e, dt)
     end
 
     -- player will jump higher the longer they hold up by increasing gravity when they let go
-    --[[if not input:down("up") and e:isInAir() then
+    if not input:down("up") and not e.on_ground then
         if e.velocity.y < 0 then
            e.velocity.y = e.velocity.y + GRAVITY / 2
         end
-    end]]--
+    end
 end
 
 return PlayerControlSystem

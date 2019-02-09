@@ -1,11 +1,9 @@
 local ProjectileSystem = tiny.processingSystem(Object:extend())
-ProjectileSystem.filter = tiny.requireAll("is_projectile")
+ProjectileSystem.filter = tiny.filter("is_projectile")
 
 function ProjectileSystem:process(e, dt)
-    e.velocity.x = e.max_speed * math.cos(e.dir)
-    e.velocity.y = e.max_speed * math.sin(e.dir) 
-
-    print(e.velocity.x)
+    e.vel.x = e.max_speed * math.cos(e.dir)
+    e.vel.y = e.max_speed * math.sin(e.dir) 
 end
 
 return ProjectileSystem

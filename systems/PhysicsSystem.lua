@@ -1,10 +1,10 @@
 local PhysicsSystem = tiny.processingSystem(Object:extend())
-PhysicsSystem.filter = tiny.requireAll("hitbox")
+PhysicsSystem.filter = tiny.filter("hitbox")
 
 local GRAVITY = 0.2
 
-function PhysicsSystem:new(bumpWorld)
-    self.bumpWorld = bumpWorld
+function PhysicsSystem:new(bump_world)
+    self.bump_world = bump_world
 end
 
 function collisionFilter(e1, e2)
@@ -13,7 +13,7 @@ function collisionFilter(e1, e2)
         if e2.properties then
             if e2.properties.collidable then
                 -- pass through if player hasn't reached top of tile
-                if e2.y >= e1.y + e1.h then
+                if e2.y >= e1.pos.y + e1.hitbox.h then
                     return "slide"
                 end
             end
@@ -30,34 +30,24 @@ function collisionFilter(e1, e2)
 end
 
 function PhysicsSystem:process(e, dt)
-    e.x, e.y, cols, len = self.bumpWorld:move(e, e.x + e.velocity.x, e.y + e.velocity.y, collisionFilter)
+    e.pos.x, e.pos.y, cols, len = self.bump_world:move(e, e.pos.x + e.vel.x, e.pos.y + e.vel.y, collisionFilter)
 
     if len == 0 then
-        e.velocity.y = e.velocity.y + GRAVITY
+        e.vel.y = e.vel.y + GRAVITY
 
         e.hit_vertical_surface = false
     else
         -- sliding
-        if e.velocity.x ~= 0 then
-            local dir = e.velocity.x / math.abs(e.velocity.x)
-            local max = 0
-            local min = 0
-
-            if dir == -1 then
-                max = 0
-                min = -e.max_speed
-            else
-                max = e.max_speed
-                min = 0
-            end
-
-            e.velocity.x = lume.clamp(e.velocity.x - dir * e.acceleration, min, max)
+        if e.vel.x < 0 then
+            e.vel.x = math.min(e.vel.x + e.acc, 0)
+        elseif e.vel.x > 0 then
+            e.vel.x = math.max(e.vel.x - e.acc, 0)
         end
     end
 
     for i = 1, len do
         if cols[i].normal.x == 0 then
-            e.velocity.y = 0
+            e.vel.y = 0
 
             if cols[i].normal.y < 0 then
                 e.on_ground = true
@@ -66,7 +56,7 @@ function PhysicsSystem:process(e, dt)
             e.hit_vertical_surface = false
         else
             -- stop horizontal motion if hit vertical surface
-            e.velocity.x = 0
+            e.vel.x = 0
             
             e.hit_vertical_surface = true  
         end
@@ -74,11 +64,11 @@ function PhysicsSystem:process(e, dt)
 end
 
 function PhysicsSystem:onAdd(e)
-    self.bumpWorld:add(e, e.x, e.y, e.w, e.h)
+    self.bump_world:add(e, e.pos.x, e.pos.y, e.hitbox.w, e.hitbox.h)
 end
 
 function PhysicsSystem:onRemove(e)
-    self.bumpWorld:remove(e)
+    self.bump_world:remove(e)
 end
 
 return PhysicsSystem

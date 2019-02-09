@@ -1,7 +1,7 @@
 local SpriteSystem = tiny.processingSystem(Object:extend())
+SpriteSystem.filter = tiny.requireAll("sprite")
 SpriteSystem.isDrawSystem = true
 SpriteSystem.isCameraBased = true
-SpriteSystem.filter = tiny.requireAll("sprite")
 
 function SpriteSystem:process(e, dt)
     e:draw()

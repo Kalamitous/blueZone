@@ -1,22 +1,21 @@
 local Projectile = Object:extend()
 
 function Projectile:new(x, y, target)
-    self.x = x or 0
-    self.y = y or 0
-    self.w = 15
-    self.h = 15
-    self.health = 1
+    self.pos = {x = x or 0, y = y or 0}
+    self.hitbox = {w = 15, h = 15}
+
     self.max_speed = 8
-    self.velocity = {x = 0, y = 0}
-    self.sprite = true
+    self.vel = {x = 0, y = 0}
+
+    self.health = 1
     self.target = target
-    self.dir = math.atan2(self.target.y - self.y, self.target.x - self.x)
+    self.dir = math.atan2(self.target.pos.y - self.pos.y, self.target.pos.x - self.pos.x)
+    self.sprite = true
     self.is_projectile = true
-    self.hitbox = true
 end
 
 function Projectile:draw()
-    love.graphics.circle("fill", self.x, self.y, self.w, self.h)
+    love.graphics.circle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
 end
 
 return Projectile

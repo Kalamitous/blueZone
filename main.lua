@@ -1,35 +1,33 @@
 -- fixed timestep so love.update() and love.draw() are not based on fps
 require 'run'
 
-bump = require 'libs.bump'
+Camera = require 'libs.camera'
 Object = require 'libs.classic'
+Gamestate = require 'libs.gamestate'
+
+sti = require 'libs.sti'
+document = require 'libs.ui'
+baton = require 'libs.baton'
+bump = require 'libs.bump'
+lume = require 'libs.lume'
 tiny = require 'libs.tiny'
 
-Player = require 'entities.Player'
 Enemy = require 'entities.Enemy'
+Player = require 'entities.Player'
 Projectile = require 'entities.Projectile'
 
-CameraTrackingSystem = require 'systems.CameraTrackingSystem'
-CollisionSystem = require 'systems.CollisionSystem'
-HUDSystem = require 'systems.HUDSystem'
-PlayerControlSystem = require 'systems.PlayerControlSystem'
-SpriteSystem = require 'systems.SpriteSystem'
-PhysicsSystem = require 'systems.PhysicsSystem'
 AISystem = require 'systems.AISystem'
+CameraTrackingSystem = require 'systems.CameraTrackingSystem'
+HUDSystem = require 'systems.HUDSystem'
+PhysicsSystem = require 'systems.PhysicsSystem'
+PlayerControlSystem = require 'systems.PlayerControlSystem'
 ProjectileSystem = require 'systems.ProjectileSystem'
-
-Camera = require 'libs.camera'
-Gamestate = require 'libs.gamestate'
+SpriteSystem = require 'systems.SpriteSystem'
 
 game = require 'states.game'
 menu = require 'states.menu'
 pause = require 'states.pause'
 settings = require 'states.settings'
-
-sti = require 'libs.sti'
-document = require 'libs.ui'
-lume = require 'libs.lume'
-baton = require 'libs.baton'
 
 input = baton.new {
     controls = {

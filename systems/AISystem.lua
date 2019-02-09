@@ -1,5 +1,5 @@
 local AISystem = tiny.processingSystem(Object:extend())
-AISystem.filter = tiny.requireAll("is_enemy")
+AISystem.filter = tiny.filter("is_enemy")
 
 function AISystem:init(world)
     self.world = world
@@ -17,7 +17,7 @@ function AISystem:process(e, dt)
     end
 
     if not self.projectile then
-        self.projectile = Projectile(e.x, e.y, e.target)
+        self.projectile = Projectile(e.pos.x, e.pos.y, e.target)
         
         self.world:add(self.projectile)
     end

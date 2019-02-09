@@ -34,7 +34,14 @@ return {
       properties = {},
       terrains = {},
       tilecount = 1,
-      tiles = {}
+      tiles = {
+        {
+          id = 0,
+          properties = {
+            ["collidable"] = true
+          }
+        }
+      }
     }
   },
   layers = {
@@ -49,9 +56,7 @@ return {
       opacity = 1,
       offsetx = 0,
       offsety = 0,
-      properties = {
-        ["collidable"] = true
-      },
+      properties = {},
       encoding = "lua",
       data = {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

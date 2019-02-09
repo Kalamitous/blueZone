@@ -7,8 +7,20 @@ function PhysicsSystem:new(bumpWorld)
     self.bumpWorld = bumpWorld
 end
 
+function collisionFilter(e1, e2)
+    if e1.is_player then
+        -- we know for sure it is a map tile if it has properties.collidable
+        if e2.properties.collidable then
+            -- pass through if player hasn't reached top of tile
+            if e2.y >= e1.y + e1.h then
+                return "slide"
+            end
+        end
+    end
+end
+
 function PhysicsSystem:process(e, dt)
-    e.x, e.y, cols, len = self.bumpWorld:move(e, e.x + e.velocity.x, e.y + e.velocity.y)
+    e.x, e.y, cols, len = self.bumpWorld:move(e, e.x + e.velocity.x, e.y + e.velocity.y, collisionFilter)
 
     if len == 0 then
         e.velocity.y = e.velocity.y + GRAVITY

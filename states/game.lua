@@ -43,7 +43,7 @@ function game:draw()
     -- sti resets draw to origin
     -- clean this up later
     self.map:draw(-self.camera.x + love.graphics.getWidth() / 2, -self.camera.y + love.graphics.getHeight() / 2, self.camera.scale, self.camera.scale)
-    self.map:bump_draw(self.bumpWorld, -self.camera.x + love.graphics.getWidth() / 2, -self.camera.y + love.graphics.getHeight() / 2, self.camera.scale, self.camera.scale)
+    --self.map:bump_draw(self.bumpWorld, -self.camera.x + love.graphics.getWidth() / 2, -self.camera.y + love.graphics.getHeight() / 2, self.camera.scale, self.camera.scale)
     
     self.camera:attach()
         self.world:update(dt, drawFilter)

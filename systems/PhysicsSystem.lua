@@ -19,6 +19,14 @@ function collisionFilter(e1, e2)
             end
         end
     end
+
+    if e1.is_enemy then
+        if e2.is_player then
+            return nil
+        end
+
+        return "slide"
+    end
 end
 
 function PhysicsSystem:process(e, dt)

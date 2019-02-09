@@ -11,6 +11,7 @@ function Enemy:new(x, y)
     self.acceleration = 0.2
     self.sprite = true
     self.hitbox = true
+    self.is_enemy = true
 end
 
 return Enemy

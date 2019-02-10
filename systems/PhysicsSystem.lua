@@ -21,7 +21,7 @@ function collisionFilter(e1, e2)
     end
 
     if e1.is_enemy then
-        if e2.is_player then
+        if e2.is_player or e2.is_enemy then
             return nil
         end
 

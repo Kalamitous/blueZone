@@ -34,6 +34,8 @@ end
 function game:stage(file)
     self.map = sti(file, {"bump"})
     self.map:bump_init(game.bump_world)
+
+    self.world:add(SpawnSystem(self.world, self.map))
 end
 
 function game:update(dt)

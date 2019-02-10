@@ -8,7 +8,7 @@ return {
   height = 20,
   tilewidth = 64,
   tileheight = 64,
-  nextobjectid = 1,
+  nextobjectid = 23,
   properties = {},
   tilesets = {
     {
@@ -79,6 +79,63 @@ return {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+      }
+    },
+    {
+      type = "objectgroup",
+      name = "Object Layer 1",
+      visible = false,
+      opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      draworder = "topdown",
+      properties = {},
+      objects = {
+        {
+          id = 14,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 256,
+          y = 512,
+          width = 768,
+          height = 64,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["enemy_spawn"] = true
+          }
+        },
+        {
+          id = 15,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 640,
+          y = 768,
+          width = 384,
+          height = 64,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["enemy_spawn"] = true
+          }
+        },
+        {
+          id = 16,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 256,
+          y = 832,
+          width = 256,
+          height = 64,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["enemy_spawn"] = true
+          }
+        }
       }
     }
   }

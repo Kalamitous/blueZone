@@ -10,6 +10,7 @@ document = require 'libs.ui'
 baton = require 'libs.baton'
 bump = require 'libs.bump'
 lume = require 'libs.lume'
+tick = require 'libs.tick'
 tiny = require 'libs.tiny'
 
 Enemy = require 'entities.Enemy'
@@ -22,6 +23,7 @@ HUDSystem = require 'systems.HUDSystem'
 PhysicsSystem = require 'systems.PhysicsSystem'
 PlayerControlSystem = require 'systems.PlayerControlSystem'
 ProjectileSystem = require 'systems.ProjectileSystem'
+SpawnSystem = require 'systems.SpawnSystem'
 SpriteSystem = require 'systems.SpriteSystem'
 
 game = require 'states.game'
@@ -49,9 +51,10 @@ function love.load()
 end
 
 function love.update(dt)
-    input:update()
+    tick.update(dt)
+    input:update(dt)
 
-    Gamestate:update()
+    Gamestate:update(dt)
 end
 
 function love.draw()

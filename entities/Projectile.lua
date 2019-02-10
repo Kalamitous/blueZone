@@ -5,11 +5,11 @@ function Projectile:new(x, y, target)
     self.hitbox = {w = 15, h = 15}
 
     self.target = target
-    self.angle = lume.angle(self.pos.x, self.pos.y , self.target.pos.x, self.target.pos.y)
+    self.ang = lume.angle(self.pos.x, self.pos.y , self.target.pos.x, self.target.pos.y)
 
     self.max_speed = 8
     self.vel = {}
-    self.vel.x, self.vel.y = lume.vector(self.angle, self.max_speed)
+    self.vel.x, self.vel.y = lume.vector(self.ang, self.max_speed)
 
     self.health = 1
     self.sprite = true

@@ -24,10 +24,7 @@ local camera_draw_filter = tiny.filter("isDrawSystem&isCameraBased")
 local window_w, window_h = love.graphics.getDimensions()
 
 function game:init()
-    self.world:add(
-        Player(0, 300), 
-        Enemy(300, 275)
-    )
+    self.world:add(Player(0, 300))
     self:stage("assets/maps/test.lua")
 end
 

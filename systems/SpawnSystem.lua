@@ -22,6 +22,10 @@ function SpawnSystem:new(ecs_world, map)
             table.insert(self.enemy_spawns, o)
         end
     end
+    
+    for i = 1, self.max_enemies do
+        self:spawnEnemy()
+    end
 
     self.timer = tick.recur(function()
         if self.current_enemies >= self.max_enemies then return end
@@ -41,10 +45,11 @@ function SpawnSystem:process(e, dt)
     end
 end
 
+-- distribute enemies to correspond w/ platform size
 function SpawnSystem:spawnEnemy()
-    local spawn = self.enemy_spawns[math.random(#self.enemy_spawns)]
-
-    self.ecs_world:add(Enemy(spawn.x + lume.random(50, spawn.width - 50), spawn.y - 75))
+    local spawn_platform = self.enemy_spawns[math.random(#self.enemy_spawns)]
+    
+    self.ecs_world:add(Enemy(spawn_platform.x + lume.random(spawn_platform.width - 50), spawn_platform.y - 75, spawn_platform))
     self.spawned_enemies = self.spawned_enemies + 1
 end
 

@@ -12,7 +12,7 @@ function AISystem:process(e, dt)
 
     e.target = nil
 
-    -- we shouldnt be looping each frame
+    -- we shouldnt be looping each frame (redo this w/ bump segments)
     if not e.target then
         for k, v in pairs(self.ecs_world.entities) do
             if tostring(v) == "Object" then

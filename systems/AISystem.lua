@@ -46,7 +46,9 @@ function AISystem:process(e, dt)
         -- if enemy doesn't have move_timer then we know it was manually stopped
         if e.stopped then
             tick.delay(function()
-                e.desires_move = true
+                if not e.target then
+                    e.desires_move = true
+                end
             end, lume.random(e.max_wait_time))
 
             e.stopped = false

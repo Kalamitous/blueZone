@@ -5,7 +5,7 @@ function Enemy:new(x, y, spawn_platform)
     self.hitbox = {w = 50, h = 75}
 
     self.max_speed = 1
-    self.vel = {x = 0, y = 0}
+	self.vel = {x = 0, y = 0}
 
     self.goal = {}
 	self.desires_move = true
@@ -13,6 +13,9 @@ function Enemy:new(x, y, spawn_platform)
     self.max_wait_time = 10
     self.move_timer = nil
 	self.wait_timer = nil
+
+	self.dir = 1
+	self.view_cone = math.pi / 3
     
     self.target = nil
     self.can_shoot = true
@@ -39,7 +42,9 @@ function Enemy:moveTo(x, y, wait)
     local ang = lume.angle(self.pos.x, self.pos.y, x, y)
 
     self.vel.x, self.vel.y = lume.vector(ang, self.max_speed)
-    self.desires_move = false
+	self.desires_move = false
+	
+	self:updateDir()
 
     self.move_timer = tick.delay(function()
         self.vel = {x = 0, y = 0}
@@ -50,6 +55,12 @@ function Enemy:moveTo(x, y, wait)
 			end, lume.random(self.max_idle_time))
 		end
     end, dist / (self.max_speed / (1 / 100)))
+end
+
+function Enemy:updateDir()
+	if self.vel.x == 0 then return end
+
+	self.dir = lume.sign(self.vel.x)
 end
 
 function Enemy:stop()

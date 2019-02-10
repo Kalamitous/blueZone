@@ -16,8 +16,18 @@ function AISystem:process(e, dt)
         for k, v in pairs(self.ecs_world.entities) do
             if tostring(v) == "Object" then
                 if v.is_player then
-                    if lume.distance(e.pos.x, e.pos.y, v.pos.x, v.pos.y) <= 200 then
-                        e.target = v
+                    if lume.distance(e.pos.x, e.pos.y, v.pos.x, v.pos.y) <= 512 then
+                        local ang = lume.angle(e.pos.x, e.pos.y, v.pos.x, v.pos.y)
+                        
+                        if e.dir == 1 then
+                            if ang > -e.view_cone / 2 and ang < e.view_cone / 6 then
+                                e.target = v
+                            end
+                        else
+                            if ang > math.pi - e.view_cone / 2 and ang < math.pi + e.view_cone / 2 then
+                                e.target = v
+                            end
+                        end
                     end
                 end
             end

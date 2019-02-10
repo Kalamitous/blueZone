@@ -9,7 +9,7 @@ end
 
 function collisionFilter(e1, e2)
     if e1.is_player then
-        -- we know for sure it is a map tile if it has properties.collidable
+        -- we know for sure it is a map tile if it has `properties`
         if e2.properties then
             if e2.properties.collidable then
                 -- pass through if player hasn't reached top of tile
@@ -17,6 +17,8 @@ function collisionFilter(e1, e2)
                     return "slide"
                 end
             end
+        elseif e2.is_projectile then
+            e1.health = e1.health - e2.dmg
         end
     end
 

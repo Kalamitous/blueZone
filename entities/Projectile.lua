@@ -1,9 +1,10 @@
 local Projectile = Object:extend()
 
-function Projectile:new(x, y, target)
+function Projectile:new(x, y, owner, target)
     self.pos = {x = x or 0, y = y or 0}
     self.hitbox = {w = 15, h = 15}
 
+    self.owner = owner
     self.target = target
     self.ang = lume.angle(self.pos.x, self.pos.y , self.target.pos.x, self.target.pos.y)
 
@@ -12,6 +13,7 @@ function Projectile:new(x, y, target)
     self.vel.x, self.vel.y = lume.vector(self.ang, self.max_speed)
 
     self.health = 1
+    self.dmg = 10
     self.sprite = true
     self.is_projectile = true
 end

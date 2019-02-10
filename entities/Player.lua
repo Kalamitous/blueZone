@@ -18,7 +18,9 @@ function Player:new(x, y)
 end
 
 function Player:draw()
-    love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
+    love.graphics.setColor(0, 0.5, 1)
+        love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
+    love.graphics.setColor(1, 1, 1)
 end
 
 return Player

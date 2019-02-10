@@ -12,6 +12,7 @@ function AISystem:process(e, dt)
 
     e.target = nil
 
+    -- we shouldnt be looping each frame
     if not e.target then
         for k, v in pairs(self.ecs_world.entities) do
             if tostring(v) == "Object" then
@@ -20,11 +21,12 @@ function AISystem:process(e, dt)
                         local ang = lume.angle(e.pos.x, e.pos.y, v.pos.x, v.pos.y)
                         
                         if e.dir == 1 then
-                            if ang > -e.view_cone / 2 and ang < e.view_cone / 6 then
+                            if ang > -e.view_cone / 2 and ang < e.view_cone / 2 then
                                 e.target = v
                             end
                         else
-                            if ang > math.pi - e.view_cone / 2 and ang < math.pi + e.view_cone / 2 then
+                            -- this is so wack
+                            if (ang < -math.pi + e.view_cone / 2 and ang > -math.pi) or (ang < math.pi and ang > math.pi - e.view_cone / 2) then
                                 e.target = v
                             end
                         end

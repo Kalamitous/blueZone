@@ -37,6 +37,8 @@ function collisionFilter(e1, e2)
                 e1.health = e1.health - e2.dmg
                 e1.invincible = true
 
+                e2.remove = true
+
                 tick.delay(function()
                     e1.invincible = false
                 end, e1.invincible_time)

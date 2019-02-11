@@ -33,6 +33,14 @@ function game:stage(file)
     self.map:bump_init(game.bump_world)
 
     self.ecs_world:add(SpawnSystem(self.ecs_world, self.map))
+
+    -- there has to be a better way to do this.
+    local objects = self.map.objects
+    for _, o in pairs(objects) do
+        if o.name == "Bounds" then
+            self.camera:setBounds(o.x, o.y, o.width, o.height)
+        end
+    end
 end
 
 function game:update(dt)

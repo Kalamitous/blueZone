@@ -5,6 +5,13 @@ local GRAVITY = 0.2
 
 function PhysicsSystem:new(bump_world)
     self.bump_world = bump_world
+    -- TODO: create map collision bounds
+    --[[local objects = self.map.objects
+    for _, o in pairs(objects) do
+        if o.name == "Bounds" then
+            self.camera:setBounds(o.x, o.y, o.width, o.height)
+        end
+    end]]--
 end
 
 function collisionFilter(e1, e2)

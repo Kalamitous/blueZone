@@ -10,7 +10,6 @@ game.ecs_world:add(
     CameraTrackingSystem(game.camera),
     HUDSystem,
     PlayerControlSystem,
-    ProjectileSystem,
     SpriteSystem
 )
 
@@ -32,7 +31,7 @@ function game:stage(file)
     self.map:bump_init(game.bump_world)
 
     self.ecs_world:add(
-        PhysicsSystem(game.bump_world, game.map),
+        PhysicsSystem(game.ecs_world, game.bump_world, game.map),
         SpawnSystem(self.ecs_world, self.map)
     )
 

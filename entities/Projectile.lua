@@ -23,5 +23,3 @@ function Projectile:draw()
 end
 
 return Projectile
-
--- TODO: make projectiles die when off screen

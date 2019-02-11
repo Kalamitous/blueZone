@@ -22,7 +22,6 @@ CameraTrackingSystem = require 'systems.CameraTrackingSystem'
 HUDSystem = require 'systems.HUDSystem'
 PhysicsSystem = require 'systems.PhysicsSystem'
 PlayerControlSystem = require 'systems.PlayerControlSystem'
-ProjectileSystem = require 'systems.ProjectileSystem'
 SpawnSystem = require 'systems.SpawnSystem'
 SpriteSystem = require 'systems.SpriteSystem'
 

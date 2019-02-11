@@ -3,11 +3,13 @@ PhysicsSystem.filter = tiny.filter("hitbox")
 
 local GRAVITY = 0.2
 
-function PhysicsSystem:new(bump_world, map)
+function PhysicsSystem:new(ecs_world, bump_world, map)
+    self.ecs_world = ecs_world
     self.bump_world = bump_world
     self.map = map
     
     local objects = self.map.objects
+
     for _, o in pairs(objects) do
         if o.name == "Bounds" then
             self.bump_world:add({is_bound = true}, o.x - 1, o.y, 1, o.height)
@@ -40,10 +42,13 @@ function collisionFilter(e1, e2)
                 end, e1.invincible_time)
             end
         end
-    end
-
-    if e1.is_enemy then
+    elseif e1.is_enemy then
         return nil
+    elseif e1.is_projectile then
+        if e2.is_bound then
+            --TODO: make projectile disappear after the whole thing is off bounds
+            e1.remove = true
+        end
     end
 end
 
@@ -72,6 +77,10 @@ function PhysicsSystem:process(e, dt)
                 e.hit_vertical_surface = true  
             end
         end
+    end
+
+    if e.remove then
+        self.ecs_world:remove(e)
     end
 end
 

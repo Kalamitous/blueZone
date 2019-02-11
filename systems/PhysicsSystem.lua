@@ -18,7 +18,14 @@ function collisionFilter(e1, e2)
                 end
             end
         elseif e2.is_projectile then
-            e1.health = e1.health - e2.dmg
+            if not e1.invincible then
+                e1.health = e1.health - e2.dmg
+                e1.invincible = true
+
+                tick.delay(function()
+                    e1.invincible = false
+                end, e1.invincible_time)
+            end
         end
     end
 

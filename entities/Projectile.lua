@@ -24,4 +24,4 @@ end
 
 return Projectile
 
--- make projectiles die when off screen
+-- TODO: make projectiles die when off screen

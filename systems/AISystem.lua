@@ -1,8 +1,15 @@
 local AISystem = tiny.processingSystem(Object:extend())
 AISystem.filter = tiny.filter("is_enemy")
 
-function AISystem:new(ecs_world)
+function AISystem:new(ecs_world, bump_world)
     self.ecs_world = ecs_world
+    self.bump_world = bump_world
+
+    self.view_cone_subdivisions = 10
+end
+
+function viewConeFilter(item)
+    return item.is_player
 end
 
 function AISystem:process(e, dt)
@@ -12,32 +19,36 @@ function AISystem:process(e, dt)
 
     e.target = nil
 
-    -- we shouldnt be looping each frame (redo this w/ bump segments)
-    if not e.target then
-        for k, v in pairs(self.ecs_world.entities) do
-            if tostring(v) == "Object" then
-                if v.is_player then
-                    if lume.distance(e.pos.x, e.pos.y, v.pos.x, v.pos.y) <= 512 then
-                        local ang = lume.angle(e.pos.x, e.pos.y, v.pos.x, v.pos.y)
-                        
-                        if e.dir == 1 then
-                            if ang > -e.view_cone / 2 and ang < e.view_cone / 2 then
-                                e.target = v
-                            end
-                        else
-                            -- this is so wack
-                            if (ang < -math.pi + e.view_cone / 2 and ang > -math.pi) or (ang < math.pi and ang > math.pi - e.view_cone / 2) then
-                                e.target = v
-                            end
-                        end
-                    end
-                end
-            end
+    -- TODO: optimize by calculating segment coords on init
+    for i = 1, self.view_cone_subdivisions do
+        local x1, y1, x_offset, y_offset
+
+        if e.dir == 1 then
+            x1 = e.pos.x
+            y1 = e.pos.y + (e.hitbox.h / (self.view_cone_subdivisions - 1)) * (i - 1)
+
+            x_offset, y_offset = lume.vector(-e.view_cone / 2 + (e.view_cone / (self.view_cone_subdivisions - 1)) * (i - 1), e.view_dist)
+        else
+            x1 = e.pos.x + e.hitbox.w
+            y1 = e.pos.y + (e.hitbox.h / (self.view_cone_subdivisions - 1)) * (i - 1)
+
+            x_offset, y_offset = lume.vector(math.pi + e.view_cone / 2 - (e.view_cone / (self.view_cone_subdivisions - 1)) * (i - 1), e.view_dist)
+        end
+
+        local x2 = x1 + x_offset
+        local y2 = y1 + y_offset
+
+        local items, len = self.bump_world:querySegment(x1, y1, x2, y2, viewConeFilter)
+
+        if #items > 0 then
+            e.target = items[1]
         end
     end
-
+    
     if e.target then
-        e:stop()
+        if not e.stopped then
+            e:stop()
+        end
 
         if e.can_shoot then
             e:shoot(self.ecs_world)

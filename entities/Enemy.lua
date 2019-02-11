@@ -14,8 +14,9 @@ function Enemy:new(x, y, spawn_platform)
     self.move_timer = nil
 	self.wait_timer = nil
 
-	self.dir = 1
-	self.view_cone = math.pi / 3
+    self.dir = 1
+    self.view_dist = 450
+	self.view_cone = math.pi / 4
     
     self.target = nil
     self.can_shoot = true

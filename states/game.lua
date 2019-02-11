@@ -9,7 +9,6 @@ game.ecs_world:add(
     AISystem(game.ecs_world, game.bump_world),
     CameraTrackingSystem(game.camera),
     HUDSystem,
-    PhysicsSystem(game.bump_world),
     PlayerControlSystem,
     ProjectileSystem,
     SpriteSystem
@@ -32,7 +31,10 @@ function game:stage(file)
     self.map = sti(file, {"bump"})
     self.map:bump_init(game.bump_world)
 
-    self.ecs_world:add(SpawnSystem(self.ecs_world, self.map))
+    self.ecs_world:add(
+        PhysicsSystem(game.bump_world, game.map),
+        SpawnSystem(self.ecs_world, self.map)
+    )
 
     -- there has to be a better way to do this.
     local objects = self.map.objects

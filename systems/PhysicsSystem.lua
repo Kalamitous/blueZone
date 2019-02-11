@@ -3,15 +3,19 @@ PhysicsSystem.filter = tiny.filter("hitbox")
 
 local GRAVITY = 0.2
 
-function PhysicsSystem:new(bump_world)
+function PhysicsSystem:new(bump_world, map)
     self.bump_world = bump_world
-    -- TODO: create map collision bounds
-    --[[local objects = self.map.objects
+    self.map = map
+    
+    local objects = self.map.objects
     for _, o in pairs(objects) do
         if o.name == "Bounds" then
-            self.camera:setBounds(o.x, o.y, o.width, o.height)
+            self.bump_world:add({is_bound = true}, o.x - 1, o.y, 1, o.height)
+            self.bump_world:add({is_bound = true}, o.x + o.width, o.y, 1, o.height)
+            self.bump_world:add({is_bound = true}, o.x, o.y - 1, o.width, 1)
+            self.bump_world:add({is_bound = true}, o.x, o.y + o.height, o.width, 1)
         end
-    end]]--
+    end
 end
 
 function collisionFilter(e1, e2)
@@ -24,6 +28,8 @@ function collisionFilter(e1, e2)
                     return "slide"
                 end
             end
+        elseif e2.is_bound then
+            return "slide"
         elseif e2.is_projectile then
             if not e1.invincible then
                 e1.health = e1.health - e2.dmg

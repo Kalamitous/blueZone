@@ -6,7 +6,7 @@ function SpawnSystem:new(ecs_world, map)
     self.map = map
 
     self.total_enemies = 20
-    self.max_enemies = 100
+    self.max_enemies = 10
     self.spawned_enemies = 0
     self.current_enemies = 0
 

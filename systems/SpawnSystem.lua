@@ -45,7 +45,7 @@ function SpawnSystem:process(e, dt)
     end
 end
 
--- distribute enemies to correspond w/ platform size
+-- TODO: distribute enemies to correspond w/ platform size
 function SpawnSystem:spawnEnemy()
     local spawn_platform = self.enemy_spawns[math.random(#self.enemy_spawns)]
     

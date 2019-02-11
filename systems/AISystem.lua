@@ -9,7 +9,9 @@ function AISystem:new(ecs_world, bump_world)
 end
 
 function viewConeFilter(item)
-    return item.is_player
+    if item.properties or item.is_player then
+        return true
+    end
 end
 
 function AISystem:process(e, dt)
@@ -40,8 +42,10 @@ function AISystem:process(e, dt)
 
         local items, len = self.bump_world:querySegment(x1, y1, x2, y2, viewConeFilter)
 
-        if #items > 0 then
-            e.target = items[1]
+        if len > 0 then
+            if items[1].is_player then
+                e.target = items[1]
+            end
         end
     end
     

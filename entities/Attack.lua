@@ -1,12 +1,12 @@
 local Attack = Object:extend()
 
-function Attack:new(offset_x, offset_y, lifetime, owner)
+function Attack:new(offset_x, offset_y, lifetime, parent)
     self.offset = { x = offset_x or 0, y = offset_y or 0 }
-    self.pos = {x = owner.pos.x + offset_x or 0, y = owner.pos.y + offset_y or 0}
+    self.pos = {x = parent.pos.x + offset_x or 0, y = parent.pos.y + offset_y or 0}
     self.hitbox = {w = 20, h = 40}
     self.vel = {x = 0, y = 0}
 
-    self.owner = owner
+    self.parent = parent
     self.bump_world = bump_world
     
     self.dmg = 20
@@ -24,9 +24,6 @@ function Attack:draw()
 end
 
 function Attack:update(dt)
-    self.vel.x = self.owner.vel.x
-    self.vel.y = self.owner.vel.y
-    --self.pos.x, self.pos.y, cols, len = self.bump_world:move(self, self.owner.pos.x + self.offset.x, self.owner.pos.y + self.offset.y, self.filter)
 end
 
 function Attack:filter(e)

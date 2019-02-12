@@ -30,6 +30,11 @@ function PhysicsSystem:process(e, dt)
         e:update(dt)
     end
 
+    if e.parent then
+        new_x = e.parent.pos.x + e.offset.x
+        new_y = e.parent.pos.y + e.offset.y
+    end
+
     e.pos.x, e.pos.y, cols, len = self.bump_world:move(e, new_x, new_y, e.filter)
 
     if e.onCollide then

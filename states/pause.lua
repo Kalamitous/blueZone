@@ -1,8 +1,8 @@
-local pause = {}
+local pause = {
+    panel = document.new()
+}
 
 function pause:init()
-    pause.panel = document.new()
-
     local button_style = {
         corner_radius = 0,
         border_thickness = 0,

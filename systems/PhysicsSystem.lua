@@ -56,10 +56,10 @@ end
 
 function PhysicsSystem:process(e, dt)
     if e.is_player then
-        e.vel.y = e.vel.y + e.gravity
+        e.vel.y = e.vel.y + e.gravity * dt
     end
 
-    e.pos.x, e.pos.y, cols, len = self.bump_world:move(e, e.pos.x + e.vel.x, e.pos.y + e.vel.y, collisionFilter)
+    e.pos.x, e.pos.y, cols, len = self.bump_world:move(e, e.pos.x + e.vel.x * dt, e.pos.y + e.vel.y * dt, collisionFilter)
     
     if e.is_player then
         e.grounded = false

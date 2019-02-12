@@ -56,10 +56,15 @@ function love.update(dt)
     tick.update(dt)
     input:update(dt)
 
-    -- need to update each state to actually pass in dt. doesnt matter rn bc we are using fixed timestep
-    Gamestate:update(dt)
+    game:update(dt)
+    menu:update(dt)
+    pause:update(dt)
+    settings:update(dt)
 end
 
 function love.draw()
-    Gamestate:draw()
+    game:draw()
+    menu:draw()
+    pause:draw()
+    settings:draw()
 end

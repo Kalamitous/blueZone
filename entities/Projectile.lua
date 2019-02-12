@@ -8,7 +8,7 @@ function Projectile:new(x, y, owner, target)
     self.target = target
     self.ang = lume.angle(self.pos.x, self.pos.y, self.target.pos.x + self.target.hitbox.w / 2, self.target.pos.y + self.target.hitbox.h / 2)
 
-    self.max_speed = 2
+    self.max_speed = 200
     self.vel = {}
     self.vel.x, self.vel.y = lume.vector(self.ang, self.max_speed)
 

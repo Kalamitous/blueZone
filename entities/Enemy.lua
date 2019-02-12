@@ -4,7 +4,7 @@ function Enemy:new(x, y, spawn_platform)
     self.pos = {x = x or 0, y = y or 0}
     self.hitbox = {w = 50, h = 75}
 
-    self.max_speed = 1
+    self.max_speed = 100
 	self.vel = {x = 0, y = 0}
 
     self.goal = {}
@@ -42,6 +42,7 @@ function Enemy:moveTo(x, y, wait)
     local dist = lume.distance(self.pos.x, self.pos.y, x, y)
     local ang = lume.angle(self.pos.x, self.pos.y, x, y)
 
+    -- TODO: RE DO THIS TO WORK WITH NON FIXED TIMESTEP
     self.vel.x, self.vel.y = lume.vector(ang, self.max_speed)
 	self.desires_move = false
 	

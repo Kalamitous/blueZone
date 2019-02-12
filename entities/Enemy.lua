@@ -7,7 +7,8 @@ function Enemy:new(x, y, spawn_platform)
     self.max_speed = 100
 	self.vel = {x = 0, y = 0}
 
-    self.goal = {}
+    self.goal_dist = 0
+    self.cur_dist = 0
 	self.desires_move = true
 	self.stopped = false
     self.max_wait_time = 10
@@ -38,25 +39,14 @@ function Enemy:draw()
     love.graphics.setColor(1, 1, 1)
 end
 
-function Enemy:moveTo(x, y, wait)
-    local dist = lume.distance(self.pos.x, self.pos.y, x, y)
+function Enemy:moveTo(x, y)
     local ang = lume.angle(self.pos.x, self.pos.y, x, y)
 
-    -- TODO: RE DO THIS TO WORK WITH NON FIXED TIMESTEP
+    self.goal_dist = lume.distance(self.pos.x, self.pos.y, x, y)
     self.vel.x, self.vel.y = lume.vector(ang, self.max_speed)
 	self.desires_move = false
 	
 	self:updateDir()
-
-    self.move_timer = tick.delay(function()
-        self.vel = {x = 0, y = 0}
-
-		if wait then
-			self.wait_timer = tick.delay(function()
-				self.desires_move = true
-			end, lume.random(self.max_idle_time))
-		end
-    end, dist / (self.max_speed / (1 / 100)))
 end
 
 function Enemy:updateDir()
@@ -67,11 +57,7 @@ end
 
 function Enemy:stop()
     self.vel = {x = 0, y = 0}
-
-    if self.move_timer then
-        self.move_timer:stop()
-        self.move_timer = nil
-    end
+    self.cur_dist = 0
 
     if self.wait_timer then
         self.wait_timer:stop()

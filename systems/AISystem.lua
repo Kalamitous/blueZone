@@ -16,7 +16,7 @@ end
 
 function AISystem:process(e, dt)
     if e.desires_move then
-        e:moveTo(e.spawn_platform.x + lume.random(e.spawn_platform.width - 50), e.pos.y, true)
+        e:moveTo(e.spawn_platform.x + lume.random(e.spawn_platform.width - 50), e.pos.y)
     end
 
     e.target = nil

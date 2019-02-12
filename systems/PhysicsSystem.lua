@@ -59,8 +59,15 @@ function PhysicsSystem:process(e, dt)
         e.vel.y = e.vel.y + e.gravity * dt
     end
 
-    e.pos.x, e.pos.y, cols, len = self.bump_world:move(e, e.pos.x + e.vel.x * dt, e.pos.y + e.vel.y * dt, collisionFilter)
-    
+    local new_x = e.pos.x + e.vel.x * dt
+    local new_y = e.pos.y + e.vel.y * dt
+
+    if e.is_enemy then
+        e.cur_dist = e.cur_dist + lume.distance(e.pos.x, e.pos.y, new_x, new_y)
+    end
+
+    e.pos.x, e.pos.y, cols, len = self.bump_world:move(e, new_x, new_y, collisionFilter)
+  
     if e.is_player then
         e.grounded = false
         e.hit_vertical_surface = false
@@ -78,6 +85,10 @@ function PhysicsSystem:process(e, dt)
                 
                 e.hit_vertical_surface = true  
             end
+        end
+    elseif e.is_enemy then
+        if e.cur_dist >= e.goal_dist then
+            e:stop()
         end
     end
 

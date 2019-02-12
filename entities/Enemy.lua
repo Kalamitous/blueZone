@@ -24,6 +24,7 @@ function Enemy:new(x, y, spawn_platform)
     self.reload_time = 3
 
     self.health = 100
+    self.invincible_time = 2
     self.spawn_platform = spawn_platform
     self.sprite = true
     self.is_enemy = true

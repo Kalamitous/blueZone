@@ -25,7 +25,6 @@ PhysicsSystem = require 'systems.PhysicsSystem'
 PlayerControlSystem = require 'systems.PlayerControlSystem'
 SpawnSystem = require 'systems.SpawnSystem'
 SpriteSystem = require 'systems.SpriteSystem'
-AttackSystem = require 'systems.AttackSystem'
 
 game = require 'states.game'
 menu = require 'states.menu'

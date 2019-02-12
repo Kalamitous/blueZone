@@ -26,11 +26,11 @@ function PhysicsSystem:process(e, dt)
     local new_x = e.pos.x + e.vel.x * dt
     local new_y = e.pos.y + e.vel.y * dt
 
-    e.pos.x, e.pos.y, cols, len = self.bump_world:move(e, new_x, new_y, e.filter)
-
     if e.update then
         e:update(dt)
     end
+
+    e.pos.x, e.pos.y, cols, len = self.bump_world:move(e, new_x, new_y, e.filter)
 
     if e.onCollide then
         e:onCollide(cols, len)

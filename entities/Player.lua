@@ -15,6 +15,9 @@ function Player:new(x, y)
     self.health = 100
     self.invincible = false
     self.invincible_time = 2
+    self.attack_cooldown = 0.5
+    self.attack_lifetime = 0.25
+    self.can_attack = true
     self.opacity = 1
     self.flash_timer = nil
 
@@ -85,7 +88,11 @@ function Player:onCollide(cols, len)
 end
 
 function Player:attack(ecs_world)
-    ecs_world:add(Attack(50, 5, 20, self))
+    ecs_world:add(Attack(50, 5, self.attack_lifetime, self))
+    self.can_attack = false
+    tick.delay(function() 
+        self.can_attack = true
+    end, self.attack_cooldown)
 end
 
 return Player

@@ -29,6 +29,17 @@ function Enemy:new(x, y, spawn_platform)
     self.is_enemy = true
 end
 
+function Enemy:update(dt)
+    local new_x = self.pos.x + self.vel.x * dt
+    local new_y = self.pos.y + self.vel.y * dt
+
+    self.cur_dist = self.cur_dist + lume.distance(self.pos.x, self.pos.y, new_x, new_y)
+
+    if self.cur_dist >= self.goal_dist then
+        self:stop()
+    end
+end
+
 function Enemy:draw()
     if self.target then
         love.graphics.setColor(1, 0.5, 0.5)
@@ -39,6 +50,16 @@ function Enemy:draw()
     love.graphics.setColor(1, 1, 1)
 end
 
+function Enemy:filter(e)
+    return nil
+end
+
+function Enemy:updateDir()
+	if self.vel.x == 0 then return end
+
+	self.dir = lume.sign(self.vel.x)
+end
+
 function Enemy:moveTo(x, y)
     local ang = lume.angle(self.pos.x, self.pos.y, x, y)
 
@@ -47,12 +68,6 @@ function Enemy:moveTo(x, y)
 	self.desires_move = false
 	
 	self:updateDir()
-end
-
-function Enemy:updateDir()
-	if self.vel.x == 0 then return end
-
-	self.dir = lume.sign(self.vel.x)
 end
 
 function Enemy:stop()
@@ -70,6 +85,7 @@ end
 
 function Enemy:shoot(ecs_world)
     ecs_world:add(Projectile(self.pos.x + self.hitbox.w / 2, self.pos.y + self.hitbox.h / 2, self, self.target))
+    
     self.can_shoot = false
 
     tick.delay(function()

@@ -19,7 +19,35 @@ function Projectile:new(x, y, owner, target)
 end
 
 function Projectile:draw()
-    love.graphics.circle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
+    love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
+end
+
+function Projectile:filter(e)
+    if e.is_player then
+        return "cross"
+    end
+end
+
+function Projectile:onCollide(cols, len)
+    for i = 1, len do
+        local e = cols[i].other
+
+        if e.is_bound then
+            -- TODO: make disappear when completely off bounds
+            self.remove = true
+        elseif e.is_player then
+            if not e.invincible then
+                e.health = e.health - self.dmg
+                e.invincible = true
+                
+                self.remove = true
+
+                tick.delay(function()
+                    e.invincible = false
+                end, e.invincible_time)
+            end
+        end
+    end
 end
 
 return Projectile

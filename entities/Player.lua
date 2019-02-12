@@ -22,6 +22,11 @@ function Player:new(x, y)
     self.is_player = true
 end
 
+function Player:update(dt)
+    self.grounded = false
+    self.hit_vertical_surface = false
+end
+
 function Player:draw()
     if self.invincible then
         if not self.flash_timer then
@@ -45,6 +50,38 @@ function Player:draw()
     love.graphics.setColor(0, 0.5, 1, self.opacity)
         love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
     love.graphics.setColor(1, 1, 1)
+end
+
+function Player:filter(e)
+    -- we know for sure it is a map tile if it has `properties`
+    if e.properties then
+        if e.properties.collidable then
+            -- pass through if player hasn't reached top of tile
+            if e.y >= self.pos.y + self.hitbox.h then
+                return "slide"
+            end
+        end
+    elseif e.is_bound then
+        return "slide"
+    end
+end
+
+function Player:onCollide(cols, len)
+    for i = 1, len do
+        local e = cols[i]
+
+        if e.normal.x == 0 then
+            self.vel.y = 0
+
+            if e.normal.y < 0 then
+                self.grounded = true
+            end
+        else
+            -- stop horizontal motion if hit vertical surface
+            self.vel.x = 0
+            self.hit_vertical_surface = true  
+        end
+    end
 end
 
 return Player

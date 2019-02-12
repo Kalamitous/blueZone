@@ -40,7 +40,9 @@ function Attack:onCollide(cols, len)
                 e.invincible = true
                 
                 self.remove = true
-
+                if e.health <= 0 then
+                    e.remove = true
+                end
                 tick.delay(function()
                     e.invincible = false
                 end, e.invincible_time)

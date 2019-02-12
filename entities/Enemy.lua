@@ -65,6 +65,7 @@ function Enemy:draw()
     end
     brightness = self.health / 100
     love.graphics.setColor(brightness, brightness, brightness, self.opacity)
+    
     if self.target then
         love.graphics.setColor(1 * brightness, 0.5 * brightness, 0.5 * brightness, self.opacity)
     end

@@ -5,6 +5,7 @@ Camera = require 'libs.camera'
 Object = require 'libs.classic'
 Gamestate = require 'libs.gamestate'
 
+animator = require 'libs.animator'
 sti = require 'libs.sti'
 document = require 'libs.ui'
 baton = require 'libs.baton'
@@ -53,18 +54,12 @@ function love.load()
 end
 
 function love.update(dt)
-    tick.update(dt)
     input:update(dt)
+    tick.update(dt)
 
-    game:update(dt)
-    menu:update(dt)
-    pause:update(dt)
-    settings:update(dt)
+    Gamestate.update(dt)
 end
 
 function love.draw()
-    game:draw()
-    menu:draw()
-    pause:draw()
-    settings:draw()
+    Gamestate.draw(dt)
 end

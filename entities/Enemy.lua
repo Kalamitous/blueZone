@@ -41,8 +41,10 @@ function Enemy:update(dt)
 end
 
 function Enemy:draw()
+    brightness = self.health / 100
+    love.graphics.setColor(brightness, brightness, brightness)
     if self.target then
-        love.graphics.setColor(1, 0.5, 0.5)
+        love.graphics.setColor(1 * brightness, 0.5 * brightness, 0.5 * brightness)
     end
         love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
     love.graphics.setColor(0, 0, 0)

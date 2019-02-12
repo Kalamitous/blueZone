@@ -16,6 +16,7 @@ tiny = require 'libs.tiny'
 Enemy = require 'entities.Enemy'
 Player = require 'entities.Player'
 Projectile = require 'entities.Projectile'
+Attack = require 'entities.Attack'
 
 AISystem = require 'systems.AISystem'
 CameraTrackingSystem = require 'systems.CameraTrackingSystem'
@@ -24,6 +25,7 @@ PhysicsSystem = require 'systems.PhysicsSystem'
 PlayerControlSystem = require 'systems.PlayerControlSystem'
 SpawnSystem = require 'systems.SpawnSystem'
 SpriteSystem = require 'systems.SpriteSystem'
+AttackSystem = require 'systems.AttackSystem'
 
 game = require 'states.game'
 menu = require 'states.menu'
@@ -36,6 +38,7 @@ input = baton.new {
         right = {'key:right', 'axis:leftx+', 'button:dpright'},
         up = {'key:up', 'axis:lefty-', 'button:dpup'},
         down = {'key:down', 'axis:lefty+', 'button:dpdown'},
+        z = {'key:z', 'button:a'},
         pause = {'key:escape'},
     },
     pairs = {

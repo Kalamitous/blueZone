@@ -1,6 +1,10 @@
 local PlayerControlSystem = tiny.processingSystem(Object:extend())
 PlayerControlSystem.filter = tiny.filter("is_player")
 
+function PlayerControlSystem:new(ecs_world)
+    self.ecs_world = ecs_world
+end
+
 function PlayerControlSystem:process(e, dt)
     if input:down("left") then
         if e.grounded then
@@ -42,6 +46,11 @@ function PlayerControlSystem:process(e, dt)
         if e.vel.y < 0 then
            e.vel.y = e.vel.y + e.gravity * dt
         end
+    end
+
+    --attacks
+    if input:pressed("z") then
+        e:attack(self.ecs_world)
     end
 end
 

@@ -9,8 +9,9 @@ game.ecs_world:add(
     AISystem(game.ecs_world, game.bump_world),
     CameraTrackingSystem(game.camera),
     HUDSystem,
-    PlayerControlSystem,
-    SpriteSystem
+    PlayerControlSystem(game.ecs_world),
+    SpriteSystem,
+    AttackSystem(game.ecs_world, game.bump_world)
 )
 
 game.camera:setFollowLerp(0.2)

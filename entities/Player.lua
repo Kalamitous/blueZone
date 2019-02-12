@@ -84,4 +84,8 @@ function Player:onCollide(cols, len)
     end
 end
 
+function Player:attack(ecs_world)
+    ecs_world:add(Attack(50, 5, 20, self))
+end
+
 return Player

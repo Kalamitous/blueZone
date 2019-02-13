@@ -2,24 +2,34 @@ local PlayerControlSystem = tiny.processingSystem(Object:extend())
 PlayerControlSystem.filter = tiny.filter("is_player")
 
 function PlayerControlSystem:process(e, dt)
+    e.running = false
+
     if input:down("left") then
         if e.grounded then
             e.vel.x = math.max(e.vel.x - e.acc * dt, -e.max_speed)
+
+            e.running = true
         else
             if not e.hit_vertical_surface then
                 e.vel.x = math.max(e.vel.x - e.acc * dt / 2, -e.max_speed)
             end
         end
+
+        e.dir = -1
     end
 
     if input:down("right") then
         if e.grounded then
             e.vel.x = math.min(e.vel.x + e.acc * dt, e.max_speed)
+
+            e.running = true
         else
             if not e.hit_vertical_surface then
                 e.vel.x = math.min(e.vel.x + e.acc * dt / 2, e.max_speed)
             end
         end
+
+        e.dir = 1
     end
 
     -- sliding

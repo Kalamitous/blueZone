@@ -9,6 +9,9 @@ function Player:new(x, y)
     self.acc = 3000
     self.gravity = 3000
     self.jump_height = 1200
+    self.dir = 1
+
+    self.running = false
     self.grounded = false
     self.hit_vertical_surface = false
 
@@ -30,23 +33,29 @@ function Player:new(x, y)
             assets.player.run[1],
             assets.player.run[2],
             assets.player.run[3]
-        }, 1 / 10)
+        }, 1 / 10),
+        jump = animator.newAnimation({
+            assets.player.jump[1],
+        }, 1 / 1)
     }
     self.anims.idle:setLooping(true)
     self.anims.run:setLooping(true)
+    self.anims.jump:setLooping(true)
 end
 
 function Player:update(dt)
-    self.grounded = false
-    self.hit_vertical_surface = false
-
-    if self.vel.x == 0 then
-        self.anims.cur = self.anims.idle
+    if not self.grounded then
+        self:changeAnim("jump")
+    elseif self.running and not self.hit_vertical_surface then
+        self:changeAnim("run")
     else
-        self.anims.cur = self.anims.run
+        self:changeAnim("idle")
     end
 
     self.anims.cur:update(dt)
+
+    self.grounded = false
+    self.hit_vertical_surface = false
 end
 
 function Player:draw()
@@ -71,10 +80,9 @@ function Player:draw()
 
     love.graphics.setColor(1, 1, 1, self.opacity)
         love.graphics.rectangle("line", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
-        print(self.anims.cur:getWidth())
         love.graphics.push()
-        love.graphics.translate(self.pos.x + self.hitbox.w / 2 - (self.anims.cur:getWidth() or 0) * self.anims.scale / 2, self.pos.y + self.hitbox.h - (self.anims.cur:getHeight() or 0) * self.anims.scale)
-        love.graphics.scale(self.anims.scale)
+        love.graphics.translate(self.pos.x + self.hitbox.w / 2 - self.anims.cur:getWidth() * self.anims.scale / 2 * self.dir, self.pos.y + self.hitbox.h - self.anims.cur:getHeight() * self.anims.scale)
+        love.graphics.scale(self.anims.scale * self.dir, self.anims.scale)
             self.anims.cur:draw()
         love.graphics.pop()
     love.graphics.setColor(1, 1, 1, 1)
@@ -110,6 +118,13 @@ function Player:onCollide(cols, len)
             self.hit_vertical_surface = true  
         end
     end
+end
+
+function Player:changeAnim(anim)
+    if self.anims.cur == self.anims[anim] then return end
+
+    self.anims.cur = self.anims[anim]
+    self.anims.cur:restart()
 end
 
 return Player

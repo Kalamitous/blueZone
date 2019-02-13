@@ -6,7 +6,7 @@ function pause:init()
     local button_style = {
         corner_radius = 0,
         border_thickness = 0,
-        font = love.graphics.newFont("assets/fonts/RobotoCondensed-Regular.ttf", 16)
+        font = assets.fonts.roboto_condensed(16)
     }
 
     local container = pause.panel:create("Container", "container", true)

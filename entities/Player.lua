@@ -9,13 +9,14 @@ function Player:new(x, y)
     self.acc = 3000
     self.gravity = 3000
     self.jump_height = 1200
+    self.bounciness = 0.5
     self.dir = 1
 
     self.running = false
     self.grounded = false
     self.hit_vertical_surface = false
 
-    self.health = 100
+    self.health = 50
     self.invincible = false
     self.invincible_time = 1.5
     self.opacity = 1
@@ -36,20 +37,26 @@ function Player:new(x, y)
         }, 1 / 10),
         jump = animator.newAnimation({
             assets.player.jump[1],
+        }, 1 / 1),
+        death = animator.newAnimation({
+            assets.player.death[1],
         }, 1 / 1)
     }
     self.anims.idle:setLooping(true)
     self.anims.run:setLooping(true)
     self.anims.jump:setLooping(true)
+    self.anims.death:setLooping(true)
 end
 
 function Player:update(dt)
-    if not self.grounded then
-        self:changeAnim("jump")
-    elseif self.running and not self.hit_vertical_surface then
-        self:changeAnim("run")
-    else
-        self:changeAnim("idle")
+    if self.health > 0 then
+        if not self.grounded then
+            self:changeAnim("jump")
+        elseif self.running and not self.hit_vertical_surface then
+            self:changeAnim("run")
+        else
+            self:changeAnim("idle")
+        end
     end
 
     self.anims.cur:update(dt)
@@ -91,13 +98,23 @@ function Player:filter(e)
             end
         end
     elseif e.is_bound then
-        return "slide"
+        if self.health <= 0 then
+            return "bounce"
+        else
+            return "slide"
+        end
     end
 end
 
 function Player:onCollide(cols, len)
     for i = 1, len do
         local e = cols[i]
+
+        if e.type == "bounce" then
+            self:bounce(e.normal.x, e.normal.y)
+
+            return
+        end
 
         if e.normal.x == 0 then
             self.vel.y = 0
@@ -121,7 +138,17 @@ function Player:changeAnim(anim)
 end
 
 function Player:onDeath()
-    self.remove = true
+    self:changeAnim("death")
+end
+
+function Player:bounce(nx, ny)
+    if (nx < 0 and self.vel.x > 0) or (nx > 0 and self.vel.x < 0) then
+        self.vel.x = -self.vel.x * self.bounciness
+    end
+
+    if (ny < 0 and self.vel.y > 0) or (self.vel.y > 0 and self.vel.y < 0) then
+        self.vel.y = -self.vel.y * self.bounciness
+    end
 end
 
 return Player

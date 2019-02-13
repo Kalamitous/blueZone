@@ -37,14 +37,19 @@ function Projectile:onCollide(cols, len)
             self.remove = true
         elseif e.is_player then
             if not e.invincible then
-                e.health = e.health - self.dmg
+                e.health = math.max(e.health - self.dmg, 0)
+
+                if e.health <= 0 then
+                    e.vel.x, e.vel.y = lume.vector(self.ang, self.max_speed * 4)
+                end
+
                 e.invincible = true
-                
-                self.remove = true
 
                 tick.delay(function()
                     e.invincible = false
                 end, e.invincible_time)
+ 
+                self.remove = true
             end
         end
     end

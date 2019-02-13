@@ -50,4 +50,8 @@ function Projectile:onCollide(cols, len)
     end
 end
 
+function Projectile:onDeath()
+    self.remove = true
+end
+
 return Projectile

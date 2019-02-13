@@ -17,7 +17,7 @@ function Player:new(x, y)
 
     self.health = 100
     self.invincible = false
-    self.invincible_time = 2
+    self.invincible_time = 1.5
     self.opacity = 1
     self.flash_timer = nil
 
@@ -54,11 +54,6 @@ function Player:update(dt)
 
     self.anims.cur:update(dt)
 
-    self.grounded = false
-    self.hit_vertical_surface = false
-end
-
-function Player:draw()
     if self.invincible then
         if not self.flash_timer then
             self.flash_timer = tick.recur(function()
@@ -78,14 +73,12 @@ function Player:draw()
         end
     end
 
-    love.graphics.setColor(1, 1, 1, self.opacity)
-        love.graphics.rectangle("line", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
-        love.graphics.push()
-        love.graphics.translate(self.pos.x + self.hitbox.w / 2 - self.anims.cur:getWidth() * self.anims.scale / 2 * self.dir, self.pos.y + self.hitbox.h - self.anims.cur:getHeight() * self.anims.scale)
-        love.graphics.scale(self.anims.scale * self.dir, self.anims.scale)
-            self.anims.cur:draw()
-        love.graphics.pop()
-    love.graphics.setColor(1, 1, 1, 1)
+    self.grounded = false
+    self.hit_vertical_surface = false
+end
+
+function Player:draw()
+    love.graphics.rectangle("line", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
 end
 
 function Player:filter(e)
@@ -125,6 +118,10 @@ function Player:changeAnim(anim)
 
     self.anims.cur = self.anims[anim]
     self.anims.cur:restart()
+end
+
+function Player:onDeath()
+    self.remove = true
 end
 
 return Player

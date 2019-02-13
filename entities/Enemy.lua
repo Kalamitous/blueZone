@@ -93,4 +93,8 @@ function Enemy:shoot(ecs_world)
     end, self.reload_time)
 end
 
+function Enemy:onDeath()
+    self.remove = true
+end
+
 return Enemy

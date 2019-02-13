@@ -20,6 +20,7 @@ function Player:new(x, y)
     self.can_attack = true
     self.opacity = 1
     self.flash_timer = nil
+    self.dir = 0
 
     self.sprite = true
     self.is_player = true
@@ -28,7 +29,15 @@ end
 function Player:update(dt)
     self.grounded = false
     self.hit_vertical_surface = false
+    self:updateDir()
 end
+
+function Player:updateDir()
+	if self.vel.x == 0 then return end
+
+	self.dir = lume.sign(self.vel.x)
+end
+
 
 function Player:draw()
     if self.invincible then
@@ -88,7 +97,11 @@ function Player:onCollide(cols, len)
 end
 
 function Player:attack(ecs_world)
-    ecs_world:add(Attack(50, 5, self.attack_lifetime, self))
+    if self.dir == 1 then
+        ecs_world:add(Attack(50, 5, self.attack_lifetime, self))
+    else
+        ecs_world:add(Attack(-20, 5, self.attack_lifetime, self))
+    end
     self.can_attack = false
     tick.delay(function() 
         self.can_attack = true

@@ -24,13 +24,11 @@ function Enemy:new(x, y, spawn_platform)
     self.reload_time = 3
 
     self.health = 100
-    self.opacity = 1
-    self.flash_timer = nil
-    self.invincible= false
-    self.invincible_time = 2
+    self.last_hit = nil
     self.spawn_platform = spawn_platform
     self.sprite = true
     self.is_enemy = true
+    self.attack_indicator = false
 end
 
 function Enemy:update(dt)
@@ -45,29 +43,13 @@ function Enemy:update(dt)
 end
 
 function Enemy:draw()
-    if self.invincible then
-        if not self.flash_timer then
-            self.flash_timer = tick.recur(function()
-                if self.opacity == 1 then
-                    self.opacity = 0
-                else
-                    self.opacity = 1
-                end
-            end, 0.1)
-        end
-    else
-        if self.flash_timer then
-            self.flash_timer:stop()
-            self.flash_timer = nil
-
-            self.opacity = 1
-        end
-    end
     brightness = self.health / 100
-    love.graphics.setColor(brightness, brightness, brightness, self.opacity)
+    love.graphics.setColor(brightness, brightness, brightness)
     
-    if self.target then
-        love.graphics.setColor(1 * brightness, 0.5 * brightness, 0.5 * brightness, self.opacity)
+    if self.attack_indicator then
+        love.graphics.setColor(1, 0, 0)
+    elseif self.target then
+        love.graphics.setColor(0.5 * brightness, 1 * brightness, 0.5 * brightness)
     end
         love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
     love.graphics.setColor(0, 0, 0)

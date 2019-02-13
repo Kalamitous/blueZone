@@ -1,6 +1,7 @@
 local Attack = Object:extend()
 
 function Attack:new(offset_x, offset_y, lifetime, parent)
+    self.base_offset = { x = offset_x or 0, y = offset_y or 0 }
     self.offset = { x = offset_x or 0, y = offset_y or 0 }
     self.pos = {x = parent.pos.x + offset_x or 0, y = parent.pos.y + offset_y or 0}
     self.hitbox = {w = 20, h = 40}
@@ -14,6 +15,7 @@ function Attack:new(offset_x, offset_y, lifetime, parent)
     self.sprite = true
     self.is_projectile = false
     self.is_attack = true
+    self.indicator_length = 0.25
     tick.delay(function() 
         self.remove = true
     end, self.lifetime)
@@ -24,6 +26,11 @@ function Attack:draw()
 end
 
 function Attack:update(dt)
+    if self.parent.dir == 1 then
+        self.offset.x = self.base_offset.x
+    else
+        self.offset.x = -self.hitbox.w
+    end
 end
 
 function Attack:filter(e)
@@ -35,17 +42,17 @@ function Attack:onCollide(cols, len)
         local e = cols[i].other
 
         if e.is_enemy then
-            if not e.invincible then
+            if e.last_hit ~= self then
                 e.health = e.health - self.dmg
-                e.invincible = true
                 
-                self.remove = true
                 if e.health <= 0 then
                     e.remove = true
                 end
-                tick.delay(function()
-                    e.invincible = false
-                end, e.invincible_time)
+                e.last_hit = self
+                e.attack_indicator = true
+                tick.delay(function() 
+                    e.attack_indicator = false
+                end, self.indicator_length)
             end
         end
     end

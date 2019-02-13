@@ -51,6 +51,8 @@ function love.load()
     math.randomseed(os.time())
     math.random(); math.random(); math.random()
 
+    love.graphics.setDefaultFilter("nearest", "nearest")
+
     --Gamestate.switch(menu)
     Gamestate.switch(game)
 end

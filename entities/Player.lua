@@ -2,7 +2,7 @@ local Player = Object:extend()
 
 function Player:new(x, y)
     self.pos = {x = x or 0, y = y or 0}
-    self.hitbox = {w = 50, h = 50}
+    self.hitbox = {w = 50, h = 67}
 
     self.max_speed = 500
     self.vel = {x = 0, y = 0}
@@ -20,11 +20,33 @@ function Player:new(x, y)
 
     self.sprite = true
     self.is_player = true
+
+    self.anims = {
+        scale = 4,
+        idle = animator.newAnimation({
+            assets.player.idle[1],
+        }, 1 / 1),
+        run = animator.newAnimation({
+            assets.player.run[1],
+            assets.player.run[2],
+            assets.player.run[3]
+        }, 1 / 10)
+    }
+    self.anims.idle:setLooping(true)
+    self.anims.run:setLooping(true)
 end
 
 function Player:update(dt)
     self.grounded = false
     self.hit_vertical_surface = false
+
+    if self.vel.x == 0 then
+        self.anims.cur = self.anims.idle
+    else
+        self.anims.cur = self.anims.run
+    end
+
+    self.anims.cur:update(dt)
 end
 
 function Player:draw()
@@ -47,9 +69,15 @@ function Player:draw()
         end
     end
 
-    love.graphics.setColor(0, 0.5, 1, self.opacity)
-        love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
-    love.graphics.setColor(1, 1, 1)
+    love.graphics.setColor(1, 1, 1, self.opacity)
+        love.graphics.rectangle("line", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
+        print(self.anims.cur:getWidth())
+        love.graphics.push()
+        love.graphics.translate(self.pos.x + self.hitbox.w / 2 - (self.anims.cur:getWidth() or 0) * self.anims.scale / 2, self.pos.y + self.hitbox.h - (self.anims.cur:getHeight() or 0) * self.anims.scale)
+        love.graphics.scale(self.anims.scale)
+            self.anims.cur:draw()
+        love.graphics.pop()
+    love.graphics.setColor(1, 1, 1, 1)
 end
 
 function Player:filter(e)

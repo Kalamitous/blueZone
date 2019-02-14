@@ -7,8 +7,7 @@ Gamestate = require "libs.gamestate"
 
 animator = require "libs.animator"
 sti = require "libs.sti"
---document = require "libs.ui"
-Document = require "libs.better_ui"
+document = require "libs.ui"
 baton = require "libs.baton"
 bump = require "libs.bump"
 cargo = require "libs.cargo"
@@ -30,11 +29,10 @@ SpawnSystem = require "systems.SpawnSystem"
 SpriteSystem = require "systems.SpriteSystem"
 UpdateSystem = require "systems.UpdateSystem"
 
---game = require "states.game"
---menu = require "states.menu"
---pause = require "states.pause"
---settings = require "states.settings"
-test = require "states.test"
+game = require "states.game"
+menu = require "states.menu"
+pause = require "states.pause"
+settings = require "states.settings"
 
 assets = cargo.init("assets")
 input = baton.new {
@@ -59,7 +57,7 @@ function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
 
     --Gamestate.switch(menu)
-    Gamestate.switch(test)
+    Gamestate.switch(game)
 end
 
 function love.update(dt)

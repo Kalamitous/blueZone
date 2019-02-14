@@ -11,7 +11,6 @@ function document.new()
 
         Button = require(DIR .. "button"),
         Container = require(DIR .. "container"),
-        Dropdown = require(DIR .. "dropdown"),
         Image = require(DIR .. "image"),
         Label = require(DIR .. "label"),
 

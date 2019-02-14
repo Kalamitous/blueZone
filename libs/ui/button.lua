@@ -64,6 +64,8 @@ return {
                 end
             end
         end)
+
+        local font_height
         
         table.insert(self.draw_table, function()
             local color = style.color
@@ -80,12 +82,12 @@ return {
                 border_color = style.border_press_color
             end
 
-            local font_height = 12
-
             if style.font then
                 love.graphics.setFont(style.font)
 
                 font_height = style.font:getHeight()
+            else
+                font_height = love.graphics.getFont():getHeight()
             end
 
             love.graphics.setColor(unpack(border_color))
@@ -96,8 +98,8 @@ return {
 
             love.graphics.setColor(unpack(text_color))
             love.graphics.printf(attributes.text, attributes.x + style.border_thickness, attributes.y + style.border_thickness + attributes.innerHeight / 2 - font_height / 2, attributes.innerWidth, "center")
-            
-            love.graphics.setColor(255, 255, 255, 255)
+
+            love.graphics.setColor(1, 1, 1, 1)
         end)
 
         attributes.state = "none"

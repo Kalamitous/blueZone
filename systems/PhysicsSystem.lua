@@ -1,8 +1,7 @@
 local PhysicsSystem = tiny.processingSystem(Object:extend())
 PhysicsSystem.filter = tiny.filter("hitbox")
 
-function PhysicsSystem:new(ecs_world, bump_world, map)
-    self.ecs_world = ecs_world
+function PhysicsSystem:new(bump_world, map)
     self.bump_world = bump_world
     self.map = map
     
@@ -23,9 +22,6 @@ function PhysicsSystem:process(e, dt)
         e.vel.y = e.vel.y + e.gravity * dt
     end
 
-    local new_x = e.pos.x + e.vel.x * dt
-    local new_y = e.pos.y + e.vel.y * dt
-
     if e.update then
         e:update(dt)
     end
@@ -35,14 +31,13 @@ function PhysicsSystem:process(e, dt)
         new_y = e.parent.pos.y + e.offset.y
     end
 
+    local new_x = e.pos.x + e.vel.x * dt
+    local new_y = e.pos.y + e.vel.y * dt
+
     e.pos.x, e.pos.y, cols, len = self.bump_world:move(e, new_x, new_y, e.filter)
 
     if e.onCollide then
         e:onCollide(cols, len)
-    end
-        
-    if e.remove then
-        self.ecs_world:remove(e)
     end
 end
 

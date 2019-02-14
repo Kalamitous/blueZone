@@ -1,12 +1,12 @@
-local menu = {}
+local menu = {
+    panel = document.new()
+}
 
 function menu:init()
-    menu.panel = document.new()
-
     local button_style = {
         corner_radius = 0,
         border_thickness = 0,
-        font = love.graphics.newFont("assets/fonts/RobotoCondensed-Regular.ttf", 16)
+        font = assets.fonts.roboto_condensed(16)
     }
 
     local container = menu.panel:create("Container", "menu-container", true)
@@ -22,7 +22,7 @@ function menu:init()
     local play_button = menu.panel:create("Button", "play-button")
     play_button:setParent(container)
     play_button:setSize(100, 50)
-    play_button:setY(logo:getDimensions().bottom + 45)
+    play_button:setY(logo:getDimensions().bottom + 48)
     play_button:setText("Play")
     play_button:alignH("center")
     play_button:setStyle(button_style)
@@ -34,7 +34,7 @@ function menu:init()
     local settings_button = menu.panel:create("Button", "settings-button")
     settings_button:setParent(container)
     settings_button:setSize(100, 50)
-    settings_button:setY(play_button:getDimensions().bottom + 15)
+    settings_button:setY(play_button:getDimensions().bottom + 16)
     settings_button:setText("Settings")
     settings_button:alignH("center")
     settings_button:setStyle(button_style)
@@ -46,7 +46,7 @@ function menu:init()
     local exit_button = menu.panel:create("Button", "exit-button")
     exit_button:setParent(container)
     exit_button:setSize(100, 50)
-    exit_button:setY(settings_button:getDimensions().bottom + 15)
+    exit_button:setY(settings_button:getDimensions().bottom + 16)
     exit_button:setText("Exit")
     exit_button:alignH("center")
     exit_button:setStyle(button_style)
@@ -59,15 +59,11 @@ function menu:init()
 end
 
 function menu:update(dt)
-    if self.panel then
-        self.panel:update(dt)
-    end
+    self.panel:update(dt)
 end
 
 function menu:draw()
-    if self.panel then
-        self.panel:draw()
-    end
+    self.panel:draw()
 end
 
 return menu

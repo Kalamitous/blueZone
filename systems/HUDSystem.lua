@@ -1,5 +1,5 @@
 local HUDSystem = tiny.processingSystem(Object:extend())
-HUDSystem.filter = tiny.requireAll("is_player")
+HUDSystem.filter = tiny.filter("is_player")
 HUDSystem.isDrawSystem = true
 
 function HUDSystem:process(e, dt)

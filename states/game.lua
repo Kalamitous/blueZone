@@ -8,17 +8,18 @@ local game = {
 game.ecs_world:add(
     AISystem(game.ecs_world, game.bump_world),
     CameraTrackingSystem(game.camera),
+    DeathSystem,
     HUDSystem,
     PlayerControlSystem(game.ecs_world),
-    SpriteSystem
+    SpriteSystem(game.camera),
+    UpdateSystem(game.ecs_world)
 )
 
 game.camera:setFollowLerp(0.2)
 game.camera:setFollowStyle('LOCKON')
 
 local update_filter = tiny.filter("!isDrawSystem")
-local draw_filter = tiny.filter("isDrawSystem&!isCameraBased")
-local camera_draw_filter = tiny.filter("isDrawSystem&isCameraBased")
+local draw_filter = tiny.filter("isDrawSystem")
 local window_w, window_h = love.graphics.getDimensions()
 
 function game:init()
@@ -28,14 +29,14 @@ end
 
 function game:stage(file)
     self.map = sti(file, {"bump"})
-    self.map:bump_init(game.bump_world)
+    self.map:bump_init(self.bump_world)
 
     self.ecs_world:add(
-        PhysicsSystem(game.ecs_world, game.bump_world, game.map),
+        PhysicsSystem(self.bump_world, self.map),
         SpawnSystem(self.ecs_world, self.map)
     )
 
-    -- there has to be a better way to do this.
+    -- there has to be a better way to do this. (there is)
     local objects = self.map.objects
     for _, o in pairs(objects) do
         if o.name == "Bounds" then
@@ -60,10 +61,6 @@ function game:draw()
     self.map:bump_draw(self.bump_world, -self.camera.x + window_w / 2, -self.camera.y + window_h / 2, self.camera.scale, self.camera.scale)
     
     self.ecs_world:update(dt, draw_filter)
-
-    self.camera:attach()
-        self.ecs_world:update(dt, camera_draw_filter)
-    self.camera:detach()
 end
 
 return game

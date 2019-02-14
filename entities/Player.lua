@@ -97,15 +97,17 @@ function Player:onCollide(cols, len)
 end
 
 function Player:attack(ecs_world)
-    if self.dir == 1 then
-        ecs_world:add(Attack(50, 5, self.attack_lifetime, self))
-    else
-        ecs_world:add(Attack(-20, 5, self.attack_lifetime, self))
+    if self.can_attack then
+        if self.dir == 1 then
+            ecs_world:add(Attack(50, 5, self.attack_lifetime, self))
+        else
+            ecs_world:add(Attack(-20, 5, self.attack_lifetime, self))
+        end
+        self.can_attack = false
+        tick.delay(function() 
+            self.can_attack = true
+        end, self.attack_cooldown)
     end
-    self.can_attack = false
-    tick.delay(function() 
-        self.can_attack = true
-    end, self.attack_cooldown)
 end
 
 return Player

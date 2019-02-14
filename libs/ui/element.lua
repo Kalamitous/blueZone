@@ -105,7 +105,7 @@ function element.new(attributes)
                 self.y = self.parent.y + self.offset_y + y
             end
         end,
-        hugContent = function(self, padding)
+        hugContent = function(self, padding, h, v)
             padding = padding or 0
     
             local min_x = 0
@@ -142,16 +142,26 @@ function element.new(attributes)
                 end
             end
     
-            self.innerWidth = max_x - min_x + padding * 2
-            self.innerHeight = max_y - min_y + padding * 2
+            if h == nil or h == true then
+                self.innerWidth = max_x - min_x + padding * 2
+            end
+
+            if v == nil or v == true then
+                self.innerHeight = max_y - min_y + padding * 2
+            end
     
             self:updateOuterSize()
             self:updatePosition()
     
             for _, c in pairs(self.children) do
                 -- shift children by the same amount the parent shifted
-                c.x = c.x + (self.x - min_x) + self.style.border_thickness + padding
-                c.y = c.y + (self.y - min_y) + self.style.border_thickness + padding
+                if h == nil or h == true then
+                    c.x = c.x + (self.x - min_x) + self.style.border_thickness + padding
+                end
+
+                if v == nil or v == true then
+                    c.y = c.y + (self.y - min_y) + self.style.border_thickness + padding
+                end
             end
         end
     }})

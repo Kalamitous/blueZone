@@ -12,6 +12,7 @@ function document.new()
         Container = require(DIR .. "container"),
         Button = require(DIR .. "button"),
         Image = require(DIR .. "image"),
+        Label = require(DIR .. "label"),
 
         elements = {},
         update_table = {},

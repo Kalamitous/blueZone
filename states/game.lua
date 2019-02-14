@@ -36,7 +36,13 @@ function game:stage(file)
         SpawnSystem(self.ecs_world, self.map)
     )
 
-    self.camera:setBounds(0, 0, self.map.width * self.map.tilewidth, self.map.height * self.map.tileheight)
+    -- there has to be a better way to do this. (there is)
+    local objects = self.map.objects
+    for _, o in pairs(objects) do
+        if o.name == "Bounds" then
+            self.camera:setBounds(o.x, o.y, o.width, o.height)
+        end
+    end
 end
 
 function game:update(dt)

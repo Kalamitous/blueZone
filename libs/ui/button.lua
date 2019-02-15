@@ -89,7 +89,8 @@ return {
                 border_color = style.border_press_color
             end
 
-            local text_height = math.ceil(attributes.text:getWidth() / attributes.innerWidth) * attributes.text:getHeight()
+            -- extra pixel bc god said so
+            local text_height = math.ceil(attributes.text:getWidth() / attributes.innerWidth) * attributes.text:getHeight() - 1
 
             love.graphics.setColor(unpack(border_color))
             love.graphics.rectangle("fill", attributes.x, attributes.y, attributes.outerWidth, attributes.outerHeight, style.corner_radius, style.corner_radius)

@@ -16,11 +16,10 @@ game.ecs_world:add(
 )
 
 game.camera:setFollowLerp(0.2)
-game.camera:setFollowStyle('LOCKON')
+game.camera:setFollowStyle("LOCKON")
 
 local update_filter = tiny.filter("!isDrawSystem")
 local draw_filter = tiny.filter("isDrawSystem")
-local window_w, window_h = love.graphics.getDimensions()
 
 function game:init()
     self.ecs_world:add(Player(0, 300))
@@ -36,7 +35,7 @@ function game:stage(file)
         SpawnSystem(self.ecs_world, self.map)
     )
 
-    -- there has to be a better way to do this. (there is)
+    -- TODO: there has to be a better way to do this. (there is)
     local objects = self.map.objects
     for _, o in pairs(objects) do
         if o.name == "Bounds" then
@@ -56,9 +55,11 @@ function game:update(dt)
 end
 
 function game:draw()
+    local window_w, window_h = love.graphics.getDimensions()
+
     -- sti resets draw to origin
     self.map:draw(-self.camera.x + window_w / 2, -self.camera.y + window_h / 2, self.camera.scale, self.camera.scale)
-    self.map:bump_draw(self.bump_world, -self.camera.x + window_w / 2, -self.camera.y + window_h / 2, self.camera.scale, self.camera.scale)
+    --self.map:bump_draw(self.bump_world, -self.camera.x + window_w / 2, -self.camera.y + window_h / 2, self.camera.scale, self.camera.scale)
     
     self.ecs_world:update(dt, draw_filter)
 end

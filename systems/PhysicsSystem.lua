@@ -22,10 +22,6 @@ function PhysicsSystem:process(e, dt)
         e.vel.y = e.vel.y + e.gravity * dt
     end
 
-    if e.update then
-        e:update(dt)
-    end
-
     if e.parent then
         new_x = e.parent.pos.x + e.offset.x
         new_y = e.parent.pos.y + e.offset.y

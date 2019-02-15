@@ -5,7 +5,7 @@ return {
     create = function(self, id)
         self.elements[id] = element.new({
             id = id,
-            text = "Button",
+            text = love.graphics.newText(love.graphics.getFont(), "Button"),
             style = {
                 corner_radius = 4,
 
@@ -23,7 +23,16 @@ return {
                 border_press_color = {0.5, 0, 0, 1}
             },
             setText = function(self, text)
-                self.text = text
+                self.text:setf(text, self.innerWidth, "center")
+            end,
+            setStyle = function(self, style)
+                for k, v in pairs(style) do
+                    self.style[k] = v
+
+                    if k == "font" then
+                        self.text:setFont(v)
+                    end
+                end
             end,
             getState = function()
                 return self:getState(id)
@@ -64,8 +73,6 @@ return {
                 end
             end
         end)
-
-        local font_height
         
         table.insert(self.draw_table, function()
             local color = style.color
@@ -82,13 +89,7 @@ return {
                 border_color = style.border_press_color
             end
 
-            if style.font then
-                love.graphics.setFont(style.font)
-
-                font_height = style.font:getHeight()
-            else
-                font_height = love.graphics.getFont():getHeight()
-            end
+            local text_height = math.ceil(attributes.text:getWidth() / attributes.innerWidth) * attributes.text:getHeight()
 
             love.graphics.setColor(unpack(border_color))
             love.graphics.rectangle("fill", attributes.x, attributes.y, attributes.outerWidth, attributes.outerHeight, style.corner_radius, style.corner_radius)
@@ -97,7 +98,7 @@ return {
             love.graphics.rectangle("fill", attributes.x + style.border_thickness, attributes.y + style.border_thickness, attributes.innerWidth, attributes.innerHeight, style.corner_radius, style.corner_radius)
 
             love.graphics.setColor(unpack(text_color))
-            love.graphics.printf(attributes.text, attributes.x + style.border_thickness, attributes.y + style.border_thickness + attributes.innerHeight / 2 - font_height / 2, attributes.innerWidth, "center")
+            love.graphics.draw(attributes.text, attributes.x + style.border_thickness, attributes.y + style.border_thickness + attributes.innerHeight / 2 - text_height / 2)
 
             love.graphics.setColor(1, 1, 1, 1)
         end)

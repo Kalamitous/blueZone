@@ -9,7 +9,7 @@ function menu:init()
         font = assets.fonts.roboto_condensed(16)
     }
 
-    local container = menu.panel:create("Container", "menu-container")
+    local container = menu.panel:create("Container", "menu-container", true)
     container:align("center", "center")
     container:updatePosition()
 

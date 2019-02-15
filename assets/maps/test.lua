@@ -1,13 +1,14 @@
 return {
-  version = "1.1",
+  version = "1.2",
   luaversion = "5.1",
-  tiledversion = "1.0.3",
+  tiledversion = "1.2.2",
   orientation = "orthogonal",
   renderorder = "right-down",
   width = 20,
   height = 20,
   tilewidth = 64,
   tileheight = 64,
+  nextlayerid = 3,
   nextobjectid = 37,
   properties = {},
   tilesets = {
@@ -19,6 +20,7 @@ return {
       tileheight = 64,
       spacing = 0,
       margin = 0,
+      columns = 1,
       image = "../tilesets/test.png",
       imagewidth = 64,
       imageheight = 64,
@@ -47,6 +49,7 @@ return {
   layers = {
     {
       type = "tilelayer",
+      id = 1,
       name = "Tiles",
       x = 0,
       y = 0,
@@ -83,6 +86,7 @@ return {
     },
     {
       type = "objectgroup",
+      id = 2,
       name = "Objects",
       visible = false,
       opacity = 1,
@@ -135,19 +139,6 @@ return {
           properties = {
             ["enemy_spawn"] = true
           }
-        },
-        {
-          id = 36,
-          name = "Bounds",
-          type = "",
-          shape = "rectangle",
-          x = 0,
-          y = 0,
-          width = 1280,
-          height = 1280,
-          rotation = 0,
-          visible = true,
-          properties = {}
         }
       }
     }

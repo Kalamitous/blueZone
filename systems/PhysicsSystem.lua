@@ -7,14 +7,10 @@ function PhysicsSystem:new(bump_world, map)
     
     local objects = self.map.objects
 
-    for _, o in pairs(objects) do
-        if o.name == "Bounds" then
-            self.bump_world:add({is_bound = true}, o.x - 1, o.y, 1, o.height)
-            self.bump_world:add({is_bound = true}, o.x + o.width, o.y, 1, o.height)
-            self.bump_world:add({is_bound = true}, o.x, o.y - 1, o.width, 1)
-            self.bump_world:add({is_bound = true}, o.x, o.y + o.height, o.width, 1)
-        end
-    end
+    self.bump_world:add({is_bound = true}, -1, 0, 1, self.map.height * self.map.tileheight)
+    self.bump_world:add({is_bound = true}, self.map.width * self.map.tilewidth, 0, 1, self.map.height * self.map.tileheight)
+    self.bump_world:add({is_bound = true}, 0, -1, self.map.width * self.map.tilewidth, 1)
+    self.bump_world:add({is_bound = true}, 0, self.map.height * self.map.tileheight, self.map.width * self.map.tilewidth, 1)
 end
 
 function PhysicsSystem:process(e, dt)

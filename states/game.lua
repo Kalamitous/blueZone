@@ -11,7 +11,6 @@ game.ecs_world:add(
     DeathSystem,
     HUDSystem,
     PlayerControlSystem(game.ecs_world),
-    SpriteSystem(game.camera),
     UpdateSystem(game.ecs_world)
 )
 
@@ -29,19 +28,39 @@ end
 function game:stage(file)
     self.map = sti(file, {"bump"})
     self.map:bump_init(self.bump_world)
+    
+    self.map_size = {
+        w = self.map.width * self.map.tilewidth,
+        h = self.map.height * self.map.tileheight
+    }
 
     self.ecs_world:add(
         PhysicsSystem(self.bump_world, self.map),
-        SpawnSystem(self.ecs_world, self.map)
+        SpawnSystem(self.ecs_world, self.map),
+        SpriteSystem(self.camera, self.map_size)
     )
 
-    -- TODO: there has to be a better way to do this. (there is)
-    local objects = self.map.objects
-    for _, o in pairs(objects) do
-        if o.name == "Bounds" then
-            self.camera:setBounds(o.x, o.y, o.width, o.height)
-        end
+    local window_w, window_h = love.graphics.getDimensions()
+
+    local cam_x1, cam_x2, cam_y1, cam_y2
+
+    if self.map_size.w >= window_w then
+        cam_x1 = 0
+        cam_x2 = self.map_size.w
+    else
+        cam_x1 = window_w / 2 - self.map_size.w / 2
+        cam_x2 = window_w / 2 + self.map_size.w / 2
     end
+    
+    if self.map_size.h >= window_h then
+        cam_y1 = 0
+        cam_y2 = self.map_size.h
+    else
+        cam_y1 = window_h / 2 - self.map_size.h / 2
+        cam_y2 = window_h / 2 + self.map_size.h / 2
+    end
+
+    self.camera:setBounds(cam_x1, cam_y1, cam_x2, cam_y2)
 end
 
 function game:update(dt)
@@ -60,7 +79,7 @@ function game:draw()
     -- sti resets draw to origin
     self.map:draw(-self.camera.x + window_w / 2, -self.camera.y + window_h / 2, self.camera.scale, self.camera.scale)
     --self.map:bump_draw(self.bump_world, -self.camera.x + window_w / 2, -self.camera.y + window_h / 2, self.camera.scale, self.camera.scale)
-    
+
     self.ecs_world:update(dt, draw_filter)
 end
 

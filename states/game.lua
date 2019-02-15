@@ -41,26 +41,25 @@ function game:stage(file)
     )
 
     local window_w, window_h = love.graphics.getDimensions()
-
-    local cam_x1, cam_x2, cam_y1, cam_y2
+    local x1, x2, y1, y2
 
     if self.map_size.w >= window_w then
-        cam_x1 = 0
-        cam_x2 = self.map_size.w
+        x1 = 0
+        x2 = self.map_size.w
     else
-        cam_x1 = window_w / 2 - self.map_size.w / 2
-        cam_x2 = window_w / 2 + self.map_size.w / 2
+        x1 = window_w / 2 - self.map_size.w / 2
+        x2 = window_w / 2 + self.map_size.w / 2
     end
     
     if self.map_size.h >= window_h then
-        cam_y1 = 0
-        cam_y2 = self.map_size.h
+        y1 = 0
+        y2 = self.map_size.h
     else
-        cam_y1 = window_h / 2 - self.map_size.h / 2
-        cam_y2 = window_h / 2 + self.map_size.h / 2
+        y1 = window_h / 2 - self.map_size.h / 2
+        y2 = window_h / 2 + self.map_size.h / 2
     end
 
-    self.camera:setBounds(cam_x1, cam_y1, cam_x2, cam_y2)
+    self.camera:setBounds(x1, y1, x2, y2)
 end
 
 function game:update(dt)
@@ -75,23 +74,23 @@ end
 
 function game:draw()
     local window_w, window_h = love.graphics.getDimensions()
-    local x, y
+    local offset_x, offset_y
 
     if self.map_size.w >= window_w then
-        x = 0
+        offset_x = 0
     else
-        x = window_w / 2 - self.map_size.w / 2
+        offset_x = window_w / 2 - self.map_size.w / 2
     end
     
     if self.map_size.h >= window_h then
-        y = 0
+        offset_y = 0
     else
-        y = window_h / 2 - self.map_size.h / 2
+        offset_y = window_h / 2 - self.map_size.h / 2
     end
 
     -- sti resets draw to origin
-    self.map:draw(-self.camera.x + window_w / 2 + x, -self.camera.y + window_h / 2 + y, self.camera.scale, self.camera.scale)
-    --self.map:bump_draw(self.bump_world, -self.camera.x + window_w / 2, -self.camera.y + window_h / 2, self.camera.scale, self.camera.scale)
+    self.map:draw(-self.camera.x + window_w / 2 + offset_x, -self.camera.y + window_h / 2 + offset_y, self.camera.scale, self.camera.scale)
+    --self.map:bump_draw(self.bump_world, -self.camera.x + window_w / 2 + offset_x, -self.camera.y + window_h / 2 + offset_y, self.camera.scale, self.camera.scale)
 
     self.ecs_world:update(dt, draw_filter)
 end

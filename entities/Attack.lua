@@ -1,29 +1,25 @@
 local Attack = Object:extend()
 
 function Attack:new(offset_x, offset_y, lifetime, owner)
-    self.base_offset = { x = offset_x or 0, y = offset_y or 0 }
-    if owner.dir == 1 then
-        self.offset = { x = offset_x or 0, y = offset_y or 0 }
-    else
-        self.offset = { x = -offset_x or 0, y = offset_y or 0 }
-    end
+    self.owner = owner
+
+    self.offset = {x = offset_x * self.owner.dir or 0, y = offset_y or 0}
     self.hitbox = {w = 20, h = 40}
     self.pos = {
-        x = owner.pos.x + owner.hitbox.w / 2 + self.offset.x - self.hitbox.w / 2,
-        y = owner.pos.y + owner.hitbox.h / 2 + self.offset.y - self.hitbox.h / 2
+        x = self.owner.pos.x + self.owner.hitbox.w / 2 + self.offset.x - self.hitbox.w / 2,
+        y = self.owner.pos.y + self.owner.hitbox.h / 2 + self.offset.y - self.hitbox.h / 2
     }
+    
     self.vel = {x = 0, y = 0}
-
-    self.owner = owner
-    self.bump_world = bump_world
     
     self.dmg = 20
     self.lifetime = lifetime
-    self.sprite = true
-    self.is_projectile = false
+    self.indicator_length = 0.2
+    
     self.is_attack = true
-    self.indicator_length = 0.25
-    tick.delay(function() 
+    self.sprite = true
+
+    tick.delay(function()
         self.remove = true
     end, self.lifetime)
 end
@@ -33,11 +29,6 @@ function Attack:draw()
 end
 
 function Attack:update(dt)
-    if self.owner.dir == 1 then
-        self.offset.x = self.base_offset.x
-    else
-        self.offset.x = -self.base_offset.x
-    end
 end
 
 function Attack:filter(e)
@@ -55,8 +46,10 @@ function Attack:onCollide(cols, len)
                 if e.health <= 0 then
                     e.remove = true
                 end
+
                 e.last_hit = self
                 e.attack_indicator = true
+
                 tick.delay(function() 
                     e.attack_indicator = false
                 end, self.indicator_length)

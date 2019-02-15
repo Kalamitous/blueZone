@@ -1,15 +1,15 @@
-local menu = {
-    panel = document.new()
-}
+local menu = {}
 
 function menu:init()
+    self.panel = document.new()
+
     local button_style = {
         corner_radius = 0,
         border_thickness = 0,
         font = assets.fonts.roboto_condensed(16)
     }
 
-    local container = menu.panel:create("Container", "menu-container", true)
+    local container = menu.panel:create("Container", "menu-container")
     container:align("center", "center")
     container:updatePosition()
 
@@ -31,22 +31,28 @@ function menu:init()
         Gamestate.switch(game)
     end
 
-    local settings_button = menu.panel:create("Button", "settings-button")
-    settings_button:setParent(container)
-    settings_button:setSize(100, 50)
-    settings_button:setY(play_button:getDimensions().bottom + 16)
-    settings_button:setText("Settings")
-    settings_button:alignH("center")
-    settings_button:setStyle(button_style)
-    settings_button:updatePosition()
-    settings_button.onRelease = function()
-        Gamestate.switch(settings)
+    local fs_button = menu.panel:create("Button", "fs-button")
+    fs_button:setParent(container)
+    fs_button:setSize(100, 50)
+    fs_button:setY(play_button:getDimensions().bottom + 16)
+    fs_button:setText("Toggle Fullscreen")
+    fs_button:alignH("center")
+    fs_button:setStyle(button_style)
+    fs_button:updatePosition()
+    fs_button.onRelease = function()
+        if love.window.getFullscreen() then
+            love.window.setFullscreen(false)
+        else
+            love.window.setFullscreen(true)
+        end
+
+        self:init()
     end
 
     local exit_button = menu.panel:create("Button", "exit-button")
     exit_button:setParent(container)
     exit_button:setSize(100, 50)
-    exit_button:setY(settings_button:getDimensions().bottom + 16)
+    exit_button:setY(fs_button:getDimensions().bottom + 16)
     exit_button:setText("Exit")
     exit_button:alignH("center")
     exit_button:setStyle(button_style)

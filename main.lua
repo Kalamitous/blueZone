@@ -33,7 +33,6 @@ UpdateSystem = require "systems.UpdateSystem"
 game = require "states.game"
 menu = require "states.menu"
 pause = require "states.pause"
-settings = require "states.settings"
 
 assets = cargo.init("assets")
 input = baton.new {
@@ -59,7 +58,7 @@ function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
 
     --Gamestate.switch(menu)
-    Gamestate.switch(game)
+    Gamestate.switch(menu)
 end
 
 function love.update(dt)

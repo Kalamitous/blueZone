@@ -75,9 +75,22 @@ end
 
 function game:draw()
     local window_w, window_h = love.graphics.getDimensions()
+    local x, y
+
+    if self.map_size.w >= window_w then
+        x = 0
+    else
+        x = window_w / 2 - self.map_size.w / 2
+    end
+    
+    if self.map_size.h >= window_h then
+        y = 0
+    else
+        y = window_h / 2 - self.map_size.h / 2
+    end
 
     -- sti resets draw to origin
-    self.map:draw(-self.camera.x + window_w / 2, -self.camera.y + window_h / 2, self.camera.scale, self.camera.scale)
+    self.map:draw(-self.camera.x + window_w / 2 + x, -self.camera.y + window_h / 2 + y, self.camera.scale, self.camera.scale)
     --self.map:bump_draw(self.bump_world, -self.camera.x + window_w / 2, -self.camera.y + window_h / 2, self.camera.scale, self.camera.scale)
 
     self.ecs_world:update(dt, draw_filter)

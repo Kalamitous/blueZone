@@ -2,11 +2,30 @@ local SpriteSystem = tiny.processingSystem(Object:extend())
 SpriteSystem.filter = tiny.filter("sprite")
 SpriteSystem.isDrawSystem = true
 
-function SpriteSystem:new(camera)
+function SpriteSystem:new(camera, map_size)
     self.camera = camera
+    self.map_size = map_size
 end
 
 function SpriteSystem:preProcess(dt)
+    local window_w, window_h = love.graphics.getDimensions()
+    local x, y
+
+    if self.map_size.w >= window_w then
+        x = 0
+    else
+        x = window_w / 2 - self.map_size.w / 2
+    end
+    
+    if self.map_size.h >= window_h then
+        y = 0
+    else
+        y = window_h / 2 - self.map_size.h / 2
+    end
+
+    love.graphics.push()
+    love.graphics.translate(x, y)
+
     self.camera:attach()
 end
 
@@ -34,6 +53,8 @@ end
 
 function SpriteSystem:postProcess(dt)
     self.camera:detach()
+    
+    love.graphics.pop()
 end
 
 return SpriteSystem

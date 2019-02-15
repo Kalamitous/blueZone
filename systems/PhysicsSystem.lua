@@ -21,14 +21,14 @@ function PhysicsSystem:process(e, dt)
     if e.gravity then
         e.vel.y = e.vel.y + e.gravity * dt
     end
+    
+    local new_x = e.pos.x + e.vel.x * dt
+    local new_y = e.pos.y + e.vel.y * dt
 
     if e.parent then
         new_x = e.parent.pos.x + e.offset.x
         new_y = e.parent.pos.y + e.offset.y
     end
-
-    local new_x = e.pos.x + e.vel.x * dt
-    local new_y = e.pos.y + e.vel.y * dt
 
     e.pos.x, e.pos.y, cols, len = self.bump_world:move(e, new_x, new_y, e.filter)
 

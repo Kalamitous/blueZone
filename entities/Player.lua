@@ -19,13 +19,12 @@ function Player:new(x, y)
     self.health = 50
     self.invincible = false
     self.invincible_time = 1.5
+    self.opacity = 1
+    self.flash_timer = nil
+
     self.attack_cooldown = 0.5
     self.attack_lifetime = 0.25
     self.can_attack = true
-    self.invincible_time = 1.5
-    self.opacity = 1
-    self.flash_timer = nil
-    self.dir = 0
 
     self.sprite = true
     self.is_player = true

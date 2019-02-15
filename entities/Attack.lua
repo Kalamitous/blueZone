@@ -1,13 +1,20 @@
 local Attack = Object:extend()
 
-function Attack:new(offset_x, offset_y, lifetime, parent)
+function Attack:new(offset_x, offset_y, lifetime, owner)
     self.base_offset = { x = offset_x or 0, y = offset_y or 0 }
-    self.offset = { x = offset_x or 0, y = offset_y or 0 }
-    self.pos = {x = parent.pos.x + offset_x or 0, y = parent.pos.y + offset_y or 0}
+    if owner.dir == 1 then
+        self.offset = { x = offset_x or 0, y = offset_y or 0 }
+    else
+        self.offset = { x = -offset_x or 0, y = offset_y or 0 }
+    end
     self.hitbox = {w = 20, h = 40}
+    self.pos = {
+        x = owner.pos.x + owner.hitbox.w / 2 + self.offset.x - self.hitbox.w / 2,
+        y = owner.pos.y + owner.hitbox.h / 2 + self.offset.y - self.hitbox.h / 2
+    }
     self.vel = {x = 0, y = 0}
 
-    self.parent = parent
+    self.owner = owner
     self.bump_world = bump_world
     
     self.dmg = 20
@@ -26,10 +33,10 @@ function Attack:draw()
 end
 
 function Attack:update(dt)
-    if self.parent.dir == 1 then
+    if self.owner.dir == 1 then
         self.offset.x = self.base_offset.x
     else
-        self.offset.x = -self.hitbox.w
+        self.offset.x = -self.base_offset.x
     end
 end
 

@@ -136,11 +136,7 @@ end
 
 function Player:attack(ecs_world)
     if self.can_attack then
-        if self.dir == 1 then
-            ecs_world:add(Attack(50, 5, self.attack_lifetime, self))
-        else
-            ecs_world:add(Attack(-20, 5, self.attack_lifetime, self))
-        end
+        ecs_world:add(Attack(35, 0, self.attack_lifetime, self))
         self.can_attack = false
         tick.delay(function() 
             self.can_attack = true

@@ -25,9 +25,9 @@ function PhysicsSystem:process(e, dt)
     local new_x = e.pos.x + e.vel.x * dt
     local new_y = e.pos.y + e.vel.y * dt
 
-    if e.parent then
-        new_x = e.parent.pos.x + e.offset.x
-        new_y = e.parent.pos.y + e.offset.y
+    if e.offset then
+        new_x = e.owner.pos.x + e.owner.hitbox.w / 2 + e.offset.x - e.hitbox.w / 2
+        new_y = e.owner.pos.y + e.owner.hitbox.h / 2 + e.offset.y - e.hitbox.h / 2
     end
 
     e.pos.x, e.pos.y, cols, len = self.bump_world:move(e, new_x, new_y, e.filter)

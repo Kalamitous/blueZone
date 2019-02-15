@@ -22,44 +22,41 @@ local draw_filter = tiny.filter("isDrawSystem")
 
 function game:init()
     self.ecs_world:add(Player(0, 300))
-    self:stage("assets/maps/test.lua")
+    self:stage("assets/maps/test")
 end
 
 function game:stage(file)
-    self.map = sti(file, {"bump"})
-    self.map:bump_init(self.bump_world)
+    local map = require(file)
+
+    local window_w, window_h = love.graphics.getDimensions()
     
-    self.map_size = {
-        w = self.map.width * self.map.tilewidth,
-        h = self.map.height * self.map.tileheight
+    local map_offset = {x = 0, y = 0}
+    local map_size = {
+        w = map.width * map.tilewidth,
+        h = map.height * map.tileheight
     }
+
+    if map_size.w < window_w then
+        map_offset.x = window_w / 2 - map_size.w / 2
+    end
+    
+    if map_size.h < window_h then
+        map_offset.y = window_h / 2 - map_size.h / 2
+    end
+
+    self.map = sti(file .. ".lua", {"bump"}, map_offset.x, map_offset.y)
+    self.map:bump_init(self.bump_world)
+
+    self.map.offset = map_offset
+    self.map.size = map_size
 
     self.ecs_world:add(
         PhysicsSystem(self.bump_world, self.map),
         SpawnSystem(self.ecs_world, self.map),
-        SpriteSystem(self.camera, self.map_size)
+        SpriteSystem(self.camera, self.map_offset)
     )
 
-    local window_w, window_h = love.graphics.getDimensions()
-    local x1, x2, y1, y2
-
-    if self.map_size.w >= window_w then
-        x1 = 0
-        x2 = self.map_size.w
-    else
-        x1 = window_w / 2 - self.map_size.w / 2
-        x2 = window_w / 2 + self.map_size.w / 2
-    end
-    
-    if self.map_size.h >= window_h then
-        y1 = 0
-        y2 = self.map_size.h
-    else
-        y1 = window_h / 2 - self.map_size.h / 2
-        y2 = window_h / 2 + self.map_size.h / 2
-    end
-
-    self.camera:setBounds(x1, y1, x2, y2)
+    self.camera:setBounds(self.map.offset.x, self.map.offset.y, self.map.offset.x + self.map.size.w, self.map.offset.y + self.map.size.h)
 end
 
 function game:update(dt)
@@ -74,23 +71,10 @@ end
 
 function game:draw()
     local window_w, window_h = love.graphics.getDimensions()
-    local offset_x, offset_y
-
-    if self.map_size.w >= window_w then
-        offset_x = 0
-    else
-        offset_x = window_w / 2 - self.map_size.w / 2
-    end
-    
-    if self.map_size.h >= window_h then
-        offset_y = 0
-    else
-        offset_y = window_h / 2 - self.map_size.h / 2
-    end
 
     -- sti resets draw to origin
-    self.map:draw(-self.camera.x + window_w / 2 + offset_x, -self.camera.y + window_h / 2 + offset_y, self.camera.scale, self.camera.scale)
-    --self.map:bump_draw(self.bump_world, -self.camera.x + window_w / 2 + offset_x, -self.camera.y + window_h / 2 + offset_y, self.camera.scale, self.camera.scale)
+    self.map:draw(-self.camera.x + window_w / 2, -self.camera.y + window_h / 2, self.camera.scale, self.camera.scale)
+    --self.map:bump_draw(self.bump_world, -self.camera.x + window_w / 2, -self.camera.y + window_h / 2, self.camera.scale, self.camera.scale)
 
     self.ecs_world:update(dt, draw_filter)
 end

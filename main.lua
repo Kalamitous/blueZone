@@ -58,7 +58,7 @@ function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
 
     --Gamestate.switch(menu)
-    Gamestate.switch(game)
+    Gamestate.switch(menu)
 end
 
 function love.update(dt)

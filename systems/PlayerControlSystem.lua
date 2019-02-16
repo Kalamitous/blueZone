@@ -105,11 +105,29 @@ function PlayerControlSystem:process(e, dt)
 
     --[[ATTACKS]]--
     if input:pressed("light") then
-        e:attack(self.ecs_world, "light", 1)
+        if e:attack(self.ecs_world, "light", e.combo + 1) then
+            if e.combo < 3 then
+                e.combo = e.combo + 1
+            else
+                e.combo = 0
+                e.attacks.heavy.used = false
+            end
+        end
     elseif input:pressed("heavy") then
-        e:attack(self.ecs_world, "heavy", 1)
+        if e:attack(self.ecs_world, "heavy", e.combo + 1) then
+            if e.combo < 3 then
+                e.combo = e.combo + 1
+                e.attacks.heavy.used = true
+            else
+                e.combo = 0
+                e.attacks.heavy.used = false
+            end
+        end
     elseif input:pressed("special") then
-        e:attack(self.ecs_world, "special", 1)
+        if e:attack(self.ecs_world, "special", 1) then
+            e.combo = 0
+            e.attacks.heavy.used = false
+        end
     end
 end
 

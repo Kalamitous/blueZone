@@ -35,6 +35,7 @@ function Player:new(x, y)
     self.is_player = true
 
     self.can_attack = true
+    self.combo = 0
     self.attacks = {
         light = {
             {
@@ -42,6 +43,27 @@ function Player:new(x, y)
                 hitbox = {w = 35, h = self.hitbox.h},
                 duration = 0.1,
                 cooldown = 0.05,
+                dmg = 10
+            },
+            {
+                offset = {x = self.hitbox.w / 2, y = 0},
+                hitbox = {w = 35, h = self.hitbox.h},
+                duration = 0.1,
+                cooldown = 0.05,
+                dmg = 10
+            },
+            {
+                offset = {x = self.hitbox.w / 2, y = 0},
+                hitbox = {w = 35, h = self.hitbox.h},
+                duration = 0.1,
+                cooldown = 0.05,
+                dmg = 15
+            },
+            {
+                offset = {x = self.hitbox.w / 2, y = 0},
+                hitbox = {w = 35, h = self.hitbox.h},
+                duration = 0.1,
+                cooldown = 0.5,
                 dmg = 20
             }
         },
@@ -52,6 +74,27 @@ function Player:new(x, y)
                 hitbox = {w = 35, h = self.hitbox.h},
                 duration = 0.3,
                 cooldown = 0.05,
+                dmg = 20
+            },
+            {
+                offset = {x = self.hitbox.w / 2, y = 0},
+                hitbox = {w = 35, h = self.hitbox.h},
+                duration = 0.3,
+                cooldown = 0.05,
+                dmg = 20
+            },
+            {
+                offset = {x = self.hitbox.w / 2, y = 0},
+                hitbox = {w = 35, h = self.hitbox.h},
+                duration = 0.3,
+                cooldown = 0.05,
+                dmg = 25
+            },
+            {
+                offset = {x = self.hitbox.w / 2, y = 0},
+                hitbox = {w = 35, h = self.hitbox.h},
+                duration = 0.3,
+                cooldown = 0.5,
                 dmg = 30
             }
         },
@@ -223,20 +266,17 @@ function Player:attack(ecs_world, type, num)
     if not self.can_attack then return end
     if type == "light" and self.attacks.heavy.used then return end
 
-    local attack = self.attacks[type]
+    local attack = self.attacks[type][num]
 
     self.can_attack = false
-    if type == "heavy" then
-        attack.used = true
-    elseif type == "special" then
-        self.attacks.heavy.used = false
-    end
-    
-    ecs_world:add(Attack(attack[num].offset.x, attack[num].offset.y, attack[num].hitbox.w, attack[num].hitbox.h, attack[num].duration, attack[num].dmg, self))
+
+    ecs_world:add(Attack(attack.offset.x, attack.offset.y, attack.hitbox.w, attack.hitbox.h, attack.duration, attack.dmg, self))
 
     tick.delay(function() 
         self.can_attack = true
-    end, attack[num].duration + attack[num].cooldown)
+    end, attack.duration + attack.cooldown)
+
+    return true
 end
 
 return Player

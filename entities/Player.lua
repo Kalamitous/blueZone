@@ -23,8 +23,7 @@ function Player:new(x, y)
     self.dash_time = 0.15
     self.dash_detect_timer = nil
 
-    self.attack_cooldown = 0.3
-    self.attack_lifetime = 0.25
+    self.attack_cooldown = 0.05
     self.can_attack = true
 
     self.health = 50
@@ -185,11 +184,11 @@ end
 
 function Player:attack(ecs_world)
     if self.can_attack then
-        --ecs_world:add(Attack(35, 0, self.attack_lifetime, self))
+        ecs_world:add(Attack(self.hitbox.w / 2, 0, 35, self.hitbox.h, self.attack_duration, self))
         self.can_attack = false
         tick.delay(function() 
             self.can_attack = true
-        end, self.attack_cooldown)
+        end, self.attack_duration + self.attack_cooldown)
     end
 end
 

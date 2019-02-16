@@ -8,7 +8,7 @@ end
 function PlayerControlSystem:process(e, dt)
     e.running = false
 
-    if input:down("left") and not e.dead then
+    if input:down("left") and not (input:down("right") or e.dead) then
         if e.grounded then
             e.vel.x = math.max(e.vel.x - e.acc * dt, -e.max_speed)
 
@@ -22,7 +22,7 @@ function PlayerControlSystem:process(e, dt)
         e.dir = -1
     end
 
-    if input:down("right") and not e.dead then
+    if input:down("right") and not (input:down("left") or e.dead) then
         if e.grounded then
             e.vel.x = math.min(e.vel.x + e.acc * dt, e.max_speed)
 
@@ -55,7 +55,7 @@ function PlayerControlSystem:process(e, dt)
     end
 
     -- sliding
-    if not ((input:down("left") or input:down("right")) and not e.dead) and e.grounded then
+    if ((input:down("left") and input:down("right")) or not (input:down("left") or input:down("right"))) and e.grounded then
         local acc = e.acc
 
         if e.dead then

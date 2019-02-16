@@ -40,6 +40,7 @@ function Projectile:onCollide(cols, len)
             self.remove = true
         elseif e.is_player and not e.dashing and not e.invincible and not e.dead then
             e.health = math.max(e.health - self.dmg, 0)
+            e.points = math.max(e.points - 500, 0)
 
             if e.health <= 0 then
                 e.vel.x, e.vel.y = lume.vector(self.ang, self.max_speed * 4)

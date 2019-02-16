@@ -45,6 +45,12 @@ function Attack:onCollide(cols, len)
             e.health = e.health - self.dmg
             
             if e.health <= 0 then
+                if e.is_enemy then
+                    self.owner.points = self.owner.points + 500
+                elseif e.is_projectile then
+                    self.owner.points = self.owner.points + 100
+                end
+
                 e.remove = true
             end
 

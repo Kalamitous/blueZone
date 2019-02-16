@@ -34,6 +34,8 @@ function Player:new(x, y)
     self.sprite = true
     self.is_player = true
 
+    self.points = 0
+
     self.can_attack = true
     self.attacks = {
         light = {
@@ -169,6 +171,8 @@ function Player:onCollide(cols, len)
 end
 
 function Player:onDeath()
+    self.points = math.max(self.points - 2000, 0)
+
     self.dead = true
 
     if self.flash_timer then

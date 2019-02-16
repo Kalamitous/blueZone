@@ -8,7 +8,7 @@ end
 function PlayerControlSystem:process(e, dt)
     e.running = false
 
-    if input:down("left") and e.health > 0 then
+    if input:down("left") and not e.dead then
         if e.grounded then
             e.vel.x = math.max(e.vel.x - e.acc * dt, -e.max_speed)
 
@@ -22,7 +22,7 @@ function PlayerControlSystem:process(e, dt)
         e.dir = -1
     end
 
-    if input:down("right") and e.health > 0 then
+    if input:down("right") and not e.dead then
         if e.grounded then
             e.vel.x = math.min(e.vel.x + e.acc * dt, e.max_speed)
 
@@ -36,14 +36,14 @@ function PlayerControlSystem:process(e, dt)
         e.dir = 1
     end
 
-    if input:pressed("up") and e.grounded and e.health > 0 then
+    if input:pressed("up") and e.grounded and not e.dead then
         e.vel.y = e.vel.y - e.jump_height
 
         e.grounded = false
     end
 
     -- player will jump higher the longer they hold up by increasing gravity when they let go
-    if not (input:down("up") or e.grounded) and e.health > 0 then
+    if not (input:down("up") or e.grounded) and not e.dead then
         if e.vel.y < 0 then
            e.vel.y = e.vel.y + e.gravity * dt
         end
@@ -55,10 +55,10 @@ function PlayerControlSystem:process(e, dt)
     end
 
     -- sliding
-    if not (input:down("left") or input:down("right")) and e.grounded then
+    if not ((input:down("left") or input:down("right")) and not e.dead) and e.grounded then
         local acc = e.acc
 
-        if e.health <= 0 then
+        if e.dead then
             acc = acc / 8
         end
 

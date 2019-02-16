@@ -58,7 +58,9 @@ function AISystem:process(e, dt)
             e:shoot(self.ecs_world)
         elseif e.lock_time and not e.delay then
             e.delay = tick.delay(function()
-                e:shoot(self.ecs_world)
+                if e then
+                    e:shoot(self.ecs_world)
+                end
             end, e.lock_time)
         end
     else

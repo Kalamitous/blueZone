@@ -11,7 +11,7 @@ function Laser:new(x, y, owner, target)
     self.max_speed = 750
     self.vel = {}
     self.vel.x, self.vel.y = lume.vector(self.ang, self.max_speed)
-    self.lifetime = 2.5
+    self.lifetime = 1.5
 
     self.is_projectile = false
     self.is_laser = true

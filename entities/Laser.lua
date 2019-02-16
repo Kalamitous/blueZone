@@ -36,19 +36,4 @@ function Laser:update(dt)
     }
 end
 
-function Laser:filter(item)
-    if item and item.is_player and not item.invincible and not item.dead then
-        item.health = math.max(item.health - self.dmg, 0)
-
-        if item.health <= 0 then
-            item.vel.x, item.vel.y = lume.vector(self.ang, self.max_speed * 4)
-        end
-
-        item:setInvincible(item.invincible_time)
-
-        self.remove = true
-        return "cross"
-    end
-end
-
 return Laser

@@ -49,7 +49,7 @@ end
 function EnemySpawnSystem:spawnEnemy()
     local spawn_platform = self.enemy_spawns[math.random(#self.enemy_spawns)]
     
-    self.ecs_world:add(Enemy(spawn_platform))
+    self.ecs_world:add(Beamer(spawn_platform))
     self.spawned_enemies = self.spawned_enemies + 1
 end
 

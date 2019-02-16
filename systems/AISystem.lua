@@ -66,6 +66,7 @@ function AISystem:process(e, dt)
     else
         if e.lock_time and e.delay then
             e.delay:stop()
+            --e.delay = nil
         end
         -- if enemy doesn't have move_timer then we know it was manually stopped
         if e.stopped then

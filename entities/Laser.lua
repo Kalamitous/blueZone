@@ -28,6 +28,8 @@ function Laser:draw()
     love.graphics.setColor(1, 0.1, 0.1, 0.9)
     love.graphics.setLineWidth(3)
     love.graphics.line(self.pos.x, self.pos.y, self.ending.x, self.ending.y)
+    love.graphics.setLineWidth(1)
+    love.graphics.setColor(1, 1, 1, 1)
 end
 
 function Laser:update(dt)

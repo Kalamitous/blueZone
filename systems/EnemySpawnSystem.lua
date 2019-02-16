@@ -44,7 +44,7 @@ end
 function EnemySpawnSystem:process(e, dt)
 end
 
--- TODO: distribute enemies to correspond w/ platform size
+-- TODO: use tiled to set max amt of each type of enemy on each platform
 function EnemySpawnSystem:spawnEnemy()
     local spawn_platform = self.enemy_spawns[math.random(#self.enemy_spawns)]
     local enemy_type = math.random(2)

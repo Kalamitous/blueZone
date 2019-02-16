@@ -67,11 +67,17 @@ function PlayerControlSystem:process(e, dt)
 
     -- dash
     if input:pressed("left") or input:pressed("right") then
-        if e.can_dash == e.dir and not e.dashed_in_air then
+        local dir = 1
+
+        if input:pressed("left") then
+            dir = -1
+        end
+
+        if e.can_dash == dir and not e.dashed_in_air then
             e:dash()
             e.dashed_in_air = true
-        elseif e.can_dash == 0 then
-            e:startDashDetection()
+        else
+            e:startDashDetection(dir)
         end
     end
 

@@ -183,13 +183,13 @@ function Player:bounce(nx, ny)
     end
 end
 
-function Player:startDashDetection()
+function Player:startDashDetection(dir)
     if self.dash_detect_timer then 
         self.dash_detect_timer:stop()
         self.dash_detect_timer = nil
     end
 
-    self.can_dash = self.dir
+    self.can_dash = dir
 
     self.dash_detect_timer = tick.delay(function()
         self.can_dash = 0

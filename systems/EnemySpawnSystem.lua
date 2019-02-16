@@ -8,7 +8,6 @@ function EnemySpawnSystem:new(ecs_world, map)
     self.total_enemies = 20
     self.max_enemies = 10
     self.spawned_enemies = 0
-    self.current_enemies = 0
 
     for _, e in pairs(self.ecs_world.entities) do
         if tostring(e) == "Object" and e.is_enemy then
@@ -28,7 +27,14 @@ function EnemySpawnSystem:new(ecs_world, map)
     end
 
     self.timer = tick.recur(function()
-        if self.current_enemies >= self.max_enemies then return end
+        local current_enemies = 0
+        for _, e in pairs(self.ecs_world.entities) do
+            if tostring(e) == "Object" and e.is_enemy then
+                current_enemies = current_enemies + 1
+            end
+        end
+
+        if current_enemies >= self.max_enemies then return end
         if self.spawned_enemies >= self.total_enemies then return end
 
         self:spawnEnemy()
@@ -36,13 +42,6 @@ function EnemySpawnSystem:new(ecs_world, map)
 end
 
 function EnemySpawnSystem:process(e, dt)
-    self.current_enemies = 0
-
-    for _, e in pairs(self.ecs_world.entities) do
-        if tostring(e) == "Object" and e.is_enemy then
-            self.current_enemies = self.current_enemies + 1
-        end
-    end
 end
 
 -- TODO: distribute enemies to correspond w/ platform size

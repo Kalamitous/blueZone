@@ -12,9 +12,7 @@ function Beamer:shoot(ecs_world)
     self.can_shoot = false
 
     tick.delay(function()
-        if self then
-            self.can_shoot = true
-        end
+        self.can_shoot = true
     end, self.reload_time)
 end
 

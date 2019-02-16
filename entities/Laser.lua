@@ -18,7 +18,9 @@ function Laser:new(x, y, owner, target)
     self.age = 0
 
     tick.delay(function()
-        self.remove = true
+        if self then
+            self.remove = true
+        end
     end, self.lifetime)
 end
 

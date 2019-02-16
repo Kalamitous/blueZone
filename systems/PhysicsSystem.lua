@@ -33,7 +33,11 @@ function PhysicsSystem:process(e, dt)
     e.pos.x, e.pos.y, cols, len = self.bump_world:move(e, new_x, new_y, e.filter)
 
     if e.onCollide then
-        e:onCollide(cols, len)
+        if e.needs_bump then
+            e:onCollide(cols, len, self.bump_world)
+        else
+            e:onCollide(cols, len)
+        end
     end
 end
 

@@ -18,9 +18,11 @@ tiny = require "libs.tiny"
 
 Enemy = require 'entities.Enemy'
 Beamer = require 'entities.Beamer'
+Rocketeer = require 'entities.Rocketeer'
 Player = require 'entities.Player'
 Projectile = require 'entities.Projectile'
 Laser = require 'entities.Laser'
+Missile = require 'entities.Missile'
 Attack = require 'entities.Attack'
 
 AISystem = require "systems.AISystem"

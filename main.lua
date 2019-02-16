@@ -42,12 +42,14 @@ pause = require "states.pause"
 assets = cargo.init("assets")
 input = baton.new {
     controls = {
+        pause = {'key:escape'},
         left = {'key:left', 'axis:leftx-', 'button:dpleft'},
         right = {'key:right', 'axis:leftx+', 'button:dpright'},
         up = {'key:up', 'axis:lefty-', 'button:dpup'},
         down = {'key:down', 'axis:lefty+', 'button:dpdown'},
-        z = {'key:z', 'button:a'},
-        pause = {'key:escape'},
+        light = {'key:z'},
+        heavy = {'key:x'},
+        special = {'key:c'}
     },
     pairs = {
         move = {"left", "right", "up", "down"}

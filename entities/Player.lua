@@ -24,10 +24,6 @@ function Player:new(x, y)
     self.dash_time = 0.15
     self.dash_detect_timer = nil
 
-    self.attack_cooldown = 0.05
-    self.attack_duration = 0.2
-    self.can_attack = true
-
     self.health = 50
     self.invincible = false
     self.invincible_time = 1.5
@@ -38,25 +34,60 @@ function Player:new(x, y)
     self.sprite = true
     self.is_player = true
 
+    self.can_attack = true
+    self.attacks = {
+        light = {
+            {
+                offset = {x = self.hitbox.w / 2, y = 0},
+                hitbox = {w = 35, h = self.hitbox.h},
+                duration = 0.1,
+                cooldown = 0.05,
+                dmg = 20
+            }
+        },
+        heavy = {
+            used = false,
+            {
+                offset = {x = self.hitbox.w / 2, y = 0},
+                hitbox = {w = 35, h = self.hitbox.h},
+                duration = 0.3,
+                cooldown = 0.05,
+                dmg = 30
+            }
+        },
+        special = {
+            {
+                offset = {x = self.hitbox.w / 2, y = 0},
+                hitbox = {w = 35, h = self.hitbox.h},
+                duration = 0.4,
+                cooldown = 0.5,
+                dmg = 40
+            }
+        },
+        dash = {
+            {
+                offset = {x = 0, y = 0},
+                hitbox = {w = self.hitbox.w, h = self.hitbox.h},
+                duration = self.dash_time,
+                cooldown = 0,
+                dmg = 10
+            }
+        }
+    }
+
     self.anims = {
-        scale = 2,
+        scale = 0.4,
         idle = animator.newAnimation({
-            assets.player.idle[1],
+            assets.player.idle[1]
         }, 1 / 1),
         run = animator.newAnimation({
-            assets.player.idle[1],
-            assets.player.idle[2],
-            assets.player.idle[3]
+            assets.player.idle[1]
         }, 1 / 2),
         jump = animator.newAnimation({
-            assets.player.idle[1],
-            assets.player.idle[2],
-            assets.player.idle[3]
+            assets.player.idle[1]
         }, 1 / 2),
         death = animator.newAnimation({
-            assets.player.idle[1],
-            assets.player.idle[2],
-            assets.player.idle[3]
+            assets.player.idle[1]
         }, 1 / 2)
     }
     self.anims.idle:setLooping(true)
@@ -188,14 +219,24 @@ function Player:bounce(nx, ny)
     end
 end
 
-function Player:attack(ecs_world)
-    if self.can_attack then
-        ecs_world:add(Attack(self.hitbox.w / 2, 0, 35, self.hitbox.h, self.attack_duration, self))
-        self.can_attack = false
-        tick.delay(function() 
-            self.can_attack = true
-        end, self.attack_duration + self.attack_cooldown)
+function Player:attack(ecs_world, type, num)
+    if not self.can_attack then return end
+    if type == "light" and self.attacks.heavy.used then return end
+
+    local attack = self.attacks[type]
+
+    self.can_attack = false
+    if type == "heavy" then
+        attack.used = true
+    elseif type == "special" then
+        self.attacks.heavy.used = false
     end
+    
+    ecs_world:add(Attack(attack[num].offset.x, attack[num].offset.y, attack[num].hitbox.w, attack[num].hitbox.h, attack[num].duration, attack[num].dmg, self))
+
+    tick.delay(function() 
+        self.can_attack = true
+    end, attack[num].duration + attack[num].cooldown)
 end
 
 return Player

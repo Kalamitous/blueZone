@@ -79,7 +79,7 @@ function PlayerControlSystem:process(e, dt)
             e.dashing = true
             e.vel.x = e.dash_speed * e.dir
 
-            self.ecs_world:add(Attack(0, 0, e.hitbox.w, e.hitbox.h, e.dash_time, e))
+            e:attack(self.ecs_world, "dash", 1)
 
             tick.delay(function()
                 e.dashing = false
@@ -104,8 +104,12 @@ function PlayerControlSystem:process(e, dt)
     end
 
     --[[ATTACKS]]--
-    if input:pressed("z") then
-        e:attack(self.ecs_world)
+    if input:pressed("light") then
+        e:attack(self.ecs_world, "light", 1)
+    elseif input:pressed("heavy") then
+        e:attack(self.ecs_world, "heavy", 1)
+    elseif input:pressed("special") then
+        e:attack(self.ecs_world, "special", 1)
     end
 end
 

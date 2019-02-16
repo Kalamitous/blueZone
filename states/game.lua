@@ -10,7 +10,8 @@ game.ecs_world:add(
     DeathSystem,
     HUDSystem,
     PlayerControlSystem(game.ecs_world),
-    UpdateSystem(game.ecs_world)
+    UpdateSystem(game.ecs_world),
+    LaserSystem(game.bump_world)
 )
 
 local update_filter = tiny.filter("!isDrawSystem")

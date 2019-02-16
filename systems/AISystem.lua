@@ -54,10 +54,18 @@ function AISystem:process(e, dt)
             e:stop()
         end
 
-        if e.can_shoot then
+        if e.can_shoot and not e.lock_time then
             e:shoot(self.ecs_world)
+        elseif e.lock_time and not e.delay then
+            e.delay = tick.delay(function()
+                e:shoot(self.ecs_world)
+            end, e.lock_time)
         end
     else
+        if e.lock_time and e.delay then
+            e.delay:stop()
+            e.delay = nil
+        end
         -- if enemy doesn't have move_timer then we know it was manually stopped
         if e.stopped then
             tick.delay(function()

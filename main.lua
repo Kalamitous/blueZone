@@ -17,8 +17,10 @@ tick = require "libs.tick"
 tiny = require "libs.tiny"
 
 Enemy = require 'entities.Enemy'
+Beamer = require 'entities.Beamer'
 Player = require 'entities.Player'
 Projectile = require 'entities.Projectile'
+Laser = require 'entities.Laser'
 Attack = require 'entities.Attack'
 
 AISystem = require "systems.AISystem"
@@ -31,6 +33,7 @@ PlayerControlSystem = require "systems.PlayerControlSystem"
 PlayerSpawnSystem = require "systems.PlayerSpawnSystem"
 SpriteSystem = require "systems.SpriteSystem"
 UpdateSystem = require "systems.UpdateSystem"
+LaserSystem = require "systems.LaserSystem"
 
 game = require "states.game"
 menu = require "states.menu"

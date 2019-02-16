@@ -15,6 +15,17 @@ function Player:new(x, y)
     self.running = false
     self.grounded = false
     self.hit_vertical_surface = false
+    
+    self.can_dash = 0
+    self.dashing = false
+    self.dashed_in_air = false
+    self.dash_speed = 2400
+    self.dash_time = 0.15
+    self.dash_detect_timer = nil
+
+    self.attack_cooldown = 0.3
+    self.attack_lifetime = 0.25
+    self.can_attack = true
 
     self.health = 50
     self.invincible = false
@@ -22,10 +33,6 @@ function Player:new(x, y)
     self.opacity = 1
     self.flash_timer = nil
     self.dead = false
-
-    self.attack_cooldown = 0.5
-    self.attack_lifetime = 0.25
-    self.can_attack = true
 
     self.sprite = true
     self.is_player = true
@@ -70,6 +77,10 @@ function Player:update(dt)
     end
 
     self.anims.cur:update(dt)
+
+    if self.grounded then
+        self.dashed_in_air = false
+    end
 
     self.grounded = false
     self.hit_vertical_surface = false
@@ -121,6 +132,24 @@ function Player:onCollide(cols, len)
     end
 end
 
+function Player:onDeath()
+    self.dead = true
+
+    if self.flash_timer then
+        self.flash_timer:stop()
+        self.flash_timer = nil
+    end
+
+    self:changeAnim("death")
+end
+
+function Player:changeAnim(anim)
+    if self.anims.cur == self.anims[anim] then return end
+
+    self.anims.cur = self.anims[anim]
+    self.anims.cur:restart()
+end
+
 function Player:setInvincible(time)
     self.invincible = true
 
@@ -144,34 +173,6 @@ function Player:setInvincible(time)
     end, time)
 end
 
-function Player:attack(ecs_world)
-    if self.can_attack then
-        ecs_world:add(Attack(35, 0, self.attack_lifetime, self))
-        self.can_attack = false
-        tick.delay(function() 
-            self.can_attack = true
-        end, self.attack_cooldown)
-    end
-end
-
-function Player:changeAnim(anim)
-    if self.anims.cur == self.anims[anim] then return end
-
-    self.anims.cur = self.anims[anim]
-    self.anims.cur:restart()
-end
-
-function Player:onDeath()
-    self.dead = true
-
-    if self.flash_timer then
-        self.flash_timer:stop()
-        self.flash_timer = nil
-    end
-
-    self:changeAnim("death")
-end
-
 function Player:bounce(nx, ny)
     if (nx < 0 and self.vel.x > 0) or (nx > 0 and self.vel.x < 0) then
         self.vel.x = -self.vel.x * self.bounciness
@@ -179,6 +180,40 @@ function Player:bounce(nx, ny)
 
     if (ny < 0 and self.vel.y > 0) or (self.vel.y > 0 and self.vel.y < 0) then
         self.vel.y = -self.vel.y * self.bounciness
+    end
+end
+
+function Player:startDashDetection()
+    if self.dash_detect_timer then 
+        self.dash_detect_timer:stop()
+        self.dash_detect_timer = nil
+    end
+
+    self.can_dash = self.dir
+
+    self.dash_detect_timer = tick.delay(function()
+        self.can_dash = 0
+        self.dash_detect_timer = nil
+    end, 0.3)
+end
+
+function Player:dash()
+    self.dashing = true
+    self.vel.x = self.dash_speed * self.dir
+
+    tick.delay(function()
+        self.dashing = false
+        self.vel.x = 0
+    end, self.dash_time)
+end
+
+function Player:attack(ecs_world)
+    if self.can_attack then
+        ecs_world:add(Attack(35, 0, self.attack_lifetime, self))
+        self.can_attack = false
+        tick.delay(function() 
+            self.can_attack = true
+        end, self.attack_cooldown)
     end
 end
 

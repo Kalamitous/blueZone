@@ -6,6 +6,7 @@ function PlayerControlSystem:new(ecs_world)
 end
 
 function PlayerControlSystem:process(e, dt)
+    --[[MOVEMENT]]--
     e.running = false
 
     if input:down("left") and not (input:down("right") or e.dead) then
@@ -14,7 +15,7 @@ function PlayerControlSystem:process(e, dt)
 
             e.running = true
         else
-            if not e.hit_vertical_surface then
+            if not (e.hit_vertical_surface or e.dashing) then
                 e.vel.x = math.max(e.vel.x - e.acc * dt / 2, -e.max_speed)
             end
         end
@@ -28,7 +29,7 @@ function PlayerControlSystem:process(e, dt)
 
             e.running = true
         else
-            if not e.hit_vertical_surface then
+            if not (e.hit_vertical_surface or e.dashing) then
                 e.vel.x = math.min(e.vel.x + e.acc * dt / 2, e.max_speed)
             end
         end
@@ -49,11 +50,6 @@ function PlayerControlSystem:process(e, dt)
         end
     end
 
-    -- attack
-    if input:pressed("z") then
-        e:attack(self.ecs_world)
-    end
-
     -- sliding
     if (((input:down("left") and input:down("right")) or not (input:down("left") or input:down("right"))) and e.grounded) or e.dead then
         local acc = e.acc
@@ -67,6 +63,23 @@ function PlayerControlSystem:process(e, dt)
         elseif e.vel.x > 0 then
             e.vel.x = math.max(e.vel.x - acc * dt, 0)
         end
+    end
+
+    -- dash
+    if input:pressed("left") or input:pressed("right") then
+        if e.can_dash == e.dir and not e.dashed_in_air then
+            e:dash()
+            e.dashed_in_air = true
+        elseif e.can_dash == 0 then
+            e:startDashDetection()
+        end
+    end
+
+    --[[ATTACKS]]--
+    if e.dead then return end
+
+    if input:pressed("z") then
+        e:attack(self.ecs_world)
     end
 end
 

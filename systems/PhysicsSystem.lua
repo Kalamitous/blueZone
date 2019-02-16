@@ -15,7 +15,11 @@ end
 
 function PhysicsSystem:process(e, dt)
     if e.gravity then
-        e.vel.y = e.vel.y + e.gravity * dt
+        if e.dashing then
+            e.vel.y = 0
+        else
+            e.vel.y = e.vel.y + e.gravity * dt
+        end
     end
     
     local new_x = e.pos.x + e.vel.x * dt

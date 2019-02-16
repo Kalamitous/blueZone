@@ -1,7 +1,8 @@
 local Player = Object:extend()
 
 function Player:new(x, y)
-    self.hitbox = {w = 50, h = 67}
+    self.offset = {x = 18, y = 0}
+    self.hitbox = {w = 45, h = 110}
     self.pos = {x = x, y = y - self.hitbox.h}
 
     self.max_speed = 500
@@ -38,21 +39,25 @@ function Player:new(x, y)
     self.is_player = true
 
     self.anims = {
-        scale = 4,
+        scale = 2,
         idle = animator.newAnimation({
             assets.player.idle[1],
         }, 1 / 1),
         run = animator.newAnimation({
-            assets.player.run[1],
-            assets.player.run[2],
-            assets.player.run[3]
-        }, 1 / 10),
+            assets.player.idle[1],
+            assets.player.idle[2],
+            assets.player.idle[3]
+        }, 1 / 2),
         jump = animator.newAnimation({
-            assets.player.jump[1],
-        }, 1 / 1),
+            assets.player.idle[1],
+            assets.player.idle[2],
+            assets.player.idle[3]
+        }, 1 / 2),
         death = animator.newAnimation({
-            assets.player.death[1],
-        }, 1 / 1)
+            assets.player.idle[1],
+            assets.player.idle[2],
+            assets.player.idle[3]
+        }, 1 / 2)
     }
     self.anims.idle:setLooping(true)
     self.anims.run:setLooping(true)

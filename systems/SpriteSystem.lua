@@ -2,12 +2,15 @@ local SpriteSystem = tiny.processingSystem(Object:extend())
 SpriteSystem.filter = tiny.filter("sprite")
 SpriteSystem.isDrawSystem = true
 
-function SpriteSystem:new(camera, map_offset)
+function SpriteSystem:new(camera, map)
     self.camera = camera
-    self.map_offset = map_offset
+    self.map = map
 end
 
 function SpriteSystem:preProcess(dt)
+    love.graphics.push()
+    love.graphics.translate(self.map.offset.x, self.map.offset.y)
+    
     self.camera:attach()
 end
 
@@ -35,6 +38,8 @@ end
 
 function SpriteSystem:postProcess(dt)
     self.camera:detach()
+
+    love.graphics.pop()
 end
 
 return SpriteSystem

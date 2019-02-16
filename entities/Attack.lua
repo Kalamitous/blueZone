@@ -20,7 +20,9 @@ function Attack:new(x, y, w, h, duration, owner)
     self.sprite = true
 
     tick.delay(function()
-        self.remove = true
+        if self then
+            self.remove = true
+        end
     end, self.duration)
 end
 
@@ -53,7 +55,9 @@ function Attack:onCollide(cols, len)
                 e.attack_indicator = true
 
                 tick.delay(function() 
-                    e.attack_indicator = false
+                    if e then
+                        e.attack_indicator = false
+                    end
                 end, self.indicator_length)
             end
         end

@@ -100,7 +100,9 @@ function Enemy:shoot(ecs_world)
     self.can_shoot = false
 
     tick.delay(function()
-        self.can_shoot = true
+        if self then
+            self.can_shoot = true
+        end
     end, self.reload_time)
 end
 

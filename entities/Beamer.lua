@@ -2,7 +2,7 @@ local Beamer = Enemy:extend()
 
 function Beamer:new(spawn_platform)
     Beamer.super.new(self, spawn_platform)
-    self.lock_time = 0.35
+    self.lock_time = 0.5
     self.delay = nil
 end
 
@@ -17,6 +17,15 @@ function Beamer:shoot(ecs_world)
 end
 
 function Beamer:draw()
+    if self.target then
+        love.graphics.setColor(1, 0.1, 0.1, 0.25)
+        love.graphics.setLineWidth(1)
+        local centerX = self.pos.x + (self.hitbox.w / 2)
+        local centerY = self.pos.y + (self.hitbox.h / 2)
+        local targetCenterX = self.target.pos.x + (self.target.hitbox.w / 2)
+        local targetCenterY = self.target.pos.y + (self.target.hitbox.h / 2)
+        love.graphics.line(centerX, centerY, targetCenterX, targetCenterY)
+    end
     brightness = self.health / 100
     love.graphics.setColor(brightness*0.5, brightness*0.75, brightness)
     

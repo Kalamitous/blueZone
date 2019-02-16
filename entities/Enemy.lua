@@ -17,6 +17,7 @@ function Enemy:new(spawn_platform)
     self.move_timer = nil
     self.wait_timer = nil
     self.lock_time = 0.3
+    self.locked = false
 
     self.dir = 1
     self.view_dist = 450

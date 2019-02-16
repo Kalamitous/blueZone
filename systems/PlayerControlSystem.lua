@@ -38,7 +38,7 @@ function PlayerControlSystem:process(e, dt)
 
     if input:pressed("up") and e.grounded and not e.dead then
         e.vel.y = e.vel.y - e.jump_height
-
+        e.sounds.jump:play()
         e.grounded = false
     end
 

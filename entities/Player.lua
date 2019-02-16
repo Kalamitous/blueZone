@@ -51,8 +51,11 @@ function Player:new(x, y)
     self.anims.run:setLooping(true)
     self.anims.jump:setLooping(true)
     self.anims.death:setLooping(true)
-
     self.anims.cur = self.anims.idle
+
+    self.sounds = {
+        jump = ripple.newSound(assets.sounds.player.jump, {volume = 0.3})
+    }
 end
 
 function Player:update(dt)

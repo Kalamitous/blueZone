@@ -12,6 +12,7 @@ baton = require "libs.baton"
 bump = require "libs.bump"
 cargo = require "libs.cargo"
 lume = require "libs.lume"
+ripple = require "libs.ripple"
 tick = require "libs.tick"
 tiny = require "libs.tiny"
 

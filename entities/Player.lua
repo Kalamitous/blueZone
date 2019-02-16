@@ -24,6 +24,7 @@ function Player:new(x, y)
     self.dash_detect_timer = nil
 
     self.attack_cooldown = 0.05
+    self.attack_duration = 0.2
     self.can_attack = true
 
     self.health = 50

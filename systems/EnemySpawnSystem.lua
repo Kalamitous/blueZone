@@ -48,8 +48,12 @@ end
 -- TODO: distribute enemies to correspond w/ platform size
 function EnemySpawnSystem:spawnEnemy()
     local spawn_platform = self.enemy_spawns[math.random(#self.enemy_spawns)]
-    
-    self.ecs_world:add(Beamer(spawn_platform))
+    local enemy_type = math.random(2)
+    if enemy_type == 1 then
+        self.ecs_world:add(Enemy(spawn_platform))
+    elseif enemy_type == 2 then
+        self.ecs_world:add(Beamer(spawn_platform))
+    end
     self.spawned_enemies = self.spawned_enemies + 1
 end
 

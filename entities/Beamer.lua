@@ -16,4 +16,19 @@ function Beamer:shoot(ecs_world)
     end, self.reload_time)
 end
 
+function Beamer:draw()
+    brightness = self.health / 100
+    love.graphics.setColor(brightness*0.5, brightness*0.75, brightness)
+    
+    if self.attack_indicator then
+        love.graphics.setColor(1, 0, 0.25)
+    elseif self.target then
+        love.graphics.setColor(0.2 * brightness, 1 * brightness, 0.65 * brightness)
+    end
+        love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
+    love.graphics.setColor(0, 0, 0)
+        love.graphics.rectangle("line", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
+    love.graphics.setColor(1, 1, 1)
+end
+
 return Beamer

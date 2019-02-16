@@ -1,8 +1,10 @@
 local Enemy = Object:extend()
 
-function Enemy:new(x, y, spawn_platform)
-    self.pos = {x = x or 0, y = y or 0}
+function Enemy:new(spawn_platform)
+    self.spawn_platform = spawn_platform
+
     self.hitbox = {w = 50, h = 75}
+    self.pos = {x = self.spawn_platform.x + lume.random(self.spawn_platform.width - self.hitbox.w), y = self.spawn_platform.y - self.hitbox.h}
 
     self.max_speed = 100
 	self.vel = {x = 0, y = 0}
@@ -25,10 +27,10 @@ function Enemy:new(x, y, spawn_platform)
 
     self.health = 100
     self.last_hit = nil
-    self.spawn_platform = spawn_platform
+    self.attack_indicator = false
+
     self.sprite = true
     self.is_enemy = true
-    self.attack_indicator = false
 end
 
 function Enemy:update(dt)

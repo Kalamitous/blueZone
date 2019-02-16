@@ -52,8 +52,8 @@ function game:stage(file)
 
     self.ecs_world:add(
         CameraTrackingSystem(self.camera),
+        EnemySpawnSystem(self.ecs_world, self.map),
         PhysicsSystem(self.bump_world, self.map),
-        SpawnSystem(self.ecs_world, self.map),
         SpriteSystem(self.camera, self.map)
     )
 end

@@ -23,10 +23,10 @@ Attack = require 'entities.Attack'
 AISystem = require "systems.AISystem"
 CameraTrackingSystem = require "systems.CameraTrackingSystem"
 DeathSystem = require "systems.DeathSystem"
+EnemySpawnSystem = require "systems.EnemySpawnSystem"
 HUDSystem = require "systems.HUDSystem"
 PhysicsSystem = require "systems.PhysicsSystem"
 PlayerControlSystem = require "systems.PlayerControlSystem"
-SpawnSystem = require "systems.SpawnSystem"
 SpriteSystem = require "systems.SpriteSystem"
 UpdateSystem = require "systems.UpdateSystem"
 

@@ -3,7 +3,7 @@ local Enemy = Object:extend()
 function Enemy:new(spawn_platform)
     self.spawn_platform = spawn_platform
 
-    self.hitbox = {w = 50, h = 75}
+    self.hitbox = {w = 100, h = 200}
     self.pos = {x = self.spawn_platform.x + lume.random(self.spawn_platform.width - self.hitbox.w), y = self.spawn_platform.y - self.hitbox.h}
 
     self.max_speed = 100

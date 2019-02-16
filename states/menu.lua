@@ -29,7 +29,6 @@ function menu:init()
     play_button:updatePosition()
     play_button.onRelease = function()
         Gamestate.switch(game)
-        game:init()
     end
 
     local fs_button = menu.panel:create("Button", "fs-button")

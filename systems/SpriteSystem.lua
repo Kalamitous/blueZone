@@ -20,8 +20,8 @@ function SpriteSystem:process(e, dt)
     love.graphics.setColor(1, 1, 1, opacity)
         if e.anims then
             local scale = e.anims.scale
-            local x = e.pos.x + e.offset.x * e.dir + e.hitbox.w / 2 - e.anims.cur:getWidth() * scale / 2 * e.dir
-            local y = e.pos.y + e.offset.y * e.dir + e.hitbox.h - e.anims.cur:getHeight() * scale
+            local x = e.pos.x + e.hitbox.w / 2 - e.anims.cur:getWidth() * scale / 2 * e.dir
+            local y = e.pos.y + e.hitbox.h - e.anims.cur:getHeight() * scale
 
             love.graphics.push()
             love.graphics.translate(x, y)

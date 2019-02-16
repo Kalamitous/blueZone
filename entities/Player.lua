@@ -1,15 +1,14 @@
 local Player = Object:extend()
 
 function Player:new(x, y)
-    self.hitbox = {w = 64, h = 280}
-    self.offset = {x = 64, y = 0}
+    self.hitbox = {w = 50, h = 67}
     self.pos = {x = x, y = y - self.hitbox.h}
 
     self.max_speed = 500
     self.vel = {x = 0, y = 0}
     self.acc = 3000
     self.gravity = 3000
-    self.jump_height = 1600
+    self.jump_height = 1200
     self.bounciness = 0.5
     self.dir = 1
 
@@ -24,6 +23,10 @@ function Player:new(x, y)
     self.dash_time = 0.15
     self.dash_detect_timer = nil
 
+    self.attack_cooldown = 0.05
+    self.attack_duration = 0.2
+    self.can_attack = true
+
     self.health = 50
     self.invincible = false
     self.invincible_time = 1.5
@@ -31,47 +34,14 @@ function Player:new(x, y)
     self.flash_timer = nil
     self.dead = false
 
+    self.sprite = true
     self.is_player = true
 
-    self.attack_cooldown = 0.05
-    self.attack_duration = 0.2
-    self.can_attack = true
-    --[[
-    self.attacks = {
-        light = {
-            {
-                duration = 0.1,
-                cooldown = 0.05
-            }
-        },
-        medium = {
-            {
-                duration = 0.2,
-                cooldown = 0.05
-            }
-        },
-        heavy = {
-            {
-                duration = 0.3,
-                cooldown = 0.05
-            }
-        },
-        special = {
-            {
-                duration = 0.4,
-                cooldown = 0.2
-            }
-        }
-    }
-    ]]--
-    self.sprite = true
     self.anims = {
-        scale = 1,
+        scale = 4,
         idle = animator.newAnimation({
             assets.player.idle[1],
-            assets.player.idle[2],
-            assets.player.idle[3]
-        }, 1 / 2),
+        }, 1 / 1),
         run = animator.newAnimation({
             assets.player.run[1],
             assets.player.run[2],

@@ -1,5 +1,5 @@
 local UpdateSystem = tiny.processingSystem(Object:extend())
-UpdateSystem.filter = tiny.filter("update")
+UpdateSystem.filter = tiny.filter("update|remove")
 
 function UpdateSystem:new(ecs_world)
     self.ecs_world = ecs_world

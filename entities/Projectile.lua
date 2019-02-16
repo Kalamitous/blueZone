@@ -18,6 +18,9 @@ function Projectile:new(x, y, owner, target)
     self.is_projectile = true
 end
 
+function Projectile:update(dt)
+end
+
 function Projectile:draw()
     love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
 end
@@ -35,7 +38,7 @@ function Projectile:onCollide(cols, len)
         if e.is_bound then
             -- TODO: make disappear when completely off bounds
             self.remove = true
-        elseif e.is_player and not e.invincible and not e.dead then
+        elseif e.is_player and not e.dashing and not e.invincible and not e.dead then
             e.health = math.max(e.health - self.dmg, 0)
 
             if e.health <= 0 then

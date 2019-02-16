@@ -1,19 +1,19 @@
 local Attack = Object:extend()
 
-function Attack:new(offset_x, offset_y, lifetime, owner)
+function Attack:new(x, y, w, h, duration, owner)
     self.owner = owner
 
-    self.offset = {x = offset_x or 0, y = offset_y or 0}
-    self.hitbox = {w = 20, h = 40}
+    self.offset = {x = x, y = y}
+    self.hitbox = {w = w, h = h}
     self.pos = {
-        x = self.owner.pos.x + self.owner.hitbox.w / 2 + self.offset.x * self.owner.dir - self.hitbox.w / 2,
-        y = self.owner.pos.y + self.owner.hitbox.h / 2 + self.offset.y - self.hitbox.h / 2
+        x = self.owner.pos.x + self.owner.hitbox.w / 2 - self.hitbox.w / 2 + self.offset.x * self.owner.dir,
+        y = self.owner.pos.y + self.owner.hitbox.h / 2 - self.hitbox.h / 2 + self.offset.y 
     }
     
     self.vel = {x = 0, y = 0}
     
     self.dmg = 20
-    self.lifetime = lifetime
+    self.duration = duration
     self.indicator_length = 0.2
     
     self.is_attack = true
@@ -21,7 +21,7 @@ function Attack:new(offset_x, offset_y, lifetime, owner)
 
     tick.delay(function()
         self.remove = true
-    end, self.lifetime)
+    end, self.duration)
 end
 
 function Attack:draw()
@@ -39,8 +39,10 @@ function Attack:onCollide(cols, len)
     for i = 1, len do
         local e = cols[i].other
 
-        if e.is_enemy then
-            if e.last_hit ~= self then
+        if not e.is_player then
+            if not e.health then return end
+        
+            if e.health > 0 and e.last_hit ~= self then
                 e.health = e.health - self.dmg
                 
                 if e.health <= 0 then

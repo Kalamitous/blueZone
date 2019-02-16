@@ -66,6 +66,8 @@ function PlayerControlSystem:process(e, dt)
     end
 
     -- dash
+    if e.dead then return end
+
     if input:pressed("left") or input:pressed("right") then
         local dir = 1
 
@@ -74,16 +76,34 @@ function PlayerControlSystem:process(e, dt)
         end
 
         if e.can_dash == dir and not e.dashed_in_air then
-            e:dash()
+            e.dashing = true
+            e.vel.x = e.dash_speed * e.dir
+
+            self.ecs_world:add(Attack(0, 0, e.hitbox.w, e.hitbox.h, e.dash_time, e))
+
+            tick.delay(function()
+                e.dashing = false
+                e.vel.x = 0
+            end, e.dash_time)
+
+            -- will be set back to false in Player:update() in the same frame if player is on ground
             e.dashed_in_air = true
         else
-            e:startDashDetection(dir)
+            if e.dash_detect_timer then 
+                e.dash_detect_timer:stop()
+                e.dash_detect_timer = nil
+            end
+
+            e.can_dash = dir
+
+            e.dash_detect_timer = tick.delay(function()
+                e.can_dash = 0
+                e.dash_detect_timer = nil
+            end, 0.3)
         end
     end
 
     --[[ATTACKS]]--
-    if e.dead then return end
-
     if input:pressed("z") then
         e:attack(self.ecs_world)
     end

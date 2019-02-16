@@ -183,33 +183,9 @@ function Player:bounce(nx, ny)
     end
 end
 
-function Player:startDashDetection(dir)
-    if self.dash_detect_timer then 
-        self.dash_detect_timer:stop()
-        self.dash_detect_timer = nil
-    end
-
-    self.can_dash = dir
-
-    self.dash_detect_timer = tick.delay(function()
-        self.can_dash = 0
-        self.dash_detect_timer = nil
-    end, 0.3)
-end
-
-function Player:dash()
-    self.dashing = true
-    self.vel.x = self.dash_speed * self.dir
-
-    tick.delay(function()
-        self.dashing = false
-        self.vel.x = 0
-    end, self.dash_time)
-end
-
 function Player:attack(ecs_world)
     if self.can_attack then
-        ecs_world:add(Attack(35, 0, self.attack_lifetime, self))
+        --ecs_world:add(Attack(35, 0, self.attack_lifetime, self))
         self.can_attack = false
         tick.delay(function() 
             self.can_attack = true

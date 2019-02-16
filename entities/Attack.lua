@@ -3,10 +3,10 @@ local Attack = Object:extend()
 function Attack:new(offset_x, offset_y, lifetime, owner)
     self.owner = owner
 
-    self.offset = {x = offset_x * self.owner.dir or 0, y = offset_y or 0}
+    self.offset = {x = offset_x or 0, y = offset_y or 0}
     self.hitbox = {w = 20, h = 40}
     self.pos = {
-        x = self.owner.pos.x + self.owner.hitbox.w / 2 + self.offset.x - self.hitbox.w / 2,
+        x = self.owner.pos.x + self.owner.hitbox.w / 2 + self.offset.x * self.owner.dir - self.hitbox.w / 2,
         y = self.owner.pos.y + self.owner.hitbox.h / 2 + self.offset.y - self.hitbox.h / 2
     }
     

@@ -16,7 +16,7 @@ function Player:new(x, y)
     self.grounded = false
     self.hit_vertical_surface = false
 
-    self.health = 10
+    self.health = 50
     self.invincible = false
     self.invincible_time = 1.5
     self.opacity = 1

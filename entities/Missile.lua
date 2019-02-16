@@ -3,7 +3,7 @@ local Missile = Projectile:extend()
 function Missile:new(x, y, owner, target)
     Missile.super.new(self, x, y, owner, target)
     self.hitbox = {w = 30, h = 30}
-    self.explosion_radius = 500
+    self.explosion_radius = 100
     self.dmg = 10
     self.max_speed = 150
     self.vel = {}

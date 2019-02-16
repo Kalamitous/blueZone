@@ -1,7 +1,7 @@
-local SpawnSystem = tiny.processingSystem(Object:extend())
-SpawnSystem.filter = tiny.filter("is_enemy")
+local EnemySpawnSystem = tiny.processingSystem(Object:extend())
+EnemySpawnSystem.filter = tiny.filter("is_enemy")
 
-function SpawnSystem:new(ecs_world, map)
+function EnemySpawnSystem:new(ecs_world, map)
     self.ecs_world = ecs_world
     self.map = map
 
@@ -35,7 +35,7 @@ function SpawnSystem:new(ecs_world, map)
     end, 1)
 end
 
-function SpawnSystem:process(e, dt)
+function EnemySpawnSystem:process(e, dt)
     self.current_enemies = 0
 
     for _, e in pairs(self.ecs_world.entities) do
@@ -46,11 +46,11 @@ function SpawnSystem:process(e, dt)
 end
 
 -- TODO: distribute enemies to correspond w/ platform size
-function SpawnSystem:spawnEnemy()
+function EnemySpawnSystem:spawnEnemy()
     local spawn_platform = self.enemy_spawns[math.random(#self.enemy_spawns)]
     
     self.ecs_world:add(Enemy(spawn_platform))
     self.spawned_enemies = self.spawned_enemies + 1
 end
 
-return SpawnSystem
+return EnemySpawnSystem

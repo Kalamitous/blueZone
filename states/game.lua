@@ -17,7 +17,6 @@ local update_filter = tiny.filter("!isDrawSystem")
 local draw_filter = tiny.filter("isDrawSystem")
 
 function game:init()
-    self.ecs_world:add(Player(0, 300))
     self:stage("assets/maps/test")
 end
 
@@ -46,7 +45,7 @@ function game:stage(file)
     self.map.size = map_size
 
     self.camera = Camera()
-    self.camera:setFollowLerp(0.2)
+    self.camera:setFollowLerp(0.1)
     self.camera:setFollowStyle("LOCKON")
     self.camera:setBounds(self.map.offset.x, self.map.offset.y, self.map.offset.x + self.map.size.w, self.map.offset.y + self.map.size.h)
 
@@ -54,6 +53,7 @@ function game:stage(file)
         CameraTrackingSystem(self.camera),
         EnemySpawnSystem(self.ecs_world, self.map),
         PhysicsSystem(self.bump_world, self.map),
+        PlayerSpawnSystem(self.ecs_world, self.map),
         SpriteSystem(self.camera, self.map)
     )
 end

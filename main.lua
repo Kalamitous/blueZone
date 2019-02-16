@@ -27,6 +27,7 @@ EnemySpawnSystem = require "systems.EnemySpawnSystem"
 HUDSystem = require "systems.HUDSystem"
 PhysicsSystem = require "systems.PhysicsSystem"
 PlayerControlSystem = require "systems.PlayerControlSystem"
+PlayerSpawnSystem = require "systems.PlayerSpawnSystem"
 SpriteSystem = require "systems.SpriteSystem"
 UpdateSystem = require "systems.UpdateSystem"
 

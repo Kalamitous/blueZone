@@ -1,8 +1,8 @@
 local Player = Object:extend()
 
 function Player:new(x, y)
-    self.pos = {x = x or 0, y = y or 0}
     self.hitbox = {w = 50, h = 67}
+    self.pos = {x = x, y = y - self.hitbox.h}
 
     self.max_speed = 500
     self.vel = {x = 0, y = 0}

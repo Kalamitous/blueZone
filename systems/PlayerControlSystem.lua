@@ -55,7 +55,7 @@ function PlayerControlSystem:process(e, dt)
     end
 
     -- sliding
-    if ((input:down("left") and input:down("right")) or not (input:down("left") or input:down("right"))) and e.grounded then
+    if (((input:down("left") and input:down("right")) or not (input:down("left") or input:down("right"))) and e.grounded) or e.dead then
         local acc = e.acc
 
         if e.dead then

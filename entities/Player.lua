@@ -16,11 +16,12 @@ function Player:new(x, y)
     self.grounded = false
     self.hit_vertical_surface = false
 
-    self.health = 50
+    self.health = 10
     self.invincible = false
     self.invincible_time = 1.5
     self.opacity = 1
     self.flash_timer = nil
+    self.dead = false
 
     self.attack_cooldown = 0.5
     self.attack_lifetime = 0.25
@@ -50,6 +51,8 @@ function Player:new(x, y)
     self.anims.run:setLooping(true)
     self.anims.jump:setLooping(true)
     self.anims.death:setLooping(true)
+
+    self.anims.cur = self.anims.idle
 end
 
 function Player:update(dt)
@@ -64,25 +67,6 @@ function Player:update(dt)
     end
 
     self.anims.cur:update(dt)
-
-    if self.invincible then
-        if not self.flash_timer then
-            self.flash_timer = tick.recur(function()
-                if self.opacity == 1 then
-                    self.opacity = 0
-                else
-                    self.opacity = 1
-                end
-            end, 0.1)
-        end
-    else
-        if self.flash_timer then
-            self.flash_timer:stop()
-            self.flash_timer = nil
-
-            self.opacity = 1
-        end
-    end
 
     self.grounded = false
     self.hit_vertical_surface = false
@@ -134,6 +118,29 @@ function Player:onCollide(cols, len)
     end
 end
 
+function Player:setInvincible(time)
+    self.invincible = true
+
+    self.flash_timer = tick.recur(function()
+        if self.opacity == 1 then
+            self.opacity = 0
+        else
+            self.opacity = 1
+        end
+    end, 0.1)
+
+    tick.delay(function()
+        self.invincible = false
+
+        if self.flash_timer then
+            self.flash_timer:stop()
+            self.flash_timer = nil
+        end
+
+        self.opacity = 1
+    end, time)
+end
+
 function Player:attack(ecs_world)
     if self.can_attack then
         ecs_world:add(Attack(35, 0, self.attack_lifetime, self))
@@ -152,6 +159,13 @@ function Player:changeAnim(anim)
 end
 
 function Player:onDeath()
+    self.dead = true
+
+    if self.flash_timer then
+        self.flash_timer:stop()
+        self.flash_timer = nil
+    end
+
     self:changeAnim("death")
 end
 

@@ -35,22 +35,16 @@ function Projectile:onCollide(cols, len)
         if e.is_bound then
             -- TODO: make disappear when completely off bounds
             self.remove = true
-        elseif e.is_player then
-            if not e.invincible then
-                e.health = math.max(e.health - self.dmg, 0)
+        elseif e.is_player and not e.invincible and not e.dead then
+            e.health = math.max(e.health - self.dmg, 0)
 
-                if e.health <= 0 then
-                    e.vel.x, e.vel.y = lume.vector(self.ang, self.max_speed * 4)
-                end
-
-                e.invincible = true
-
-                tick.delay(function()
-                    e.invincible = false
-                end, e.invincible_time)
- 
-                self.remove = true
+            if e.health <= 0 then
+                e.vel.x, e.vel.y = lume.vector(self.ang, self.max_speed * 4)
             end
+
+            e:setInvincible(e.invincible_time)
+
+            self.remove = true
         end
     end
 end

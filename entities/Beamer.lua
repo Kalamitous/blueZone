@@ -2,8 +2,36 @@ local Beamer = Enemy:extend()
 
 function Beamer:new(spawn_platform)
     Beamer.super.new(self, spawn_platform)
+
     self.lock_time = 0.5
-    self.delay = nil
+end
+
+function Beamer:draw()
+    if self.target then
+        local center_x = self.pos.x + (self.hitbox.w / 2)
+        local center_y = self.pos.y + (self.hitbox.h / 2)
+        local target_center_x = self.target.pos.x + (self.target.hitbox.w / 2)
+        local target_center_y = self.target.pos.y + (self.target.hitbox.h / 2)
+        
+        love.graphics.setColor(1, 0.1, 0.1, 0.25)
+        love.graphics.line(center_x, center_y, target_center_x, target_center_y)
+    end
+
+    love.graphics.setColor(0.5, 0.75, 0)
+
+    if self.attack_indicator then
+        love.graphics.setColor(1, 0, 0)
+    elseif self.target then
+        love.graphics.setColor(0.2, 1, 0.65)
+    end
+
+    love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
+
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.rectangle("line", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
+    love.graphics.setColor(1, 1, 1)
+
+    self:drawHealthbar()
 end
 
 function Beamer:shoot(ecs_world)
@@ -14,31 +42,6 @@ function Beamer:shoot(ecs_world)
     tick.delay(function()
         self.can_shoot = true
     end, self.reload_time)
-end
-
-function Beamer:draw()
-    if self.target then
-        love.graphics.setColor(1, 0.1, 0.1, 0.25)
-        love.graphics.setLineWidth(1)
-        local centerX = self.pos.x + (self.hitbox.w / 2)
-        local centerY = self.pos.y + (self.hitbox.h / 2)
-        local targetCenterX = self.target.pos.x + (self.target.hitbox.w / 2)
-        local targetCenterY = self.target.pos.y + (self.target.hitbox.h / 2)
-        love.graphics.line(centerX, centerY, targetCenterX, targetCenterY)
-    end
-    brightness = self.health / 100
-    love.graphics.setColor(brightness*0.5, brightness*0.75, brightness)
-    
-    if self.attack_indicator then
-        love.graphics.setColor(1, 0, 0.25)
-    elseif self.target then
-        love.graphics.setColor(0.2 * brightness, 1 * brightness, 0.65 * brightness)
-    end
-        love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
-    love.graphics.setColor(0, 0, 0)
-        love.graphics.rectangle("line", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
-    love.graphics.setColor(1, 1, 1)
-    self:drawHealthbar()
 end
 
 return Beamer

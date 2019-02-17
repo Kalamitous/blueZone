@@ -6,7 +6,7 @@ function EnemySpawnSystem:new(ecs_world, map)
     self.map = map
 
     self.total_enemies = 20
-    self.max_enemies = 10
+    self.max_enemies = 1
     self.spawned_enemies = 0
 
     for _, e in pairs(self.ecs_world.entities) do
@@ -49,12 +49,13 @@ function EnemySpawnSystem:spawnEnemy()
     local spawn_platform = self.enemy_spawns[math.random(#self.enemy_spawns)]
     local enemy_type = math.random(3)
     if enemy_type == 1 then
-        self.ecs_world:add(Enemy(spawn_platform))
+        --self.ecs_world:add(Enemy(spawn_platform))
     elseif enemy_type == 2 then
-        self.ecs_world:add(Beamer(spawn_platform))
+        --self.ecs_world:add(Beamer(spawn_platform))
     elseif enemy_type == 3 then
-        self.ecs_world:add(Rocketeer(spawn_platform))
+        --self.ecs_world:add(Rocketeer(spawn_platform))
     end
+    self.ecs_world:add(Rocketeer(spawn_platform))
     self.spawned_enemies = self.spawned_enemies + 1
 end
 

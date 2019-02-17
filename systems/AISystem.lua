@@ -1,9 +1,10 @@
 local AISystem = tiny.processingSystem(Object:extend())
 AISystem.filter = tiny.filter("is_enemy")
 
-function AISystem:new(ecs_world, bump_world)
+function AISystem:new(ecs_world, bump_world, camera)
     self.ecs_world = ecs_world
     self.bump_world = bump_world
+    self.camera = camera
 
     self.view_cone_subdivisions = 10
 end
@@ -15,12 +16,15 @@ function viewConeFilter(item)
 end
 
 function AISystem:process(e, dt)
+    -- custom behavior
+    if e.think then
+        e:think(self.bump_world, dt)
+
+        return
+    end
+
     if e.desires_move then
-        if not e.is_rocketeer then
-            e:moveTo(e.spawn_platform.x + lume.random(e.spawn_platform.width - 50), e.pos.y)
-        else
-           -- e:moveTo(e.pos.x, e.pos.y + 10)
-        end
+        e:moveTo(e.spawn_platform.x + lume.random(e.spawn_platform.width - 50), e.pos.y)
     end
 
     e.target = nil
@@ -54,33 +58,7 @@ function AISystem:process(e, dt)
     end
     
     if e.target then
-        if e.is_rocketeer and e.desires_move then
-            local distance = lume.distance(e.pos.x, e.pos.y, e.target.pos.x, e.target.pos.y)
-            if distance >= e.goal_dist then
-                if e.delay then
-                    e.delay:stop()
-                    e.delay = nil
-                end
-                e:moveTo(e.target.pos.x, e.target.pos.y)
-            elseif distance < e.escape_distance then
-                e.delay = tick.delay(function()
-                    if e and e.target then
-                        local ang = lume.angle(e.pos.x, e.pos.y, e.target.pos.x + e.target.hitbox.w / 2, e.target.pos.y + e.target.hitbox.h / 2)
-                        ang = ang + math.pi
-                        --delta_x, delta_y = lume.vector(ang, e.goal_dist)
-                        --e:moveTo(e.target.pos.x + delta_x, e.target.pos.y + delta_y)
-                        e.vel.x, e.vel.y = lume.vector(ang, e.max_speed)
-                    end
-                end, e.escape_time)
-            else
-                if e.delay then
-                    e.delay:stop()
-                    e.delay = nil
-                end
-                e:stop()
-            end
-        end
-        if not e.stopped and not e.ignores_stop then
+        if not e.stopped then
             e:stop()
         end
 
@@ -94,13 +72,11 @@ function AISystem:process(e, dt)
             end, e.lock_time)
         end
     else
-        if e.is_rocketeer then
-            e.vel.x, e.vel.y = 0, 0
-        end
         if e.lock_time and e.delay then
             e.delay:stop()
             e.delay = nil
         end
+
         -- if enemy doesn't have move_timer then we know it was manually stopped
         if e.stopped then
             tick.delay(function()

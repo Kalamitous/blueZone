@@ -52,28 +52,29 @@ function Enemy:update(dt)
 end
 
 function Enemy:draw()
-    brightness = self.health / 100
-    love.graphics.setColor(brightness, brightness, brightness)
-    
     if self.attack_indicator then
         love.graphics.setColor(1, 0, 0)
     elseif self.target then
-        love.graphics.setColor(0.5 * brightness, 1 * brightness, 0.5 * brightness)
+        love.graphics.setColor(0.5, 1, 0.5)
     end
-        love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
+
+    love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
+
     love.graphics.setColor(0, 0, 0)
-        love.graphics.rectangle("line", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
+    love.graphics.rectangle("line", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
     love.graphics.setColor(1, 1, 1)
+
     self:drawHealthbar()
 end
 
 function Enemy:drawHealthbar()
-    centerX, centerY = (self.pos.x + self.hitbox.w / 2), (self.pos.y + self.hitbox.h / 2)
-    love.graphics.setColor(1,1,1)
-    love.graphics.rectangle("fill", centerX - self.health_width / 2, self.pos.y - self.health_hover - self.health_height, self.health_width, self.health_height)
+    center_x = self.pos.x + self.hitbox.w / 2
     indicatorWidth = self.health_width * (self.health / self.max_health)
+
+    love.graphics.rectangle("fill", center_x - self.health_width / 2, self.pos.y - self.health_hover - self.health_height, self.health_width, self.health_height)
+
     love.graphics.setColor(1,0,0)
-    love.graphics.rectangle("fill", centerX - self.health_width / 2, self.pos.y - self.health_hover - self.health_height, indicatorWidth, self.health_height)
+    love.graphics.rectangle("fill", center_x - self.health_width / 2, self.pos.y - self.health_hover - self.health_height, indicatorWidth, self.health_height)
     love.graphics.setColor(1,1,1)
 end
 

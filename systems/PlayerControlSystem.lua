@@ -128,16 +128,22 @@ function PlayerControlSystem:process(e, dt)
             if e:attack(self.ecs_world, "special", 1) then
                 e.combo = 0
             end
+        else
+            if e.grounded and not e.running and e.can_attack then
+                e.laser_charge_time = e.laser_charge_time + dt
+            end
         end
     elseif input:down("special") then
-        if e.combo == 0 and e.grounded then
-            e.vel.x = 0
-
-            e.running = false
+        if e.grounded and not e.running and e.can_attack and e.laser_charge_time > 0 then
+            e.laser_charge_time = e.laser_charge_time + dt
+        else
+            e.laser_charge_time = 0
         end
     elseif input:released("special") then
-        if e.combo == 0 and e.grounded then
+        if e.laser_charge_time > 0 then
             e:attack(self.ecs_world, "special", 2)
+
+            e.laser_charge_time = 0
         end
     end
 end

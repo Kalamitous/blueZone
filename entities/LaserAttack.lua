@@ -1,6 +1,6 @@
 local LaserAttack = Attack:extend()
 
-function LaserAttack:new(x, y, duration, owner)
+function LaserAttack:new(x, y, duration, charge_time, owner)
     Attack.super.new(self, x, y, 0, 0, duration, owner)
     self.owner = owner
 
@@ -17,7 +17,7 @@ function LaserAttack:new(x, y, duration, owner)
     self.vel = {}
     self.vel.x, self.vel.y = lume.vector(self.ang, self.max_speed)
 
-    self.dmg = 10
+    self.dmg = 10 + 20 * charge_time
     self.age = 0
 
     self.is_laser = true

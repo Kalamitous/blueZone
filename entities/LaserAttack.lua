@@ -17,7 +17,8 @@ function LaserAttack:new(x, y, duration, charge_time, owner)
     self.vel = {}
     self.vel.x, self.vel.y = lume.vector(self.ang, self.max_speed)
 
-    self.dmg = 10 + 20 * charge_time
+    self.dmg = 0 + 20 * charge_time
+    self.thickness = 10 + 10 * charge_time
     self.age = 0
 
     self.is_laser = true
@@ -38,7 +39,7 @@ end
 
 function LaserAttack:draw()
     love.graphics.setColor(1, 0.1, 0.1, 0.9)
-    love.graphics.setLineWidth(3)
+    love.graphics.setLineWidth(self.thickness)
     love.graphics.line(self.pos.x, self.pos.y, self.end_pos.x, self.end_pos.y)
     love.graphics.setLineWidth(1)
     love.graphics.setColor(1, 1, 1, 1)

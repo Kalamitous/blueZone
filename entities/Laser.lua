@@ -16,6 +16,7 @@ function Laser:new(x, y, owner, target)
     self.vel.x, self.vel.y = lume.vector(self.ang, self.max_speed)
 
     self.dmg = 10
+    self.thickness = 3
     self.age = 0
 
     self.is_laser = true
@@ -34,7 +35,7 @@ end
 
 function Laser:draw()
     love.graphics.setColor(1, 0.1, 0.1, 0.9)
-    love.graphics.setLineWidth(3)
+    love.graphics.setLineWidth(self.thickness)
     love.graphics.line(self.pos.x, self.pos.y, self.ending.x, self.ending.y)
     love.graphics.setLineWidth(1)
     love.graphics.setColor(1, 1, 1, 1)

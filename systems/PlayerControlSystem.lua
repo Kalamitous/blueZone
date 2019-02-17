@@ -135,7 +135,7 @@ function PlayerControlSystem:process(e, dt)
         end
     elseif input:down("special") then
         if e.grounded and not e.running and e.can_attack and e.laser_charge_time > 0 then
-            e.laser_charge_time = e.laser_charge_time + dt
+            e.laser_charge_time = math.min(e.laser_charge_time + dt, 4)
         else
             e.laser_charge_time = 0
         end

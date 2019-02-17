@@ -124,16 +124,20 @@ function PlayerControlSystem:process(e, dt)
             end
         end
     elseif input:pressed("special") then
-        if e.combo == 0 then
-            if e.grounded then
-                if e:attack(self.ecs_world, "special", 2) then
-                    e.vel.x = 0
-                end
-            end
-        else
+        if e.combo ~= 0 then
             if e:attack(self.ecs_world, "special", 1) then
                 e.combo = 0
             end
+        end
+    elseif input:down("special") then
+        if e.combo == 0 and e.grounded then
+            e.vel.x = 0
+
+            e.running = false
+        end
+    elseif input:released("special") then
+        if e.combo == 0 and e.grounded then
+            e:attack(self.ecs_world, "special", 2)
         end
     end
 end

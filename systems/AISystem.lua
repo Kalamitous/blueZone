@@ -54,9 +54,9 @@ function AISystem:process(e, dt)
     end
     
     if e.target then
-        if e.is_rocketeer then
+        if e.is_rocketeer and e.desires_move then
             local distance = lume.distance(e.pos.x, e.pos.y, e.target.pos.x, e.target.pos.y)
-            if distance >= e.target_distance then
+            if distance >= e.goal_dist then
                 if e.delay then
                     e.delay:stop()
                     e.delay = nil
@@ -67,6 +67,8 @@ function AISystem:process(e, dt)
                     if e and e.target then
                         local ang = lume.angle(e.pos.x, e.pos.y, e.target.pos.x + e.target.hitbox.w / 2, e.target.pos.y + e.target.hitbox.h / 2)
                         ang = ang + math.pi
+                        --delta_x, delta_y = lume.vector(ang, e.goal_dist)
+                        --e:moveTo(e.target.pos.x + delta_x, e.target.pos.y + delta_y)
                         e.vel.x, e.vel.y = lume.vector(ang, e.max_speed)
                     end
                 end, e.escape_time)

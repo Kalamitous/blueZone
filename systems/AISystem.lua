@@ -20,6 +20,10 @@ function AISystem:process(e, dt)
     if e.think then
         e:think(self.bump_world, dt)
 
+        if e.target and e.can_shoot then
+            e:shoot(self.ecs_world)
+        end
+
         return
     end
 

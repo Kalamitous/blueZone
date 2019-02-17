@@ -35,7 +35,7 @@ function Beamer:draw()
 end
 
 function Beamer:shoot(ecs_world)
-    ecs_world:add(Laser(self.pos.x + self.hitbox.w / 2, self.pos.y + self.hitbox.h / 2, self, self.target))
+    ecs_world:add(Laser(0, 0, self, self.target))
     
     self.can_shoot = false
 

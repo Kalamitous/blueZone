@@ -4,7 +4,12 @@ function Laser:new(x, y, owner, target)
     Laser.super.new(self, x, y, owner, target)
 
     self.hitbox = nil
-    self.end_pos = {x = x, y = y}
+    self.pos = {
+        x = self.owner.pos.x + self.owner.hitbox.w / 2 + self.offset.x * self.owner.dir,
+        y = self.owner.pos.y + self.owner.hitbox.h / 2 + self.offset.y 
+    }
+    
+    self.end_pos = {x = self.pos.x , y = self.pos.y}
 
     self.max_speed = 750
     self.vel = {}

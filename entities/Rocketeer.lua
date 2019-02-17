@@ -82,7 +82,7 @@ function Rocketeer:draw()
 end
 
 function Rocketeer:shoot(ecs_world)
-    ecs_world:add(Missile(self.pos.x + self.hitbox.w / 2, self.pos.y + self.hitbox.h / 2, self, self.target))
+    ecs_world:add(Missile(0, 0, self, self.target))
     
     self.can_shoot = false
 

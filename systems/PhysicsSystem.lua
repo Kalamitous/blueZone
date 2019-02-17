@@ -25,7 +25,8 @@ function PhysicsSystem:process(e, dt)
     local new_x = e.pos.x + e.vel.x * dt
     local new_y = e.pos.y + e.vel.y * dt
 
-    if e.owner and e.offset then
+    -- clean this up later
+    if e.owner and e.offset and not e.is_projectile then
         new_x = e.owner.pos.x + e.owner.hitbox.w / 2 + e.offset.x * e.owner.dir - e.hitbox.w / 2
         new_y = e.owner.pos.y + e.owner.hitbox.h / 2 + e.offset.y - e.hitbox.h / 2
     end

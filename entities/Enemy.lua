@@ -112,7 +112,7 @@ function Enemy:stop()
 end
 
 function Enemy:shoot(ecs_world)
-    ecs_world:add(Projectile(self.pos.x + self.hitbox.w / 2, self.pos.y + self.hitbox.h / 2, self, self.target))
+    ecs_world:add(Projectile(0, 0, self, self.target))
     
     self.can_shoot = false
 

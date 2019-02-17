@@ -46,6 +46,7 @@ function Rocketeer:draw()
     love.graphics.setColor(0, 0, 0)
         love.graphics.rectangle("line", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
     love.graphics.setColor(1, 1, 1)
+    self:drawHealthbar()
 end
 
 return Rocketeer

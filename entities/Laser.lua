@@ -2,26 +2,29 @@ local Laser = Projectile:extend()
 
 function Laser:new(x, y, owner, target)
     Laser.super.new(self, x, y, owner, target)
-    self.hitbox=nil
-    self.ending = {
-        x = x or 0,
-        y = y or 0
-    }
-    self.dmg = 1
+
+    self.hitbox = nil
+    self.end_pos = {x = x, y = y}
+
     self.max_speed = 750
     self.vel = {}
     self.vel.x, self.vel.y = lume.vector(self.ang, self.max_speed)
-    self.lifetime = 1.5
 
-    self.is_projectile = false
-    self.is_laser = true
+    self.dmg = 10
     self.age = 0
 
+    self.is_laser = true
+    
     tick.delay(function()
-        if self then
-            self.remove = true
-        end
-    end, self.lifetime)
+        self.remove = true
+    end, 1.5)
+end
+
+function Laser:update(dt)
+    self.age = self.age + dt
+    
+    self.end_pos.x = self.pos.x + (self.vel.x * self.age)
+    self.end_pos.y = self.pos.y + (self.vel.y * self.age)
 end
 
 function Laser:draw()

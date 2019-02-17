@@ -25,10 +25,16 @@ function Projectile:draw()
     love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
 end
 
-function Projectile:filter(e)
-    if e.is_player then
+function Projectile:filter(item)
+    if not item then return end
+
+    if item.is_player then
         return "cross"
     end
+end
+
+function Projectile:takeDamage(dmg)
+    self.health = math.max(self.health - dmg, 0)
 end
 
 function Projectile:onCollide(cols, len)
@@ -38,16 +44,16 @@ function Projectile:onCollide(cols, len)
         if e.is_bound then
             -- TODO: make disappear when completely off bounds
             self.remove = true
-        elseif e.is_player and not e.dashing and not e.invincible and not e.dead then
-            e.health = math.max(e.health - self.dmg, 0)
+        elseif e.is_player then
+            e:takeDamage(self.dmg)
 
-            if e.health <= 0 then
-                e.vel.x, e.vel.y = lume.vector(self.ang, self.max_speed * 4)
+            if e.dead then
+                e.vel.x, self.vel.y = lume.vector(self.ang, 800)
             end
 
-            e:setInvincible(e.invincible_time)
-
-            self.remove = true
+            if not e.invincible then
+                self.remove = true
+            end
         end
     end
 end

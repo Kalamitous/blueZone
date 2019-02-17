@@ -34,6 +34,8 @@ function Player:new(x, y)
     self.sprite = true
     self.is_player = true
 
+    self.points = 0
+
     self.can_attack = true
     self.combo = 0
     self.attacks = {
@@ -102,6 +104,12 @@ function Player:new(x, y)
             {
                 offset = {x = self.hitbox.w / 2, y = 0},
                 hitbox = {w = 35, h = self.hitbox.h},
+                duration = 0.4,
+                cooldown = 0.5,
+                dmg = 40
+            },
+            {
+                offset = {x = self.hitbox.w / 2, y = 0},
                 duration = 0.4,
                 cooldown = 0.5,
                 dmg = 40
@@ -213,6 +221,7 @@ end
 
 function Player:onDeath()
     self.dead = true
+    self.points = math.max(self.points - 2000, 0)
 
     if self.flash_timer then
         self.flash_timer:stop()
@@ -227,6 +236,15 @@ function Player:changeAnim(anim)
 
     self.anims.cur = self.anims[anim]
     self.anims.cur:restart()
+end
+
+function Player:takeDamage(dmg)
+    if self.dashing or self.invincible or self.dead then return end
+
+    self.health = math.max(self.health - dmg, 0)
+    self.points = math.max(self.points - 500, 0)
+
+    self:setInvincible(self.invincible_time)
 end
 
 function Player:setInvincible(time)
@@ -269,8 +287,17 @@ function Player:attack(ecs_world, type, num)
     local attack = self.attacks[type][num]
 
     self.can_attack = false
-
-    ecs_world:add(Attack(attack.offset.x, attack.offset.y, attack.hitbox.w, attack.hitbox.h, attack.duration, attack.dmg, self))
+    if type == "heavy" then
+        attack.used = true
+    elseif type == "special" then
+        self.attacks.heavy.used = false
+    end
+    
+    if type == "special" and num == 2 then
+        ecs_world:add(LaserAttack(attack[num].offset.x, attack[num].offset.y, attack[num].duration, self))
+    else
+        ecs_world:add(Attack(attack[num].offset.x, attack[num].offset.y, attack[num].hitbox.w, attack[num].hitbox.h, attack[num].duration, attack[num].dmg, self))
+    end
 
     tick.delay(function() 
         self.can_attack = true

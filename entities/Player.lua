@@ -38,6 +38,8 @@ function Player:new(x, y)
 
     self.can_attack = true
     self.combo = 0
+    self.combo_time = 0
+    self.combo_max_time = 0.75
     self.attacks = {
         light = {
             {
@@ -158,6 +160,15 @@ function Player:new(x, y)
 end
 
 function Player:update(dt)
+    self.combo_time = self.combo_time + dt
+
+    if self.combo_time >= self.combo_max_time then
+        self.combo = 0
+        self.combo_time = 0
+        
+        self.attacks.heavy.used = false
+    end
+
     if self.health > 0 then
         if not self.grounded and not self.dashing then
             self.offset.x = 12
@@ -302,6 +313,7 @@ function Player:attack(ecs_world, type, num)
 
     local attack = self.attacks[type][num]
 
+    self.combo_time = 0
     self.can_attack = false
     if type == "heavy" then
         self.attacks.heavy.used = true

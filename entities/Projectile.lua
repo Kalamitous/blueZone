@@ -32,7 +32,9 @@ end
 
 function Projectile:filter(e)
     if not e then return end
-
+    if e.is_projectile then
+        return "slide"
+    end
     if e.is_player then
         return "cross"
     end

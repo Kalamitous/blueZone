@@ -54,8 +54,6 @@ function Laser:update(dt)
 end
 
 function Laser:filter(e)
-    print("Filter")
-    print(e)
     if not e or not e.is_enemy then
         return "cross"
     end
@@ -81,9 +79,7 @@ function Laser:onCollide(cols, len)
 end
 
 function Laser:draw()
-    print("draw laser")
     if self.charging then
-        print(self.flash_state)
         if self.flash_state then
             love.graphics.setColor(1, 0.1, 0.1, 0.8)
         else

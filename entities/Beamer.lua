@@ -36,7 +36,6 @@ function Beamer:draw()
 end
 
 function Beamer:shoot(ecs_world)
-    print("pew.")
     ecs_world:add(Laser(0, 0, self, self.target))
     
     self.can_shoot = false

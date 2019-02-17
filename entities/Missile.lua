@@ -3,7 +3,7 @@ local Missile = Projectile:extend()
 function Missile:new(x, y, owner, target)
     Missile.super.new(self, x, y, owner, target)
     self.hitbox = {w = 30, h = 30}
-    self.explosion_radius = 500
+    self.explosion_radius = 100
     self.dmg = 10
     self.max_speed = 150
     self.vel = {}
@@ -69,12 +69,8 @@ function Missile:explode(bump_world)
     cols, len = bump_world:queryRect(centerX - self.explosion_radius, centerY - self.explosion_radius, self.explosion_radius * 2,self.explosion_radius * 2, explosionFilter)
     for i = 1, len do
         local e = cols[i]
-        if e.is_player then
-            print("Boom?")
-        end
         if e.is_player and not e.invincible and not e.dead then
             e.health = math.max(e.health - self.dmg, 0)
-            print("Boom damage")
             if e.health <= 0 then
                 e.vel.x, e.vel.y = lume.vector(self.ang, self.max_speed * 4)
             end

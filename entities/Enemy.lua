@@ -27,7 +27,12 @@ function Enemy:new(spawn_platform)
     self.can_shoot = true
     self.reload_time = 3
 
-    self.health = 100
+    self.max_health = 100
+    self.health = self.max_health
+    self.health_width = 75
+    self.health_height = 10
+    self.health_hover = 25
+
     self.last_hit = nil
     self.attack_indicator = false
 
@@ -59,6 +64,17 @@ function Enemy:draw()
     love.graphics.setColor(0, 0, 0)
         love.graphics.rectangle("line", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
     love.graphics.setColor(1, 1, 1)
+    self:drawHealthbar()
+end
+
+function Enemy:drawHealthbar()
+    centerX, centerY = (self.pos.x + self.hitbox.w / 2), (self.pos.y + self.hitbox.h / 2)
+    love.graphics.setColor(1,1,1)
+    love.graphics.rectangle("fill", centerX - self.health_width / 2, self.pos.y - self.health_hover - self.health_height, self.health_width, self.health_height)
+    indicatorWidth = self.health_width * (self.health / self.max_health)
+    love.graphics.setColor(1,0,0)
+    love.graphics.rectangle("fill", centerX - self.health_width / 2, self.pos.y - self.health_hover - self.health_height, indicatorWidth, self.health_height)
+    love.graphics.setColor(1,1,1)
 end
 
 function Enemy:filter(e)

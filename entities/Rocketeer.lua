@@ -4,6 +4,12 @@ function Rocketeer:new(spawn_platform)
     Rocketeer.super.new(self, spawn_platform)
     self.lock_time = 0.4
     self.delay = nil
+    self.is_rocketeer = true
+    self.goal_dist = 150
+    self.escape_distance = 100
+    self.escape_time = 0.25
+    self.ignores_stop = true
+    self.desire_move = false
 end
 
 function Rocketeer:shoot(ecs_world)
@@ -40,6 +46,7 @@ function Rocketeer:draw()
     love.graphics.setColor(0, 0, 0)
         love.graphics.rectangle("line", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
     love.graphics.setColor(1, 1, 1)
+    self:drawHealthbar()
 end
 
 return Rocketeer

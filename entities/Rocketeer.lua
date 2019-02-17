@@ -33,7 +33,7 @@ function Rocketeer:think(bump_world, dt)
         self.target = items[1]
     end
 
-    if self.target then
+    if self.target and not self.stunned then
         self.view_box.size = self.view_box.lock_size
         self.view_box.pos = {
             x = self.pos.x + self.hitbox.w / 2 - self.view_box.size.w / 2,

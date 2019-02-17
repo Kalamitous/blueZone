@@ -8,7 +8,7 @@ function Beamer:new(spawn_platform)
 end
 
 function Beamer:draw()
-    if self.target and self.can_shoot then
+    if self.target and self.can_shoot and not self.stunned then
         local center_x = self.pos.x + (self.hitbox.w / 2)
         local center_y = self.pos.y + (self.hitbox.h / 2)
         local target_center_x = self.target.pos.x + (self.target.hitbox.w / 2)
@@ -19,7 +19,6 @@ function Beamer:draw()
     end
 
     love.graphics.setColor(0.5, 0.75, 0)
-
     if self.attack_indicator then
         love.graphics.setColor(1, 0, 0)
     elseif self.target then

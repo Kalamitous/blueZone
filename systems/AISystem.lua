@@ -20,14 +20,14 @@ function AISystem:process(e, dt)
     if e.think then
         e:think(self.bump_world, dt)
 
-        if e.target and e.can_shoot then
+        if e.target and e.can_shoot and not e.stunned then
             e:shoot(self.ecs_world)
         end
 
         return
     end
 
-    if e.desires_move then
+    if e.desires_move and not e.stunned then
         e:moveTo(e.spawn_platform.x + lume.random(e.spawn_platform.width - 50), e.pos.y)
     end
 
@@ -61,7 +61,7 @@ function AISystem:process(e, dt)
         end
     end
     
-    if e.target then
+    if e.target and not e.stunned then
         if not e.stopped then
             e:stop()
         end

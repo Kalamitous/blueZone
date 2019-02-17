@@ -32,6 +32,8 @@ function Enemy:new(spawn_platform)
     self.health_width = 75
     self.health_height = 10
     self.health_hover = 25
+    self.stunned = false
+    self.stun_time = 0.5
 
     self.last_hit = nil
     self.attack_indicator = false
@@ -128,6 +130,15 @@ function Enemy:takeDamage(dmg)
     tick.delay(function() 
         self.attack_indicator = false
     end, 0.2)
+
+    self.stunned = true
+    self:stop()
+    if not self.target then
+        self.dir = -self.dir
+    end
+    tick.delay(function()
+        self.stunned = false
+    end, self.stun_time)
 end
 
 function Enemy:onDeath()

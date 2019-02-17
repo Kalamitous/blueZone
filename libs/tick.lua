@@ -93,6 +93,8 @@ end
 
 function tick:update(dt)
   for i = #self, 1, -1 do
+    -- hacky fix
+    if not self[i] then return end
     local e = self[i]
     e.timer = e.timer - dt
     while e.timer <= 0 do

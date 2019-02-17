@@ -288,15 +288,15 @@ function Player:attack(ecs_world, type, num)
 
     self.can_attack = false
     if type == "heavy" then
-        attack.used = true
+        self.attacks.heavy.used = true
     elseif type == "special" then
         self.attacks.heavy.used = false
     end
     
     if type == "special" and num == 2 then
-        ecs_world:add(LaserAttack(attack[num].offset.x, attack[num].offset.y, attack[num].duration, self))
+        ecs_world:add(LaserAttack(attack.offset.x, attack.offset.y, attack.duration, self))
     else
-        ecs_world:add(Attack(attack[num].offset.x, attack[num].offset.y, attack[num].hitbox.w, attack[num].hitbox.h, attack[num].duration, attack[num].dmg, self))
+        ecs_world:add(Attack(attack.offset.x, attack.offset.y, attack.hitbox.w, attack.hitbox.h, attack.duration, attack.dmg, self))
     end
 
     tick.delay(function() 

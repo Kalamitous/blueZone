@@ -64,6 +64,12 @@ function Player:new(x, y)
                 duration = 0.4,
                 cooldown = 0.5,
                 dmg = 40
+            },
+            {
+                offset = {x = self.hitbox.w / 2, y = 0},
+                duration = 0.4,
+                cooldown = 0.5,
+                dmg = 40
             }
         },
         dash = {
@@ -171,9 +177,9 @@ function Player:onCollide(cols, len)
 end
 
 function Player:onDeath()
-    self.points = math.max(self.points - 2000, 0)
-
     self.dead = true
+    self.points = math.max(self.points - 2000, 0)
+    self.vel.x, self.vel.y = lume.vector(self.ang, 800)
 
     if self.flash_timer then
         self.flash_timer:stop()
@@ -188,6 +194,15 @@ function Player:changeAnim(anim)
 
     self.anims.cur = self.anims[anim]
     self.anims.cur:restart()
+end
+
+function Player:takeDamage(dmg)
+    if self.dashing or self.invincible or self.dead then return end
+
+    self.health = math.max(self.health - dmg, 0)
+    self.points = math.max(self.points - 500, 0)
+
+    self:setInvincible(self.invincible_time)
 end
 
 function Player:setInvincible(time)
@@ -236,7 +251,11 @@ function Player:attack(ecs_world, type, num)
         self.attacks.heavy.used = false
     end
     
-    ecs_world:add(Attack(attack[num].offset.x, attack[num].offset.y, attack[num].hitbox.w, attack[num].hitbox.h, attack[num].duration, attack[num].dmg, self))
+    if type == "special" and num == 2 then
+        ecs_world:add(PlayerLaser(attack[num].offset.x, attack[num].offset.y, self))
+    else
+        ecs_world:add(Attack(attack[num].offset.x, attack[num].offset.y, attack[num].hitbox.w, attack[num].hitbox.h, attack[num].duration, attack[num].dmg, self))
+    end
 
     tick.delay(function() 
         self.can_attack = true

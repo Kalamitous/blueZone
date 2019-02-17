@@ -28,6 +28,7 @@ function Laser:draw()
     love.graphics.setColor(1, 0.1, 0.1, 0.9)
     love.graphics.setLineWidth(3)
     love.graphics.line(self.pos.x, self.pos.y, self.ending.x, self.ending.y)
+    love.graphics.setLineWidth(1)
 end
 
 function Laser:update(dt)
@@ -36,6 +37,14 @@ function Laser:update(dt)
         x = self.pos.x + (self.vel.x * self.age),
         y = self.pos.y + (self.vel.y * self.age)
     }
+end
+
+function Laser:filter(item)
+    if not item then return end
+    
+    if item.is_player then
+        return true
+    end
 end
 
 return Laser

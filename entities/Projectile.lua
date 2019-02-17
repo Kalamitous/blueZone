@@ -31,6 +31,10 @@ function Projectile:filter(e)
     end
 end
 
+function Projectile:takeDamage(dmg)
+    self.health = math.max(self.health - dmg, 0)
+end
+
 function Projectile:onCollide(cols, len)
     for i = 1, len do
         local e = cols[i].other
@@ -38,15 +42,8 @@ function Projectile:onCollide(cols, len)
         if e.is_bound then
             -- TODO: make disappear when completely off bounds
             self.remove = true
-        elseif e.is_player and not e.dashing and not e.invincible and not e.dead then
-            e.health = math.max(e.health - self.dmg, 0)
-            e.points = math.max(e.points - 500, 0)
-
-            if e.health <= 0 then
-                e.vel.x, e.vel.y = lume.vector(self.ang, self.max_speed * 4)
-            end
-
-            e:setInvincible(e.invincible_time)
+        elseif e.is_player then
+            e:takeDamage(self.dmg)
 
             self.remove = true
         end

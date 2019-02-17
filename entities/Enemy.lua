@@ -104,6 +104,10 @@ function Enemy:shoot(ecs_world)
     end, self.reload_time)
 end
 
+function Enemy:takeDamage(dmg)
+    self.health = math.max(self.health - dmg, 0)
+end
+
 function Enemy:onDeath()
     self.remove = true
 end

@@ -6,11 +6,9 @@ function LaserSystem:new(bump_world)
 end
 
 function LaserSystem:process(e, dt)
-    local items, len = self.bump_world:querySegment(e.pos.x, e.pos.y, e.ending.x, e.ending.y, e.filter)
+    local items, len = self.bump_world:querySegment(e.pos.x, e.pos.y, e.end_pos.x, e.end_pos.y, e.filter)
 
-    for i = 1, len do
-        items[i]:takeDamage(e.dmg)
-    end
+    e:onCollide(items, len)
 end
 
 return LaserSystem

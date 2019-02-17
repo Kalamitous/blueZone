@@ -106,6 +106,11 @@ end
 
 function Enemy:takeDamage(dmg)
     self.health = math.max(self.health - dmg, 0)
+    self.attack_indicator = true
+    
+    tick.delay(function() 
+        self.attack_indicator = false
+    end, 0.2)
 end
 
 function Enemy:onDeath()

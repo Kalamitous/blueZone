@@ -179,7 +179,6 @@ end
 function Player:onDeath()
     self.dead = true
     self.points = math.max(self.points - 2000, 0)
-    self.vel.x, self.vel.y = lume.vector(self.ang, 800)
 
     if self.flash_timer then
         self.flash_timer:stop()
@@ -252,7 +251,7 @@ function Player:attack(ecs_world, type, num)
     end
     
     if type == "special" and num == 2 then
-        ecs_world:add(PlayerLaser(attack[num].offset.x, attack[num].offset.y, self))
+        ecs_world:add(LaserAttack(attack[num].offset.x, attack[num].offset.y, attack[num].duration, self))
     else
         ecs_world:add(Attack(attack[num].offset.x, attack[num].offset.y, attack[num].hitbox.w, attack[num].hitbox.h, attack[num].duration, attack[num].dmg, self))
     end

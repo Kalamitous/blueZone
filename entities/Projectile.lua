@@ -25,8 +25,10 @@ function Projectile:draw()
     love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
 end
 
-function Projectile:filter(e)
-    if e.is_player then
+function Projectile:filter(item)
+    if not item then return end
+
+    if item.is_player then
         return "cross"
     end
 end
@@ -45,7 +47,13 @@ function Projectile:onCollide(cols, len)
         elseif e.is_player then
             e:takeDamage(self.dmg)
 
-            self.remove = true
+            if e.dead then
+                e.vel.x, self.vel.y = lume.vector(self.ang, 800)
+            end
+
+            if not e.invincible then
+                self.remove = true
+            end
         end
     end
 end

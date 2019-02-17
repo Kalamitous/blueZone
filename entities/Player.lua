@@ -1,15 +1,15 @@
 local Player = Object:extend()
 
 function Player:new(x, y)
-    self.offset = {x = 18, y = 0}
-    self.hitbox = {w = 45, h = 110}
+    self.offset = {x = 40, y = 0}
+    self.hitbox = {w = 45, h = 160}
     self.pos = {x = x, y = y - self.hitbox.h}
 
     self.max_speed = 500
     self.vel = {x = 0, y = 0}
     self.acc = 3000
     self.gravity = 3000
-    self.jump_height = 1200
+    self.jump_height = 1350
     self.bounciness = 0.5
     self.dir = 1
 
@@ -127,16 +127,23 @@ function Player:new(x, y)
     }
 
     self.anims = {
-        scale = 0.4,
+        scale = 1,
         idle = animator.newAnimation({
             assets.player.idle[1]
         }, 1 / 1),
         run = animator.newAnimation({
-            assets.player.idle[1]
-        }, 1 / 2),
+            assets.player.run[1],
+            assets.player.run[2],
+            assets.player.run[3],
+            assets.player.run[4],
+            assets.player.run[5],
+            assets.player.run[6]
+        }, 1 / 12),
         jump = animator.newAnimation({
-            assets.player.idle[1]
-        }, 1 / 2),
+            assets.player.jump[1],
+            assets.player.jump[2],
+            assets.player.jump[3]
+        }, 1 / 1),
         death = animator.newAnimation({
             assets.player.idle[1]
         }, 1 / 2)
@@ -154,11 +161,22 @@ end
 
 function Player:update(dt)
     if self.health > 0 then
-        if not self.grounded then
+        if not self.grounded and not self.dashing then
+            self.offset.x = 12
             self:changeAnim("jump")
-        elseif self.running and not self.hit_vertical_surface then
+
+            if math.abs(self.vel.y) < self.jump_height / 4 then
+                self.anims.cur:setCurrentFrame(2)
+            elseif self.vel.y <= 0 then
+                self.anims.cur:setCurrentFrame(1)
+            else
+                self.anims.cur:setCurrentFrame(3)
+            end
+        elseif self.running and not self.hit_vertical_surface or self.dashing then
+            self.offset.x = 12
             self:changeAnim("run")
         else
+            self.offset.x = 40
             self:changeAnim("idle")
         end
     end

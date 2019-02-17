@@ -60,9 +60,9 @@ function Rocketeer:think(bump_world, dt)
 end
 
 function Rocketeer:draw()
-    love.graphics.rectangle("line", self.view_box.pos.x, self.view_box.pos.y, self.view_box.size.w, self.view_box.size.h)
+    --[[love.graphics.rectangle("line", self.view_box.pos.x, self.view_box.pos.y, self.view_box.size.w, self.view_box.size.h)
     love.graphics.circle("line", self.pos.x + self.hitbox.w / 2, self.pos.y + self.hitbox.h / 2, self.safe_dist + self.dist_threshold)
-    love.graphics.circle("line", self.pos.x + self.hitbox.w / 2, self.pos.y + self.hitbox.h / 2, self.safe_dist - self.dist_threshold)
+    love.graphics.circle("line", self.pos.x + self.hitbox.w / 2, self.pos.y + self.hitbox.h / 2, self.safe_dist - self.dist_threshold)]]--
 
     love.graphics.setColor(0.9, 0.55, 0.25)
     

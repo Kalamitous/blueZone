@@ -76,13 +76,14 @@ function game:draw()
     self.map:draw(-self.camera.x + window_w / 2 + self.map.offset.x, -self.camera.y + window_h / 2 + self.map.offset.y, self.camera.scale, self.camera.scale)
     --self.map:bump_draw(self.bump_world, -self.camera.x + window_w / 2, -self.camera.y + window_h / 2, self.camera.scale, self.camera.scale)
 
-    self.camera:attach()
+    --[[self.camera:attach()
         local items, len = self.bump_world:getItems()
-    for i = 1, len do
-        local x, y, w, h = self.bump_world:getRect(items[i])
-        love.graphics.rectangle("line", x, y, w, h)
-    end
-    self.camera:detach()
+        for i = 1, len do
+            local x, y, w, h = self.bump_world:getRect(items[i])
+            love.graphics.rectangle("line", x + self.map.offset.x, y + self.map.offset.y, w, h)
+        end
+    self.camera:detach()]]--
+
     self.ecs_world:update(dt, draw_filter)
 end
 

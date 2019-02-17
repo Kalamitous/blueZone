@@ -8,15 +8,22 @@ function Laser:new(x, y, owner, target)
         x = self.owner.pos.x + self.owner.hitbox.w / 2 + self.offset.x * self.owner.dir,
         y = self.owner.pos.y + self.owner.hitbox.h / 2 + self.offset.y 
     }
+
+    self.ang = lume.angle(self.pos.x, self.pos.y, self.target.pos.x + self.target.hitbox.w / 2, self.target.pos.y + self.target.hitbox.h / 2)
     
-    self.end_pos = {x = self.target.pos.x + self.target.hitbox.w / 2, y = self.target.pos.y+ self.target.hitbox.h / 2}
+    self.laser_length = 1000
+    self.delta = {}
+    self.delta.x, self.delta.y = lume.vector(self.ang, self.laser_length)
+    
+    self.end_pos = {x = self.pos.x + self.delta.x, y = self.pos.y + self.delta.y}
+
 
     self.vel = {}
     self.vel.x, self.vel.y = 0, 0
 
     self.dmg = 10
     self.charge_time = 1.5
-    self.remove_time = 10.5
+    self.remove_time = 0.5
     self.charging = true
     self.flash_state = false
     self.flash_delay = 0.10
@@ -24,6 +31,7 @@ function Laser:new(x, y, owner, target)
     self.flash_min_delay = 0.05
 
     self.is_laser = true
+    
     
     tick.delay(function()
         self.charging = false
@@ -46,7 +54,9 @@ function Laser:flash()
         else
             self.flash_state = true
         end
-        self:flash()
+        if self.charging then
+            self:flash()
+        end
     end, self.flash_delay)
 end
 
@@ -65,15 +75,15 @@ function Laser:onCollide(cols, len)
 
         if e.is_bound then
             -- TODO: make disappear when completely off bounds
-            self.remove = true
-        elseif e.is_player and not e.invincible and not e.dead then
+            -- self.remove = true
+        elseif e.is_player and not e.invincible and not e.dead and not self.charging then
             e:takeDamage(self.dmg)
 
             if e.dead then
                 e.vel.x, self.vel.y = lume.vector(self.ang, 800)
             end
 
-            self.remove = true
+            --self.remove = true
         end
     end
 end

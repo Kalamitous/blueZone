@@ -16,7 +16,11 @@ end
 
 function AISystem:process(e, dt)
     if e.desires_move then
-        e:moveTo(e.spawn_platform.x + lume.random(e.spawn_platform.width - 50), e.pos.y)
+        if not e.is_rocketeer then
+            e:moveTo(e.spawn_platform.x + lume.random(e.spawn_platform.width - 50), e.pos.y)
+        else
+           -- e:moveTo(e.pos.x, e.pos.y + 10)
+        end
     end
 
     e.target = nil
@@ -50,7 +54,31 @@ function AISystem:process(e, dt)
     end
     
     if e.target then
-        if not e.stopped then
+        if e.is_rocketeer then
+            local distance = lume.distance(e.pos.x, e.pos.y, e.target.pos.x, e.target.pos.y)
+            if distance >= e.target_distance then
+                if e.delay then
+                    e.delay:stop()
+                    e.delay = nil
+                end
+                e:moveTo(e.target.pos.x, e.target.pos.y)
+            elseif distance < e.escape_distance then
+                e.delay = tick.delay(function()
+                    if e and e.target then
+                        local ang = lume.angle(e.pos.x, e.pos.y, e.target.pos.x + e.target.hitbox.w / 2, e.target.pos.y + e.target.hitbox.h / 2)
+                        ang = ang + math.pi
+                        e.vel.x, e.vel.y = lume.vector(ang, e.max_speed)
+                    end
+                end, e.escape_time)
+            else
+                if e.delay then
+                    e.delay:stop()
+                    e.delay = nil
+                end
+                e:stop()
+            end
+        end
+        if not e.stopped and not e.ignores_stop then
             e:stop()
         end
 
@@ -58,12 +86,15 @@ function AISystem:process(e, dt)
             e:shoot(self.ecs_world)
         elseif e.lock_time and not e.delay then
             e.delay = tick.delay(function()
-                if e then
+                if e and e.target then
                     e:shoot(self.ecs_world)
                 end
             end, e.lock_time)
         end
     else
+        if e.is_rocketeer then
+            e.vel.x, e.vel.y = 0, 0
+        end
         if e.lock_time and e.delay then
             e.delay:stop()
             e.delay = nil

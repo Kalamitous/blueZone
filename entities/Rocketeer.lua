@@ -4,6 +4,11 @@ function Rocketeer:new(spawn_platform)
     Rocketeer.super.new(self, spawn_platform)
     self.lock_time = 0.4
     self.delay = nil
+    self.is_rocketeer = true
+    self.target_distance = 150
+    self.escape_distance = 100
+    self.escape_time = 0.25
+    self.ignores_stop = true
 end
 
 function Rocketeer:shoot(ecs_world)

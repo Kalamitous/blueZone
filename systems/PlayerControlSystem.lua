@@ -125,9 +125,9 @@ function PlayerControlSystem:process(e, dt)
         end
     elseif input:pressed("special") then
         if self.combo == 0 then
-            e:attack(self.ecs_world, "special", 1)
-        else
             e:attack(self.ecs_world, "special", 2)
+        else
+            e:attack(self.ecs_world, "special", 1)
         end
     end
 end

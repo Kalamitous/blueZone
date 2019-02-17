@@ -140,9 +140,7 @@ function Player:new(x, y)
             assets.player.run[6]
         }, 1 / 12),
         jump = animator.newAnimation({
-            assets.player.jump[1],
-            assets.player.jump[2],
-            assets.player.jump[3]
+            assets.player.jump[1]
         }, 1 / 1),
         death = animator.newAnimation({
             assets.player.idle[1]
@@ -165,13 +163,13 @@ function Player:update(dt)
             self.offset.x = 12
             self:changeAnim("jump")
 
-            if math.abs(self.vel.y) < self.jump_height / 4 then
+            --[[if math.abs(self.vel.y) < self.jump_height / 4 then
                 self.anims.cur:setCurrentFrame(2)
             elseif self.vel.y <= 0 then
                 self.anims.cur:setCurrentFrame(1)
             else
                 self.anims.cur:setCurrentFrame(3)
-            end
+            end]]--
         elseif self.running and not self.hit_vertical_surface or self.dashing then
             self.offset.x = 12
             self:changeAnim("run")

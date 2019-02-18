@@ -183,7 +183,20 @@ function Player:new(x, y)
     self.anims.cur = self.anims.idle
 
     self.sounds = {
-        jump = ripple.newSound(assets.sounds.player.jump, {volume = 0.3})
+        dash = ripple.newSound(assets.sounds.player.dash, {volume = 1}),
+        emp = ripple.newSound(assets.sounds.player.emp, {volume = 1}),
+        enemy_hit = ripple.newSound(assets.sounds.player.jump, {volume = 1}),
+        footstep = ripple.newSound(assets.sounds.player.footstep, {volume = 1}),
+        heavy_attack = ripple.newSound(assets.sounds.player.heavy_attack, {volume = 1}),
+        heavy_finisher = ripple.newSound(assets.sounds.player.heavy_finisher, {volume = 1}),
+        jump = ripple.newSound(assets.sounds.player.jump, {volume = 1}),
+        land = ripple.newSound(assets.sounds.player.land, {volume = 1}),
+        laser_blast = ripple.newSound(assets.sounds.player.laser_blast, {volume = 1}),
+        laser_charge = ripple.newSound(assets.sounds.player.laser_charge, {volume = 1}),
+        light_attack = ripple.newSound(assets.sounds.player.light_attack, {volume = 1}),
+        light_finisher = ripple.newSound(assets.sounds.player.light_finisher, {volume = 1}),
+        player_death = ripple.newSound(assets.sounds.player.player_death, {volume = 1}),
+        player_hit = ripple.newSound(assets.sounds.player.player_hit, {volume = 1}),
     }
 end
 

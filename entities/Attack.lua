@@ -36,6 +36,11 @@ function Attack:onCollide(cols, len)
         if e.health > 0 and e.last_hit ~= self then
             e:takeDamage(self.dmg)
             e.last_hit = self
+
+            self.owner.points = self.owner.points + self.dmg * 10
+            if e.health == 0 then
+                self.owner.points = self.owner.points + 2000
+            end
         end
     end
 end

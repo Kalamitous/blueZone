@@ -34,7 +34,7 @@ function Player:new(x, y)
     self.sprite = true
     self.is_player = true
 
-    self.points = 0
+    self.points = self.points or 0
 
     self.can_attack = true
     self.combo = 0
@@ -271,15 +271,17 @@ function Player:onCollide(cols, len)
 end
 
 function Player:onDeath()
-    self.dead = true
-    self.points = math.max(self.points - 2000, 0)
+    if not self.dead then
+        self.dead = true
+        self.points = math.max(self.points - 2000, 0)
 
-    if self.flash_timer then
-        self.flash_timer:stop()
-        self.flash_timer = nil
+        if self.flash_timer then
+            self.flash_timer:stop()
+            self.flash_timer = nil
+        end
+
+        self:changeAnim("death")
     end
-
-    self:changeAnim("death")
 end
 
 function Player:changeAnim(anim)
@@ -295,7 +297,7 @@ function Player:takeDamage(dmg)
     if self.dashing or self.invincible or self.dead then return end
 
     self.health = math.max(self.health - dmg, 0)
-    self.points = math.max(self.points - 500, 0)
+    self.points = math.max(self.points - dmg * 100, 0)
 
     self:setInvincible(self.invincible_time)
 end

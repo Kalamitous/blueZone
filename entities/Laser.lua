@@ -11,33 +11,35 @@ function Laser:new(x, y, owner, target)
 
     self.ang = lume.angle(self.pos.x, self.pos.y, self.target.pos.x + self.target.hitbox.w / 2, self.target.pos.y + self.target.hitbox.h / 2)
     
-    self.laser_length = 1000
-    self.delta = {}
-    self.delta.x, self.delta.y = lume.vector(self.ang, self.laser_length)
-    
-    self.end_pos = {x = self.pos.x + self.delta.x, y = self.pos.y + self.delta.y}
-
-
+    self.max_speed = 1000
     self.vel = {}
-    self.vel.x, self.vel.y = 0, 0
+    self.vel.x, self.vel.y = lume.vector(self.ang, self.max_speed)
+    
+    --self.end_pos = {x = self.pos.x + self.delta.x, y = self.pos.y + self.delta.y}
 
     self.dmg = 10
     self.charge_time = 1.5
-    self.remove_time = 0.5
+    self.lifetime = 2
     self.charging = true
     self.flash_state = false
     self.flash_delay = 0.10
     self.flash_delta = -0.01
     self.flash_min_delay = 0.05
 
+    self.end_pos = {}
+    self.end_pos.x = self.pos.x + (self.vel.x * self.lifetime)
+    self.end_pos.y = self.pos.y + (self.vel.y * self.lifetime)
+
     self.is_laser = true
     
     
     tick.delay(function()
+        self.end_pos.x = self.pos.x
+        self.end_pos.y = self.pos.y
         self.charging = false
         tick.delay(function()
             self.remove = true
-        end, self.remove_time)
+        end, self.lifetime)
 
     end, self.charge_time)
     self:flash()
@@ -61,6 +63,10 @@ function Laser:flash()
 end
 
 function Laser:update(dt)
+    if not self.charging then
+        self.end_pos.x = self.end_pos.x + self.vel.x * dt
+        self.end_pos.y = self.end_pos.y + self.vel.y * dt
+    end
 end
 
 function Laser:filter(e)

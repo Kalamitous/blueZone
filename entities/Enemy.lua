@@ -33,7 +33,7 @@ function Enemy:new(spawn_platform)
     self.health_height = 10
     self.health_hover = 25
     self.stunned = false
-    self.stun_time = 0.5
+    self.stun_time = 1
 
     self.last_hit = nil
     self.attack_indicator = false

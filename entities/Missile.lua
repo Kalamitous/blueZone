@@ -7,7 +7,7 @@ function Missile:new(x, y, owner, target)
     self.target = target
 
     self.offset = {x = x, y = y}
-    self.hitbox = {w = 30, h = 30}
+    self.hitbox = {w = 60, h = 60}
     self.pos = {
         x = self.owner.pos.x + self.owner.hitbox.w / 2 - self.hitbox.w / 2 + self.offset.x * self.owner.dir,
         y = self.owner.pos.y + self.owner.hitbox.h / 2 - self.hitbox.h / 2 + self.offset.y 
@@ -25,20 +25,19 @@ function Missile:new(x, y, owner, target)
     self.explosion_duration = 0.2
 
     self.sprite = true
+    self.img = assets.objects.orb_2
     self.is_missile = true
     self.needs_bump = true
 end
 
 function Missile:draw()
-    if not self.exploded then
-        love.graphics.setColor(0.9, 0.5, 0.2)
-        love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
-    else
+    if self.exploded then
         love.graphics.setColor(0.95, 0.35, 0.0)
         love.graphics.circle("fill", self.pos.x + self.hitbox.w / 2, self.pos.y + self.hitbox.h / 2, self.explosion_radius)
+        love.graphics.setColor(1, 1, 1)
     end
 
-    love.graphics.setColor(1, 1, 1)
+    love.graphics.draw(self.img, self.pos.x, self.pos.y)
 end
 
 function Missile:filter(e)

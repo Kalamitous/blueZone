@@ -5,7 +5,7 @@ function Projectile:new(x, y, owner, target)
     self.target = target
 
     self.offset = {x = x, y = y}
-    self.hitbox = {w = 15, h = 15}
+    self.hitbox = {w = 29, h = 29}
     self.pos = {
         x = self.owner.pos.x + self.owner.hitbox.w / 2 - self.hitbox.w / 2 + self.offset.x * self.owner.dir,
         y = self.owner.pos.y + self.owner.hitbox.h / 2 - self.hitbox.h / 2 + self.offset.y

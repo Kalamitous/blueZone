@@ -230,7 +230,7 @@ function Player:update(dt)
 end
 
 function Player:draw()
-    love.graphics.rectangle("line", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
+    --love.graphics.rectangle("line", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
 end
 
 function Player:filter(e)

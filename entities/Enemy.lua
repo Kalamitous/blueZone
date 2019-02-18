@@ -18,7 +18,7 @@ function Enemy:new(spawn_platform)
     self.move_timer = nil
     self.wait_timer = nil
 
-    self.reaction_time = 1.5
+    self.reaction_time = 1
 
     self.dir = 1
     self.view_dist = 450
@@ -175,8 +175,9 @@ function Enemy:shoot(ecs_world)
     tick.delay(function()
         if self.health == 0 or self.stunned then return end
 
-        -- TODO: make enemy face target
-        ecs_world:add(Projectile(68, -20, self, target))
+        if self.target then
+            ecs_world:add(Projectile(68, -20, self, self.target))
+        end
 
         tick.delay(function()
             self.can_shoot = true
@@ -213,12 +214,12 @@ function Enemy:stun(time)
     end
     
     self.stun_timer = tick.delay(function()
-        -- how to look behind 101
         self.stunned = false
             
         if not self.target then
+            -- how to look behind 101
             self:moveTo(self.pos.x - self.dir, self.pos.y)
-            
+
             self.unstun_timer = tick.delay(function()
                 self.desires_move = true
             end, 3)

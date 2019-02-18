@@ -3,6 +3,8 @@ local Rocketeer = Enemy:extend()
 function Rocketeer:new(spawn_platform)
     Rocketeer.super.new(self, spawn_platform)
 
+    self.max_speed = 200
+
     self.view_box = {}
     self.view_box.idle_size = {w = 500, h = 500}
     self.view_box.lock_size = {w = 1000, h = 1000}
@@ -16,6 +18,56 @@ function Rocketeer:new(spawn_platform)
     self.dist_threshold = 125
 
     self.is_rocketeer = true
+
+    self.anims = {
+        scale = 1,
+        idle = {
+            anim = animator.newAnimation({
+                assets.enemy[3].idle[1],
+                assets.enemy[3].idle[2]
+            }, 1 / 1),
+            offset = {x = 0, y = 0},
+            draw_offset = {x = 0, y = 0}
+        },
+        attack = {
+            anim = animator.newAnimation({
+                assets.enemy[3].attack[1]
+            }, 1 / 1),
+            offset = {x = 0, y = 0},
+            draw_offset = {x = 0, y = 0}
+        }
+    }
+    self.anims.idle.anim:setLooping(true)
+    self.anims.attack.anim:setActive(false)
+    self.anims.attack.anim:setOnAnimationEnd(function()
+        self:changeAnim("idle")
+    end)
+    self.anims.cur = self.anims.idle
+end
+
+function Rocketeer:update(dt)
+    if not self.anims.attack.anim:isActive() then
+        self:changeAnim("idle")
+
+        if self.vel.y < 0 then
+            self.anims.idle.anim:setCurrentFrame(1)
+        else
+            self.anims.idle.anim:setCurrentFrame(2)
+        end
+    end
+
+    self.anims.cur.anim:update(dt)
+
+    local new_x = self.pos.x + self.vel.x * dt
+    local new_y = self.pos.y + self.vel.y * dt
+
+    self.cur_dist = self.cur_dist + lume.distance(self.pos.x, self.pos.y, new_x, new_y)
+
+    if self.cur_dist >= self.goal_dist then
+        self:stop()
+    end
+
+    self:updateDir()
 end
 
 function viewBoxFilter(item)
@@ -72,7 +124,7 @@ function Rocketeer:draw()
     love.graphics.circle("line", self.pos.x + self.hitbox.w / 2, self.pos.y + self.hitbox.h / 2, self.safe_dist + self.dist_threshold)
     love.graphics.circle("line", self.pos.x + self.hitbox.w / 2, self.pos.y + self.hitbox.h / 2, self.safe_dist - self.dist_threshold)]]--
     
-    if self.attack_indicator then
+    --[[if self.attack_indicator then
         love.graphics.setColor(1, 0, 0, 0.25)
     elseif self.target then
         love.graphics.setColor(0, 0.35, 0.05, 0.25)
@@ -82,21 +134,27 @@ function Rocketeer:draw()
     love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
     love.graphics.setColor(0, 0, 0, 0.25)
     love.graphics.rectangle("line", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
-    love.graphics.setColor(1, 1, 1)
+    love.graphics.setColor(1, 1, 1)]]--
 
     self:drawHealthbar()
 end
 
 function Rocketeer:shoot(ecs_world)
-    ecs_world:add(Missile(0, 0, self, self.target))
-    
     self.can_shoot = false
+    self:changeAnim("attack")
 
     tick.delay(function()
-        if self then
-            self.can_shoot = true
+        if self.health == 0 or self.stunned then return end
+
+        -- TODO: make enemy face target
+        if self.target then
+            ecs_world:add(Missile(68, -20, self, self.target))
         end
-    end, self.reload_time)
+
+        tick.delay(function()
+            self.can_shoot = true
+        end, self.reload_time)
+    end, 1 * 1 / 4)
 end
 
 return Rocketeer

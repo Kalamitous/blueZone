@@ -18,16 +18,15 @@ function Beamer:draw()
         love.graphics.line(center_x, center_y, target_center_x, target_center_y)
     end
 
-    love.graphics.setColor(0.5, 0.75, 0)
     if self.attack_indicator then
-        love.graphics.setColor(1, 0, 0)
+        love.graphics.setColor(1, 0, 0, 0.25)
     elseif self.target then
-        love.graphics.setColor(0.2, 1, 0.65)
+        love.graphics.setColor(0.2, 1, 0.65, 0.25)
     end
 
+    love.graphics.setColor(0.5, 0.75, 0, 0.25)
     love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
-
-    love.graphics.setColor(0, 0, 0)
+    love.graphics.setColor(0, 0, 0, 0.25)
     love.graphics.rectangle("line", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
     love.graphics.setColor(1, 1, 1)
 

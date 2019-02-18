@@ -63,18 +63,16 @@ function Rocketeer:draw()
     --[[love.graphics.rectangle("line", self.view_box.pos.x, self.view_box.pos.y, self.view_box.size.w, self.view_box.size.h)
     love.graphics.circle("line", self.pos.x + self.hitbox.w / 2, self.pos.y + self.hitbox.h / 2, self.safe_dist + self.dist_threshold)
     love.graphics.circle("line", self.pos.x + self.hitbox.w / 2, self.pos.y + self.hitbox.h / 2, self.safe_dist - self.dist_threshold)]]--
-
-    love.graphics.setColor(0.9, 0.55, 0.25)
     
     if self.attack_indicator then
-        love.graphics.setColor(1, 0, 0)
+        love.graphics.setColor(1, 0, 0, 0.25)
     elseif self.target then
-        love.graphics.setColor(0, 0.35, 0.05)
+        love.graphics.setColor(0, 0.35, 0.05, 0.25)
     end
 
+    love.graphics.setColor(0.9, 0.55, 0.25, 0.25)
     love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
-
-    love.graphics.setColor(0, 0, 0)
+    love.graphics.setColor(0, 0, 0, 0.25)
     love.graphics.rectangle("line", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
     love.graphics.setColor(1, 1, 1)
 

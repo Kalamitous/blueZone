@@ -3,7 +3,8 @@ local Enemy = Object:extend()
 function Enemy:new(spawn_platform)
     self.spawn_platform = spawn_platform
 
-    self.hitbox = {w = 50, h = 75}
+    self.offset = {x = 0, y = 0}
+    self.hitbox = {w = 45, h = 160}
     self.pos = {x = self.spawn_platform.x + lume.random(self.spawn_platform.width - self.hitbox.w), y = self.spawn_platform.y - self.hitbox.h}
 
     self.max_speed = 100
@@ -40,6 +41,18 @@ function Enemy:new(spawn_platform)
 
     self.sprite = true
     self.is_enemy = true
+
+    self.anims = {
+        scale = 1,
+        idle = {
+            anim = animator.newAnimation({
+                assets.enemy.idle[1]
+            }, 1 / 1),
+            offset = {x = 0, y = 0}
+        }
+    }
+    self.anims.idle.anim:setLooping(true)
+    self.anims.cur = self.anims.idle.anim
 end
 
 function Enemy:update(dt)
@@ -55,13 +68,13 @@ end
 
 function Enemy:draw()
     if self.attack_indicator then
-        love.graphics.setColor(1, 0, 0)
+        love.graphics.setColor(1, 0, 0, 0.25)
     elseif self.target then
-        love.graphics.setColor(0.5, 1, 0.5)
+        love.graphics.setColor(0.5, 1, 0.5, 0.25)
     end
 
+    love.graphics.setColor(1, 1, 1, 0.25)
     love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
-
     love.graphics.setColor(0, 0, 0)
     love.graphics.rectangle("line", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
     love.graphics.setColor(1, 1, 1)

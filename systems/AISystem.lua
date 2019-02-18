@@ -78,7 +78,9 @@ function AISystem:process(e, dt)
             e:shoot(self.ecs_world)
         end
     else
-        e.spotted = false
+        if not e.think then
+            e.spotted = false
+        end
         if e.delay then
             e.delay:stop()
             e.delay = nil

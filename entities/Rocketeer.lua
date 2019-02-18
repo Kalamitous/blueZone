@@ -31,7 +31,15 @@ function Rocketeer:think(bump_world, dt)
 
     if len > 0 then
         self.target = items[1]
+        if self.previous_target ~= self.target then
+            self.spotted = false
+            self.delay = tick.delay(function()
+                self.spotted = true
+            end, self.reaction_time)
+        end
     end
+
+    self.previous_target = self.target
 
     if self.target and self.spotted and not self.stunned then
         self.view_box.size = self.view_box.lock_size

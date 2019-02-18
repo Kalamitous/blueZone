@@ -5,6 +5,7 @@ function Beamer:new(spawn_platform)
     
     self.reload_time = 2
     self.in_attack = false
+    self.color = {1, 1, 0.8}
 
     self.anims = {
         scale = 1,

@@ -53,7 +53,9 @@ function Enemy:new(spawn_platform)
         run = {
             anim = animator.newAnimation({
                 assets.enemy.run[1],
-                assets.enemy.run[2]
+                assets.enemy.run[2],
+                assets.enemy.run[3],
+                assets.enemy.run[4]
             }, 1 / 4),
             offset = {x = 0, y = 0}
         }

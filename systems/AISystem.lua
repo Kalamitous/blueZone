@@ -31,7 +31,7 @@ function AISystem:process(e, dt)
         return
     end
 
-    if e.desires_move then
+    if e.desires_move and not e.in_attack then
         e:moveTo(e.spawn_platform.x + lume.random(e.spawn_platform.width - 50), e.pos.y)
     end
 

@@ -11,11 +11,9 @@ function Laser:new(x, y, owner, target)
 
     self.ang = lume.angle(self.pos.x, self.pos.y, self.target.pos.x + self.target.hitbox.w / 2, self.target.pos.y + self.target.hitbox.h / 2)
     
-    self.max_speed = 1000
+    self.max_speed = 3200
     self.vel = {}
     self.vel.x, self.vel.y = lume.vector(self.ang, self.max_speed)
-    
-    --self.end_pos = {x = self.pos.x + self.delta.x, y = self.pos.y + self.delta.y}
 
     self.dmg = 10
     self.charge_time = 1.5
@@ -30,11 +28,10 @@ function Laser:new(x, y, owner, target)
     self.end_pos.x = self.pos.x + (self.vel.x * self.lifetime)
     self.end_pos.y = self.pos.y + (self.vel.y * self.lifetime)
     
-    self.thickness = 3
+    self.thickness = 10
     self.age = 0
 
     self.is_laser = true
-    
     
     tick.delay(function()
         self.end_pos.x = self.pos.x
@@ -70,8 +67,8 @@ function Laser:update(dt)
         self.end_pos.x = self.end_pos.x + self.vel.x * dt
         self.end_pos.y = self.end_pos.y + self.vel.y * dt
     else
-        self.pos.x = self.owner.pos.x + self.owner.hitbox.w / 2
-        self.pos.y = self.owner.pos.y + self.owner.hitbox.h / 2
+        --self.pos.x = self.owner.pos.x + self.owner.hitbox.w / 2
+        --self.pos.y = self.owner.pos.y + self.owner.hitbox.h / 2
         if self.owner.stunned then
             self.remove = true
         end
@@ -82,14 +79,6 @@ function Laser:filter(e)
     if not e or not e.is_enemy then
         return "cross"
     end
-end
-
-function Laser:draw()
-    love.graphics.setColor(1, 0.1, 0.1, 0.9)
-    love.graphics.setLineWidth(self.thickness)
-    love.graphics.line(self.pos.x, self.pos.y, self.ending.x, self.ending.y)
-    love.graphics.setLineWidth(1)
-    love.graphics.setColor(1, 1, 1, 1)
 end
 
 function Laser:onCollide(cols, len)
@@ -118,11 +107,11 @@ function Laser:draw()
         else
             love.graphics.setColor(1, 1, 1, 0.8)
         end
-        love.graphics.setLineWidth(1)
+        love.graphics.setLineWidth(self.thickness)
         love.graphics.line(self.pos.x, self.pos.y, self.end_pos.x, self.end_pos.y)
     else
         love.graphics.setColor(1, 0.1, 0.1, 0.9)
-        love.graphics.setLineWidth(3)
+        love.graphics.setLineWidth(self.thickness)
         love.graphics.line(self.pos.x, self.pos.y, self.end_pos.x, self.end_pos.y)
         love.graphics.setLineWidth(1)
         love.graphics.setColor(1, 1, 1, 1)

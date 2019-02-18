@@ -36,7 +36,7 @@ function Enemy:new(spawn_platform)
     self.health_height = 10
     self.health_hover = 25
     self.stunned = false
-    self.stun_time = 5
+    self.stun_time = 1.5
 
     self.last_hit = nil
     self.attack_indicator = false
@@ -48,28 +48,28 @@ function Enemy:new(spawn_platform)
         scale = 1,
         idle = {
             anim = animator.newAnimation({
-                assets.enemy.idle[1]
+                assets.enemy[1].idle[1]
             }, 1 / 1),
             offset = {x = 0, y = 0},
             draw_offset = {x = 0, y = 0}
         },
         run = {
             anim = animator.newAnimation({
-                assets.enemy.run[1],
-                assets.enemy.run[2],
-                assets.enemy.run[3],
-                assets.enemy.run[4]
+                assets.enemy[1].run[1],
+                assets.enemy[1].run[2],
+                assets.enemy[1].run[3],
+                assets.enemy[1].run[4]
             }, 1 / 4),
             offset = {x = 0, y = 0},
             draw_offset = {x = 0, y = 0}
         },
         attack = {
             anim = animator.newAnimation({
-                assets.enemy.attack[1],
-                assets.enemy.attack[2],
-                assets.enemy.attack[3],
-                assets.enemy.attack[4],
-                assets.enemy.attack[1]
+                assets.enemy[1].attack[1],
+                assets.enemy[1].attack[2],
+                assets.enemy[1].attack[3],
+                assets.enemy[1].attack[4],
+                assets.enemy[1].attack[1]
             }, 1 / 4),
             offset = {x = 0, y = 0},
             draw_offset = {x = 24, y = 0}
@@ -77,6 +77,7 @@ function Enemy:new(spawn_platform)
     }
     self.anims.idle.anim:setLooping(true)
     self.anims.run.anim:setLooping(true)
+    self.anims.attack.anim:setActive(false)
     self.anims.attack.anim:setOnAnimationEnd(function()
         self:changeAnim("idle")
     end)
@@ -105,7 +106,7 @@ function Enemy:update(dt)
 end
 
 function Enemy:draw()
-    if self.attack_indicator then
+    --[[if self.attack_indicator then
         love.graphics.setColor(1, 0, 0, 0.25)
     elseif self.target then
         love.graphics.setColor(0.5, 1, 0.5, 0.25)
@@ -115,7 +116,7 @@ function Enemy:draw()
     love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
     love.graphics.setColor(0, 0, 0)
     love.graphics.rectangle("line", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
-    love.graphics.setColor(1, 1, 1)
+    love.graphics.setColor(1, 1, 1)]]--
 
     self:drawHealthbar()
 end
@@ -213,10 +214,11 @@ function Enemy:stun(time)
     
     self.stun_timer = tick.delay(function()
         -- how to look behind 101
-        self:moveTo(self.pos.x - self.dir, self.pos.y)
         self.stunned = false
             
         if not self.target then
+            self:moveTo(self.pos.x - self.dir, self.pos.y)
+            
             self.unstun_timer = tick.delay(function()
                 self.desires_move = true
             end, 3)

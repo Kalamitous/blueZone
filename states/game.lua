@@ -68,6 +68,31 @@ function game:stage(file)
         PlayerSpawnSystem(self.ecs_world, self.map),
         SpriteSystem(self.camera, self.map)
     )
+
+    if game.reset_timer then
+        game.reset_timer:stop()
+        game.reset_timer= nil
+    end
+    
+    game.reset_timer = tick.recur(function()
+        local current_enemies = 0
+        
+        for _, e in pairs(self.ecs_world.entities) do
+            if tostring(e) == "Object" and e.is_enemy then
+                current_enemies = current_enemies + 1
+            end
+        end
+
+        if current_enemies ~= 0 then return end
+        
+        if game.stage_num == 1 then
+            game:stage("assets/maps/stage_2")
+            game.stage_num = 2
+        elseif game.stage_num == 2 then
+            game:stage("assets/maps/stage_3")
+            game.stage_num = 3
+        end
+    end, 5)
 end
 
 function game:update(dt)
@@ -82,8 +107,10 @@ end
 
 function game:draw()
     local window_w, window_h = love.graphics.getDimensions()
-    
+    local bg_w, bg_h = assets.objects.bg:getDimensions()
+
     -- sti resets draw to origin
+    love.graphics.draw(assets.objects.bg, 0, 0, 0, window_w / 1800, window_w / 1800)
     self.map:draw(-self.camera.x + window_w / 2 + self.map.offset.x, -self.camera.y + window_h / 2 + self.map.offset.y, self.camera.scale, self.camera.scale)
     --self.map:bump_draw(self.bump_world, -self.camera.x + window_w / 2, -self.camera.y + window_h / 2, self.camera.scale, self.camera.scale)
 

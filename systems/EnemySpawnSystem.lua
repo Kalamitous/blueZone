@@ -56,26 +56,6 @@ function EnemySpawnSystem:new(ecs_world, map)
 
         self:spawnEnemy()
     end, 1)]]--
-
-    self.timer = tick.recur(function()
-        local current_enemies = 0
-        
-        for _, e in pairs(self.ecs_world.entities) do
-            if tostring(e) == "Object" and e.is_enemy then
-                current_enemies = current_enemies + 1
-            end
-        end
-
-        if current_enemies ~= 0 then return end
-        
-        if game.stage_num == 1 then
-            game:stage("assets/maps/stage_2")
-            game.stage_num = 2
-        elseif game.stage == 2 then
-            game:stage("assets/maps/stage_3")
-            game.stage_num = 3
-        end
-    end, 1)
 end
 
 function EnemySpawnSystem:process(e, dt)

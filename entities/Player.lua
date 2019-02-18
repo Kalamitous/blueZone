@@ -39,82 +39,82 @@ function Player:new(x, y)
     self.can_attack = true
     self.combo = 0
     self.combo_time = 0
-    self.combo_max_time = 0.75
+    self.combo_max_time = 0.65
     self.laser_charge_time = 0
     self.attacks = {
         light = {
             {
-                offset = {x = 50, y = 0},
-                hitbox = {w = self.hitbox.w + 100, h = self.hitbox.h},
+                offset = {x = 40, y = 0},
+                hitbox = {w = self.hitbox.w + 80, h = self.hitbox.h},
                 duration = 0.1,
                 cooldown = 0.05,
                 dmg = 10
             },
             {
-                offset = {x = 50, y = 0},
-                hitbox = {w = self.hitbox.w + 100, h = self.hitbox.h},
+                offset = {x = 40, y = 0},
+                hitbox = {w = self.hitbox.w + 80, h = self.hitbox.h},
                 duration = 0.1,
                 cooldown = 0.05,
                 dmg = 10
             },
             {
-                offset = {x = 50, y = 0},
-                hitbox = {w = self.hitbox.w + 100, h = self.hitbox.h},
+                offset = {x = 40, y = 0},
+                hitbox = {w = self.hitbox.w + 80, h = self.hitbox.h},
                 duration = 0.1,
                 cooldown = 0.05,
                 dmg = 15
             },
             {
-                offset = {x = 50, y = 0},
-                hitbox = {w = self.hitbox.w + 100, h = self.hitbox.h},
+                offset = {x = 40, y = 0},
+                hitbox = {w = self.hitbox.w + 80, h = self.hitbox.h},
                 duration = 0.1,
-                cooldown = 0.5,
+                cooldown = 0.25,
                 dmg = 20
             }
         },
         heavy = {
             used = false,
             {
-                offset = {x = 50, y = 0},
-                hitbox = {w = self.hitbox.w + 100, h = self.hitbox.h},
-                duration = 0.3,
+                offset = {x = 40, y = 0},
+                hitbox = {w = self.hitbox.w + 80, h = self.hitbox.h},
+                duration = 0.15,
                 cooldown = 0.05,
                 dmg = 20
             },
             {
-                offset = {x = 50, y = 0},
-                hitbox = {w = self.hitbox.w + 100, h = self.hitbox.h},
-                duration = 0.3,
+                offset = {x = 40, y = 0},
+                hitbox = {w = self.hitbox.w + 80, h = self.hitbox.h},
+                duration = 0.15,
                 cooldown = 0.05,
                 dmg = 20
             },
             {
-                offset = {x = 50, y = 0},
-                hitbox = {w = self.hitbox.w + 100, h = self.hitbox.h},
-                duration = 0.3,
+                offset = {x = 40, y = 0},
+                hitbox = {w = self.hitbox.w + 80, h = self.hitbox.h},
+                duration = 0.15,
                 cooldown = 0.05,
                 dmg = 25
             },
             {
-                offset = {x = 50, y = 0},
-                hitbox = {w = self.hitbox.w + 100, h = self.hitbox.h},
-                duration = 0.3,
-                cooldown = 0.5,
+                offset = {x = 40, y = 0},
+                hitbox = {w = self.hitbox.w + 80, h = self.hitbox.h},
+                duration = 0.15,
+                cooldown = 0.25,
                 dmg = 30
             }
         },
         special = {
             {
-                offset = {x = self.hitbox.w + 50, y = 0},
-                hitbox = {w = self.hitbox.w + 100, h = self.hitbox.h},
-                duration = 0.4,
-                cooldown = 0.5,
+                offset = {x = self.hitbox.w + 40, y = 0},
+                hitbox = {w = self.hitbox.w + 80, h = self.hitbox.h},
+                duration = 0.25,
+                cooldown = 0.25,
                 dmg = 40
             },
             {
                 offset = {x = self.hitbox.w / 2, y = 0},
-                duration = 0.4,
-                cooldown = 0.5,
+                duration = 0.25,
+                cooldown = 0.25,
                 dmg = 40
             }
         },
@@ -162,8 +162,9 @@ function Player:new(x, y)
         },
         light = {
             anim = animator.newAnimation({
-                assets.player.attack.light[1]
-            }, 1 / 1),
+                assets.player.attack.light[1],
+                assets.player.attack.light[2]
+            }, 0.15 / 2),
             offset = {x = 40, y = 0}
         }
     }
@@ -171,7 +172,9 @@ function Player:new(x, y)
     self.anims.run.anim:setLooping(true)
     self.anims.jump.anim:setLooping(true)
     self.anims.death.anim:setLooping(true)
-    self.anims.light.anim:setLooping(true)
+    self.anims.light.anim:setOnAnimationEnd(function()
+        self:changeAnim("idle")
+    end)
     self.anims.cur = self.anims.idle.anim
 
     self.sounds = {
@@ -205,6 +208,10 @@ function Player:update(dt)
         else
             self:changeAnim("idle")
         end
+    end
+
+    if not self.anims.cur then
+        self.anims.cur = self.anims.idle.anim
     end
 
     self.anims.cur:update(dt)

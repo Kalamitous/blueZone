@@ -8,7 +8,7 @@ return {
   height = 40,
   tilewidth = 64,
   tileheight = 64,
-  nextobjectid = 70,
+  nextobjectid = 69,
   properties = {},
   tilesets = {
     {
@@ -104,7 +104,7 @@ return {
     {
       type = "objectgroup",
       name = "Objects",
-      visible = false,
+      visible = true,
       opacity = 1,
       offsetx = 0,
       offsety = 0,

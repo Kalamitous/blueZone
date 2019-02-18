@@ -19,7 +19,6 @@ end
 function PlayerSpawnSystem:process(e, dt)
     if e.dead and e.vel.x == 0 and e.vel.y == 0 and not self.respawn_timer then
         self.respawn_timer = tick.delay(function()
-            print(self.player_spawn.y)
             e:new(self.player_spawn.x, self.player_spawn.y)
             e:setInvincible(e.invincible_time)
 

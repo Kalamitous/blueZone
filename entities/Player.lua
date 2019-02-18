@@ -3,7 +3,6 @@ local Player = Object:extend()
 function Player:new(x, y)
     self.offset = {x = 40, y = 0}
     self.hitbox = {w = 45, h = 160}
-
     self.pos = {x = x, y = y - self.hitbox.h}
 
     self.max_speed = 500
@@ -25,7 +24,7 @@ function Player:new(x, y)
     self.dash_time = 0.15
     self.dash_detect_timer = nil
 
-    self.health = 100
+    self.health = 50
     self.invincible = false
     self.invincible_time = 1.5
     self.opacity = 1
@@ -35,7 +34,7 @@ function Player:new(x, y)
     self.sprite = true
     self.is_player = true
 
-    game.points = game.points or 0
+    self.points = self.points or 0
 
     self.can_attack = true
     self.combo = 0
@@ -293,7 +292,11 @@ end
 function Player:onDeath()
     if not self.dead then
         self.dead = true
+<<<<<<< HEAD
         game.points = math.max(game.points - 5000, 0)
+=======
+        self.points = math.max(self.points - 2000, 0)
+>>>>>>> parent of a61e236... new maps + stage system + remove useless lib lol
         self.sounds.player_death:play()
 
         if self.flash_timer then
@@ -318,7 +321,7 @@ function Player:takeDamage(dmg)
     if self.dashing or self.invincible or self.dead then return end
 
     self.health = math.max(self.health - dmg, 0)
-    game.points = math.max(game.points - dmg * 100, 0)
+    self.points = math.max(self.points - dmg * 100, 0)
     self.sounds.player_hit:play()
 
     self:setInvincible(self.invincible_time)

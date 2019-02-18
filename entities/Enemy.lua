@@ -17,14 +17,16 @@ function Enemy:new(spawn_platform)
     self.max_wait_time = 10
     self.move_timer = nil
     self.wait_timer = nil
-    self.lock_time = 0.3
-    self.locked = false
+
+    self.reaction_time = 0.5
 
     self.dir = 1
     self.view_dist = 450
 	self.view_cone = math.pi / 4
     
     self.target = nil
+    self.previous_target = nil
+    self.spotted = false
     self.can_shoot = true
     self.reload_time = 3
 

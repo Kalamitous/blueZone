@@ -2,8 +2,7 @@ local Beamer = Enemy:extend()
 
 function Beamer:new(spawn_platform)
     Beamer.super.new(self, spawn_platform)
-
-    self.lock_time = 0.5
+    
     self.reload_time = 2
 end
 

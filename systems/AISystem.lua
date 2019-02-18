@@ -20,7 +20,7 @@ function AISystem:process(e, dt)
     if e.think then
         e:think(self.bump_world, dt)
 
-        if e.target and e.can_shoot and not e.stunned then
+        if e.target and e.can_shoot and not e.stunned and e.spotted then
             e:shoot(self.ecs_world)
         end
 
@@ -57,30 +57,32 @@ function AISystem:process(e, dt)
         if len > 0 then
             if items[1].is_player then
                 e.target = items[1]
+                if e.target ~= e.previous_target then
+                    e.spotted = false
+                    e.delay = tick.delay(function()
+                        e.spotted = true
+                    end, e.reaction_time)
+                end
             end
         end
     end
+
+    e.previous_target = e.target
     
     if e.target and not e.stunned then
         if not e.stopped then
             e:stop()
         end
 
-        if e.can_shoot and not e.lock_time then
+        if e.can_shoot and e.spotted then
             e:shoot(self.ecs_world)
-        elseif e.lock_time and not e.delay then
-            e.delay = tick.delay(function()
-                if e and e.target then
-                    e:shoot(self.ecs_world)
-                end
-            end, e.lock_time)
         end
     else
-        if e.lock_time and e.delay then
+        e.spotted = false
+        if e.delay then
             e.delay:stop()
             e.delay = nil
         end
-
         -- if enemy doesn't have move_timer then we know it was manually stopped
         if e.stopped then
             tick.delay(function()

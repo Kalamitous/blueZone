@@ -77,6 +77,7 @@ function PlayerControlSystem:process(e, dt)
 
         if e.can_dash == dir and not e.dashed_in_air then
             e.dashing = true
+            e.sounds.dash:play()
             e.vel.x = e.dash_speed * e.dir
 
             e:attack(self.ecs_world, "dash", 1)
@@ -108,9 +109,13 @@ function PlayerControlSystem:process(e, dt)
         if e:attack(self.ecs_world, "light", e.combo + 1) then
             if e.combo < 3 then
                 e.combo = e.combo + 1
+
+                e.sounds.light_attack:play()
             else
                 e.combo = 0
                 e.attacks.heavy.used = false
+
+                e.sounds.light_finisher:play()
             end
         end
     elseif input:pressed("heavy") then
@@ -118,15 +123,20 @@ function PlayerControlSystem:process(e, dt)
             if e.combo < 3 then
                 e.combo = e.combo + 1
                 e.attacks.heavy.used = true
+
+                e.sounds.heavy_attack:play()
             else
                 e.combo = 0
                 e.attacks.heavy.used = false
-            end
+
+                e.sounds.heavy_finisher:play()
+            end 
         end
     elseif input:pressed("special") then
         if e.combo ~= 0 then
             if e:attack(self.ecs_world, "special", 1) then
                 e.combo = 0
+                e.sounds.emp:play()
             end
         else
             if e.grounded and not e.running and e.can_attack then
@@ -136,14 +146,25 @@ function PlayerControlSystem:process(e, dt)
     elseif input:down("special") then
         if e.grounded and not e.running and e.can_attack and e.laser_charge_time > 0 then
             e.laser_charge_time = math.min(e.laser_charge_time + dt, 4)
+            e.sounds.laser_charge:play()
+
+            if e.laser_charge_time == 4 then
+                e:attack(self.ecs_world, "special", 2)
+                e.laser_charge_time = 0
+
+                e.sounds.laser_charge:stop()
+                e.sounds.laser_blast:play()
+            end
         else
             e.laser_charge_time = 0
         end
     elseif input:released("special") then
         if e.laser_charge_time > 0 then
             e:attack(self.ecs_world, "special", 2)
-
             e.laser_charge_time = 0
+
+            e.sounds.laser_charge:stop()
+            e.sounds.laser_blast:play()
         end
     end
 end

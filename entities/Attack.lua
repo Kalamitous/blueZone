@@ -37,6 +37,7 @@ function Attack:onCollide(cols, len)
             e:takeDamage(self.dmg)
             e.last_hit = self
 
+            self.owner.sounds.enemy_hit:play()
             self.owner.points = self.owner.points + self.dmg * 10
             if e.health == 0 then
                 self.owner.points = self.owner.points + 2000

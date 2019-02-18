@@ -182,6 +182,7 @@ function Player:new(x, y)
     end)
     self.anims.cur = self.anims.idle
 
+    -- TODO: land sound
     self.sounds = {
         dash = ripple.newSound(assets.sounds.player.dash, {volume = 1}),
         emp = ripple.newSound(assets.sounds.player.emp, {volume = 1}),
@@ -191,9 +192,9 @@ function Player:new(x, y)
         heavy_finisher = ripple.newSound(assets.sounds.player.heavy_finisher, {volume = 1}),
         jump = ripple.newSound(assets.sounds.player.jump, {volume = 1}),
         land = ripple.newSound(assets.sounds.player.land, {volume = 1}),
-        laser_blast = ripple.newSound(assets.sounds.player.laser_blast, {volume = 1}),
-        laser_charge = ripple.newSound(assets.sounds.player.laser_charge, {volume = 1}),
-        light_attack = ripple.newSound(assets.sounds.player.light_attack, {volume = 1}),
+        laser_blast = ripple.newSound(assets.sounds.player.laser_blast, {volume = 0.5}),
+        laser_charge = ripple.newSound(assets.sounds.player.laser_charge, {volume = 0.1}),
+        light_attack = ripple.newSound(assets.sounds.player.light_attack, {volume = 0.3}),
         light_finisher = ripple.newSound(assets.sounds.player.light_finisher, {volume = 1}),
         player_death = ripple.newSound(assets.sounds.player.player_death, {volume = 1}),
         player_hit = ripple.newSound(assets.sounds.player.player_hit, {volume = 1}),
@@ -292,6 +293,7 @@ function Player:onDeath()
     if not self.dead then
         self.dead = true
         self.points = math.max(self.points - 2000, 0)
+        self.sounds.player_death:play()
 
         if self.flash_timer then
             self.flash_timer:stop()
@@ -316,6 +318,7 @@ function Player:takeDamage(dmg)
 
     self.health = math.max(self.health - dmg, 0)
     self.points = math.max(self.points - dmg * 100, 0)
+    self.sounds.player_hit:play()
 
     self:setInvincible(self.invincible_time)
 end

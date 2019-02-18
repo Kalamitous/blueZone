@@ -18,7 +18,7 @@ function Enemy:new(spawn_platform)
     self.move_timer = nil
     self.wait_timer = nil
 
-    self.reaction_time = 1
+    self.reaction_time = 0.5
 
     self.dir = 1
     self.view_dist = 450
@@ -30,7 +30,7 @@ function Enemy:new(spawn_platform)
     self.can_shoot = true
     self.reload_time = 3
 
-    self.max_health = 100
+    self.max_health = 1
     self.health = self.max_health
     self.health_width = 75
     self.health_height = 10

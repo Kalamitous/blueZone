@@ -462,7 +462,8 @@ tiny_addEntity = tiny.addEntity
 
 --- Adds a System to the world. Returns the System.
 function tiny.addSystem(world, system)
-    assert(system.world == nil, "System already belongs to a World.")
+    -- hacky fix pt 2
+    --assert(system.world == nil, "System already belongs to a World.")
     local s2a = world.systemsToAdd
     s2a[#s2a + 1] = system
     system.world = world

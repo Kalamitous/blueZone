@@ -1,24 +1,19 @@
 local game = {
-    ecs_world = tiny.world(),
-    bump_world = bump.newWorld(),
+    ecs_world = nil,
+    bump_world = nil,
     camera = nil,
-    map = nil
+    map = nil,
+    stage_num = 1
 }
-
-game.ecs_world:add(
-    AISystem(game.ecs_world, game.bump_world),
-    DeathSystem,
-    HUDSystem,
-    PlayerControlSystem(game.ecs_world),
-    UpdateSystem(game.ecs_world),
-    LaserSystem(game.bump_world)
-)
 
 local update_filter = tiny.filter("!isDrawSystem")
 local draw_filter = tiny.filter("isDrawSystem")
 
 function game:init()
-    self:stage("assets/maps/test")
+    self:stage("assets/maps/stage_1")
+
+    assets.sounds.music.BGM_full:play()
+    assets.sounds.music.BGM_full:setLooping(true)
 end
 
 function game:stage(file)
@@ -40,6 +35,8 @@ function game:stage(file)
         map_offset.y = window_h / 2 - map_size.h / 2
     end
 
+    self.bump_world = bump.newWorld()
+
     self.map = sti(file .. ".lua", {"bump"})
     self.map:bump_init(self.bump_world)
     self.map.offset = map_offset
@@ -49,8 +46,22 @@ function game:stage(file)
     self.camera:setFollowLerp(0.1)
     self.camera:setFollowStyle("LOCKON")
     self.camera:setBounds(self.map.offset.x, self.map.offset.y, self.map.offset.x + self.map.size.w, self.map.offset.y + self.map.size.h)
+    self.camera.x = self.map.offset.x + window_w / 2
+    self.camera.y = self.map.offset.y + self.map.size.h - window_h / 2
+    
+    if self.ecs_world then
+        self.ecs_world:clearEntities()
+        self.ecs_world:clearSystems()
+    end
 
+    self.ecs_world = tiny.world()
     self.ecs_world:add(
+        AISystem(self.ecs_world, self.bump_world),
+        DeathSystem,
+        HUDSystem,
+        PlayerControlSystem(self.ecs_world),
+        UpdateSystem(self.ecs_world),
+        LaserSystem(self.bump_world),
         CameraTrackingSystem(self.camera),
         EnemySpawnSystem(self.ecs_world, self.map),
         PhysicsSystem(self.bump_world, self.map),

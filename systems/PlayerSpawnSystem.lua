@@ -8,7 +8,7 @@ function PlayerSpawnSystem:new(ecs_world, map)
     self.respawn_timer = nil
     self.player_spawn = nil
     for _, o in pairs(self.map.objects) do
-        if o.properties.player_spawn then
+        if o.type == "player_spawn" then
             self.player_spawn = o
         end
     end

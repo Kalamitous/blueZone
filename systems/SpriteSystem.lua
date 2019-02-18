@@ -20,13 +20,15 @@ function SpriteSystem:process(e, dt)
     love.graphics.setColor(1, 1, 1, opacity)
         if e.anims then
             local scale = e.anims.scale
-            local x = e.pos.x + e.hitbox.w / 2 + e.offset.x * e.dir - e.anims.cur:getWidth() * scale / 2 * e.dir
-            local y = e.pos.y + e.hitbox.h + e.offset.y - e.anims.cur:getHeight() * scale
+            local draw_offset = e.anims.cur.draw_offset
+            local cur_anim = e.anims.cur.anim
+            local x = e.pos.x + e.hitbox.w / 2 + (e.offset.x + draw_offset.x) * e.dir - cur_anim:getWidth() * scale / 2 * e.dir
+            local y = e.pos.y + e.hitbox.h + (e.offset.y + draw_offset.y) - cur_anim:getHeight() * scale
 
             love.graphics.push()
             love.graphics.translate(x, y)
             love.graphics.scale(scale * e.dir, scale)
-                e.anims.cur:draw()
+                cur_anim:draw()
             love.graphics.pop()
         end
 

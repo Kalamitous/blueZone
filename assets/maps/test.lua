@@ -12,16 +12,16 @@ return {
   properties = {},
   tilesets = {
     {
-      name = "test",
+      name = "ground",
       firstgid = 1,
-      filename = "../tilesets/test.tsx",
+      filename = "ground.tsx",
       tilewidth = 64,
       tileheight = 64,
       spacing = 0,
       margin = 0,
-      image = "../tilesets/test.png",
+      image = "ground.png",
       imagewidth = 64,
-      imageheight = 64,
+      imageheight = 128,
       tileoffset = {
         x = 0,
         y = 0
@@ -33,7 +33,7 @@ return {
       },
       properties = {},
       terrains = {},
-      tilecount = 1,
+      tilecount = 2,
       tiles = {
         {
           id = 0,
@@ -76,9 +76,9 @@ return {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
       }
     },
     {

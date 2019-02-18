@@ -20,6 +20,7 @@ function Projectile:new(x, y, owner, target)
     self.health = 1
     self.dmg = 10
     self.sprite = true
+    self.img = assets.objects.orb
     self.is_projectile = true
 end
 
@@ -27,7 +28,7 @@ function Projectile:update(dt)
 end
 
 function Projectile:draw()
-    love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
+    love.graphics.draw(self.img, self.pos.x, self.pos.y)
 end
 
 function Projectile:filter(e)

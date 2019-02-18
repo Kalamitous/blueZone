@@ -135,7 +135,8 @@ function Player:new(x, y)
             anim = animator.newAnimation({
                 assets.player.idle[1]
             }, 1 / 1),
-            offset = {x = 40, y = 0}
+            offset = {x = 40, y = 0},
+            draw_offset = {x = 0, y = 0}
         },
         run = {
             anim = animator.newAnimation({
@@ -146,26 +147,30 @@ function Player:new(x, y)
                 assets.player.run[5],
                 assets.player.run[6]
             }, 1 / 12),
-            offset = {x = 12, y = 0}
+            offset = {x = 12, y = 0},
+            draw_offset = {x = 0, y = 0}
         },
         jump = {
             anim = animator.newAnimation({
                 assets.player.jump[1]
             }, 1 / 1),
-            offset = {x = 12, y = 0}
+            offset = {x = 12, y = 0},
+            draw_offset = {x = 0, y = 0}
         },
         death = {
             anim = animator.newAnimation({
                 assets.player.idle[1]
             }, 1 / 1),
-            offset = {x = 40, y = 0}
+            offset = {x = 40, y = 0},
+            draw_offset = {x = 0, y = 0}
         },
         light = {
             anim = animator.newAnimation({
                 assets.player.attack.light[1],
                 assets.player.attack.light[2]
             }, 0.15 / 2),
-            offset = {x = 40, y = 0}
+            offset = {x = 40, y = 0},
+            draw_offset = {x = 0, y = 0}
         }
     }
     self.anims.idle.anim:setLooping(true)
@@ -175,7 +180,7 @@ function Player:new(x, y)
     self.anims.light.anim:setOnAnimationEnd(function()
         self:changeAnim("idle")
     end)
-    self.anims.cur = self.anims.idle.anim
+    self.anims.cur = self.anims.idle
 
     self.sounds = {
         jump = ripple.newSound(assets.sounds.player.jump, {volume = 0.3})
@@ -197,11 +202,11 @@ function Player:update(dt)
             self:changeAnim("jump")
 
             --[[if math.abs(self.vel.y) < self.jump_height / 4 then
-                self.anims.cur:setCurrentFrame(2)
+                self.anims.cur.anim:setCurrentFrame(2)
             elseif self.vel.y <= 0 then
-                self.anims.cur:setCurrentFrame(1)
+                self.anims.cur.anim:setCurrentFrame(1)
             else
-                self.anims.cur:setCurrentFrame(3)
+                self.anims.cur,anim:setCurrentFrame(3)
             end]]--
         elseif self.running and not self.hit_vertical_surface or self.dashing then
             self:changeAnim("run")
@@ -211,10 +216,10 @@ function Player:update(dt)
     end
 
     if not self.anims.cur then
-        self.anims.cur = self.anims.idle.anim
+        self.anims.cur = self.anims.idle
     end
 
-    self.anims.cur:update(dt)
+    self.anims.cur.anim:update(dt)
 
     if self.grounded then
         self.dashed_in_air = false
@@ -285,12 +290,12 @@ function Player:onDeath()
 end
 
 function Player:changeAnim(anim)
-    if self.anims.cur == self.anims[anim].anim then return end
+    if self.anims.cur == self.anims[anim] then return end
 
     self.offset = self.anims[anim].offset
 
-    self.anims.cur = self.anims[anim].anim
-    self.anims.cur:restart()
+    self.anims.cur = self.anims[anim]
+    self.anims.cur.anim:restart()
 end
 
 function Player:takeDamage(dmg)

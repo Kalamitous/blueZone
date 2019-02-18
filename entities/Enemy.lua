@@ -14,11 +14,11 @@ function Enemy:new(spawn_platform)
     self.cur_dist = 0
 	self.desires_move = true
 	self.stopped = false
-    self.max_wait_time = 10
+    self.max_wait_time = 0
     self.move_timer = nil
     self.wait_timer = nil
 
-    self.reaction_time = 0.5
+    self.reaction_time = 1.5
 
     self.dir = 1
     self.view_dist = 450
@@ -50,7 +50,8 @@ function Enemy:new(spawn_platform)
             anim = animator.newAnimation({
                 assets.enemy.idle[1]
             }, 1 / 1),
-            offset = {x = 0, y = 0}
+            offset = {x = 0, y = 0},
+            draw_offset = {x = 0, y = 0}
         },
         run = {
             anim = animator.newAnimation({
@@ -59,22 +60,39 @@ function Enemy:new(spawn_platform)
                 assets.enemy.run[3],
                 assets.enemy.run[4]
             }, 1 / 4),
-            offset = {x = 0, y = 0}
+            offset = {x = 0, y = 0},
+            draw_offset = {x = 0, y = 0}
+        },
+        attack = {
+            anim = animator.newAnimation({
+                assets.enemy.attack[1],
+                assets.enemy.attack[2],
+                assets.enemy.attack[3],
+                assets.enemy.attack[4],
+                assets.enemy.attack[1]
+            }, 1 / 4),
+            offset = {x = 0, y = 0},
+            draw_offset = {x = 24, y = 0}
         }
     }
     self.anims.idle.anim:setLooping(true)
     self.anims.run.anim:setLooping(true)
-    self.anims.cur = self.anims.idle.anim
+    self.anims.attack.anim:setOnAnimationEnd(function()
+        self:changeAnim("idle")
+    end)
+    self.anims.cur = self.anims.idle
 end
 
 function Enemy:update(dt)
-    if self.vel.x ~= 0 or self.vel.y ~= 0 then
-        self:changeAnim("run")
-    else
-        self:changeAnim("idle")
+    if not self.anims.attack.anim:isActive() then
+        if self.vel.x ~= 0 or self.vel.y ~= 0 then
+            self:changeAnim("run")
+        else
+            self:changeAnim("idle")
+        end
     end
 
-    self.anims.cur:update(dt)
+    self.anims.cur.anim:update(dt)
 
     local new_x = self.pos.x + self.vel.x * dt
     local new_y = self.pos.y + self.vel.y * dt
@@ -147,13 +165,22 @@ function Enemy:stop()
 end
 
 function Enemy:shoot(ecs_world)
-    ecs_world:add(Projectile(0, 0, self, self.target))
-    
     self.can_shoot = false
+    self:changeAnim("attack")
+
+    -- if loses sight of target after tick delay
+    local target = self.target
 
     tick.delay(function()
-        self.can_shoot = true
-    end, self.reload_time)
+        if self.health == 0 then return end
+
+        -- TODO: make enemy face target
+        ecs_world:add(Projectile(68, -20, self, target))
+
+        tick.delay(function()
+            self.can_shoot = true
+        end, self.reload_time)
+    end, 4 * 1 / 4)
 end
 
 function Enemy:takeDamage(dmg)
@@ -164,13 +191,26 @@ function Enemy:takeDamage(dmg)
         self.attack_indicator = false
     end, 0.2)
 
+    self:stun(self.stun_time)
+end
+
+function Enemy:stun(time)
     self.stunned = true
+    
     self:stop()
-    if not self.target then
-        self.dir = -self.dir
-    end
+    
     tick.delay(function()
-        self.stunned = false
+        if self.target then
+            self.stunned = false
+        else
+            -- how to look behind 101
+            self:moveTo(self.pos.x - self.dir, self.pos.y)
+            
+            tick.delay(function()
+                self.desires_move = true
+                self.stunned = false
+            end, 3)
+        end
     end, self.stun_time)
 end
 
@@ -179,12 +219,12 @@ function Enemy:onDeath()
 end
 
 function Enemy:changeAnim(anim)
-    if self.anims.cur == self.anims[anim].anim then return end
+    if self.anims.cur == self.anims[anim] then return end
 
     self.offset = self.anims[anim].offset
 
-    self.anims.cur = self.anims[anim].anim
-    self.anims.cur:restart()
+    self.anims.cur = self.anims[anim]
+    self.anims.cur.anim:restart()
 end
 
 return Enemy

@@ -16,10 +16,14 @@ function viewConeFilter(item)
 end
 
 function AISystem:process(e, dt)
+    if e.stunned then
+        return
+    end
+
     -- custom behavior
     if e.think then
         e:think(self.bump_world, dt)
-
+        
         if e.target and e.can_shoot and not e.stunned and e.spotted then
             e:shoot(self.ecs_world)
         end
@@ -27,7 +31,8 @@ function AISystem:process(e, dt)
         return
     end
 
-    if e.desires_move and not e.stunned then
+    if e.desires_move then
+        print("no")
         e:moveTo(e.spawn_platform.x + lume.random(e.spawn_platform.width - 50), e.pos.y)
     end
 
@@ -59,6 +64,7 @@ function AISystem:process(e, dt)
                 e.target = items[1]
                 if e.target ~= e.previous_target then
                     e.spotted = false
+
                     e.delay = tick.delay(function()
                         e.spotted = true
                     end, e.reaction_time)
@@ -68,8 +74,8 @@ function AISystem:process(e, dt)
     end
 
     e.previous_target = e.target
-    
-    if e.target and not e.stunned then
+
+    if e.target then
         if not e.stopped then
             e:stop()
         end
@@ -78,9 +84,8 @@ function AISystem:process(e, dt)
             e:shoot(self.ecs_world)
         end
     else
-        if not e.think then
-            e.spotted = false
-        end
+        e.spotted = false
+
         if e.delay then
             e.delay:stop()
             e.delay = nil
@@ -89,6 +94,7 @@ function AISystem:process(e, dt)
         if e.stopped then
             tick.delay(function()
                 if not e.target then
+                    print("THIS WILL NOT HAPPEN")
                     e.desires_move = true
                 end
             end, lume.random(e.max_wait_time))

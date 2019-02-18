@@ -92,7 +92,7 @@ function game:stage(file)
             game:stage("assets/maps/stage_3")
             game.stage_num = 3
         end
-    end, 5)
+    end, 1)
 end
 
 function game:update(dt)

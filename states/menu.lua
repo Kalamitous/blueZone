@@ -15,7 +15,7 @@ function menu:init()
 
     local logo = menu.panel:create("Image", "logo")
     logo:setParent(container)
-    logo:setImage("assets/images/test-logo.png")
+    logo:setImage("assets/images/logo.png")
     logo:align("center", "top")
     logo:updatePosition()
 
@@ -29,6 +29,7 @@ function menu:init()
     play_button:updatePosition()
     play_button.onRelease = function()
         Gamestate.switch(game)
+        game:init()
     end
 
     local fs_button = menu.panel:create("Button", "fs-button")

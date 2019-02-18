@@ -66,6 +66,12 @@ function Laser:update(dt)
     if not self.charging then
         self.end_pos.x = self.end_pos.x + self.vel.x * dt
         self.end_pos.y = self.end_pos.y + self.vel.y * dt
+    else
+        self.pos.x = self.owner.pos.x + self.owner.hitbox.w / 2
+        self.pos.y = self.owner.pos.y + self.owner.hitbox.h / 2
+        if self.owner.stunned then
+            self.remove = true
+        end
     end
 end
 

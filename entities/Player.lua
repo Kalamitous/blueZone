@@ -293,7 +293,7 @@ end
 function Player:onDeath()
     if not self.dead then
         self.dead = true
-        game.points = math.max(game.points - 2000, 0)
+        game.points = math.max(game.points - 5000, 0)
         self.sounds.player_death:play()
 
         if self.flash_timer then

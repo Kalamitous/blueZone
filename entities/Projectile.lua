@@ -18,7 +18,7 @@ function Projectile:new(x, y, owner, target)
     self.vel.x, self.vel.y = lume.vector(self.ang, self.max_speed)
 
     self.health = 1
-    self.dmg = 10
+    self.dmg = 20
     self.sprite = true
     self.img = assets.objects.orb
     self.is_projectile = true

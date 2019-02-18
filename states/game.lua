@@ -58,16 +58,19 @@ function game:stage(file)
     self.ecs_world:add(
         AISystem(self.ecs_world, self.bump_world),
         DeathSystem,
-        HUDSystem,
         PlayerControlSystem(self.ecs_world),
         UpdateSystem(self.ecs_world),
         LaserSystem(self.bump_world),
         CameraTrackingSystem(self.camera),
         EnemySpawnSystem(self.ecs_world, self.map),
         PhysicsSystem(self.bump_world, self.map),
-        PlayerSpawnSystem(self.ecs_world, self.map),
-        SpriteSystem(self.camera, self.map)
+        SpriteSystem(self.camera, self.map),
+        HUDSystem
     )
+
+    tick.delay(function()
+        self.ecs_world:add(PlayerSpawnSystem(self.ecs_world, self.map))
+    end, 1)
 
     if game.reset_timer then
         game.reset_timer:stop()

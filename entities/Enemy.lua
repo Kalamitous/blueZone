@@ -30,7 +30,7 @@ function Enemy:new(spawn_platform)
     self.can_shoot = true
     self.reload_time = 3
 
-    self.max_health = 1
+    self.max_health = 100
     self.health = self.max_health
     self.health_width = 75
     self.health_height = 10

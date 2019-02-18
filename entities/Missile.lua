@@ -19,7 +19,7 @@ function Missile:new(x, y, owner, target)
     self.vel = {}
     self.vel.x, self.vel.y = lume.vector(self.ang, self.max_speed)
 
-    self.dmg = 20
+    self.dmg = 40
     self.exploded = false
     self.explosion_radius = 100
     self.explosion_duration = 0.2

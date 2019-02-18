@@ -15,7 +15,7 @@ function Laser:new(x, y, owner, target)
     self.vel = {}
     self.vel.x, self.vel.y = lume.vector(self.ang, self.max_speed)
 
-    self.dmg = 10
+    self.dmg = 30
     self.charge_time = 1.5
     self.lifetime = 2
     self.charging = true

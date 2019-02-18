@@ -24,7 +24,7 @@ function AISystem:process(e, dt)
     if e.think then
         e:think(self.bump_world, dt)
         
-        if e.target and e.can_shoot and not e.stunned and e.spotted then
+        if e.target and e.can_shoot and e.spotted then
             e:shoot(self.ecs_world)
         end
 
@@ -32,7 +32,6 @@ function AISystem:process(e, dt)
     end
 
     if e.desires_move then
-        print("no")
         e:moveTo(e.spawn_platform.x + lume.random(e.spawn_platform.width - 50), e.pos.y)
     end
 
@@ -90,11 +89,10 @@ function AISystem:process(e, dt)
             e.delay:stop()
             e.delay = nil
         end
-        -- if enemy doesn't have move_timer then we know it was manually stopped
+
         if e.stopped then
             tick.delay(function()
                 if not e.target then
-                    print("THIS WILL NOT HAPPEN")
                     e.desires_move = true
                 end
             end, lume.random(e.max_wait_time))

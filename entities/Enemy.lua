@@ -49,13 +49,29 @@ function Enemy:new(spawn_platform)
                 assets.enemy.idle[1]
             }, 1 / 1),
             offset = {x = 0, y = 0}
+        },
+        run = {
+            anim = animator.newAnimation({
+                assets.enemy.run[1],
+                assets.enemy.run[2]
+            }, 1 / 4),
+            offset = {x = 0, y = 0}
         }
     }
     self.anims.idle.anim:setLooping(true)
+    self.anims.run.anim:setLooping(true)
     self.anims.cur = self.anims.idle.anim
 end
 
 function Enemy:update(dt)
+    if self.vel.x ~= 0 or self.vel.y ~= 0 then
+        self:changeAnim("run")
+    else
+        self:changeAnim("idle")
+    end
+
+    self.anims.cur:update(dt)
+
     local new_x = self.pos.x + self.vel.x * dt
     local new_y = self.pos.y + self.vel.y * dt
 
@@ -156,6 +172,15 @@ end
 
 function Enemy:onDeath()
     self.remove = true
+end
+
+function Enemy:changeAnim(anim)
+    if self.anims.cur == self.anims[anim].anim then return end
+
+    self.offset = self.anims[anim].offset
+
+    self.anims.cur = self.anims[anim].anim
+    self.anims.cur:restart()
 end
 
 return Enemy

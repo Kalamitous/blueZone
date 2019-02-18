@@ -38,80 +38,83 @@ function Player:new(x, y)
 
     self.can_attack = true
     self.combo = 0
+    self.combo_time = 0
+    self.combo_max_time = 0.65
+    self.laser_charge_time = 0
     self.attacks = {
         light = {
             {
-                offset = {x = self.hitbox.w / 2, y = 0},
-                hitbox = {w = 35, h = self.hitbox.h},
+                offset = {x = 40, y = 0},
+                hitbox = {w = self.hitbox.w + 80, h = self.hitbox.h},
                 duration = 0.1,
                 cooldown = 0.05,
                 dmg = 10
             },
             {
-                offset = {x = self.hitbox.w / 2, y = 0},
-                hitbox = {w = 35, h = self.hitbox.h},
+                offset = {x = 40, y = 0},
+                hitbox = {w = self.hitbox.w + 80, h = self.hitbox.h},
                 duration = 0.1,
                 cooldown = 0.05,
                 dmg = 10
             },
             {
-                offset = {x = self.hitbox.w / 2, y = 0},
-                hitbox = {w = 35, h = self.hitbox.h},
+                offset = {x = 40, y = 0},
+                hitbox = {w = self.hitbox.w + 80, h = self.hitbox.h},
                 duration = 0.1,
                 cooldown = 0.05,
                 dmg = 15
             },
             {
-                offset = {x = self.hitbox.w / 2, y = 0},
-                hitbox = {w = 35, h = self.hitbox.h},
+                offset = {x = 40, y = 0},
+                hitbox = {w = self.hitbox.w + 80, h = self.hitbox.h},
                 duration = 0.1,
-                cooldown = 0.5,
+                cooldown = 0.25,
                 dmg = 20
             }
         },
         heavy = {
             used = false,
             {
-                offset = {x = self.hitbox.w / 2, y = 0},
-                hitbox = {w = 35, h = self.hitbox.h},
-                duration = 0.3,
+                offset = {x = 40, y = 0},
+                hitbox = {w = self.hitbox.w + 80, h = self.hitbox.h},
+                duration = 0.15,
                 cooldown = 0.05,
                 dmg = 20
             },
             {
-                offset = {x = self.hitbox.w / 2, y = 0},
-                hitbox = {w = 35, h = self.hitbox.h},
-                duration = 0.3,
+                offset = {x = 40, y = 0},
+                hitbox = {w = self.hitbox.w + 80, h = self.hitbox.h},
+                duration = 0.15,
                 cooldown = 0.05,
                 dmg = 20
             },
             {
-                offset = {x = self.hitbox.w / 2, y = 0},
-                hitbox = {w = 35, h = self.hitbox.h},
-                duration = 0.3,
+                offset = {x = 40, y = 0},
+                hitbox = {w = self.hitbox.w + 80, h = self.hitbox.h},
+                duration = 0.15,
                 cooldown = 0.05,
                 dmg = 25
             },
             {
-                offset = {x = self.hitbox.w / 2, y = 0},
-                hitbox = {w = 35, h = self.hitbox.h},
-                duration = 0.3,
-                cooldown = 0.5,
+                offset = {x = 40, y = 0},
+                hitbox = {w = self.hitbox.w + 80, h = self.hitbox.h},
+                duration = 0.15,
+                cooldown = 0.25,
                 dmg = 30
             }
         },
         special = {
             {
-                offset = {x = self.hitbox.w / 2, y = 0},
-                hitbox = {w = 35, h = self.hitbox.h},
-                duration = 0.4,
-                cooldown = 0.5,
+                offset = {x = self.hitbox.w + 40, y = 0},
+                hitbox = {w = self.hitbox.w + 80, h = self.hitbox.h},
+                duration = 0.25,
+                cooldown = 0.25,
                 dmg = 40
             },
             {
                 offset = {x = self.hitbox.w / 2, y = 0},
-                duration = 0.4,
-                cooldown = 0.5,
+                duration = 0.25,
+                cooldown = 0.25,
                 dmg = 40
             }
         },
@@ -128,29 +131,51 @@ function Player:new(x, y)
 
     self.anims = {
         scale = 1,
-        idle = animator.newAnimation({
-            assets.player.idle[1]
-        }, 1 / 1),
-        run = animator.newAnimation({
-            assets.player.run[1],
-            assets.player.run[2],
-            assets.player.run[3],
-            assets.player.run[4],
-            assets.player.run[5],
-            assets.player.run[6]
-        }, 1 / 12),
-        jump = animator.newAnimation({
-            assets.player.jump[1]
-        }, 1 / 1),
-        death = animator.newAnimation({
-            assets.player.idle[1]
-        }, 1 / 2)
+        idle = {
+            anim = animator.newAnimation({
+                assets.player.idle[1]
+            }, 1 / 1),
+            offset = {x = 40, y = 0}
+        },
+        run = {
+            anim = animator.newAnimation({
+                assets.player.run[1],
+                assets.player.run[2],
+                assets.player.run[3],
+                assets.player.run[4],
+                assets.player.run[5],
+                assets.player.run[6]
+            }, 1 / 12),
+            offset = {x = 12, y = 0}
+        },
+        jump = {
+            anim = animator.newAnimation({
+                assets.player.jump[1]
+            }, 1 / 1),
+            offset = {x = 12, y = 0}
+        },
+        death = {
+            anim = animator.newAnimation({
+                assets.player.idle[1]
+            }, 1 / 1),
+            offset = {x = 40, y = 0}
+        },
+        light = {
+            anim = animator.newAnimation({
+                assets.player.attack.light[1],
+                assets.player.attack.light[2]
+            }, 0.15 / 2),
+            offset = {x = 40, y = 0}
+        }
     }
-    self.anims.idle:setLooping(true)
-    self.anims.run:setLooping(true)
-    self.anims.jump:setLooping(true)
-    self.anims.death:setLooping(true)
-    self.anims.cur = self.anims.idle
+    self.anims.idle.anim:setLooping(true)
+    self.anims.run.anim:setLooping(true)
+    self.anims.jump.anim:setLooping(true)
+    self.anims.death.anim:setLooping(true)
+    self.anims.light.anim:setOnAnimationEnd(function()
+        self:changeAnim("idle")
+    end)
+    self.anims.cur = self.anims.idle.anim
 
     self.sounds = {
         jump = ripple.newSound(assets.sounds.player.jump, {volume = 0.3})
@@ -158,9 +183,17 @@ function Player:new(x, y)
 end
 
 function Player:update(dt)
-    if self.health > 0 then
+    self.combo_time = self.combo_time + dt
+
+    if self.combo_time >= self.combo_max_time then
+        self.combo = 0
+        self.combo_time = 0
+        
+        self.attacks.heavy.used = false
+    end
+
+    if self.health > 0 and self.can_attack then
         if not self.grounded and not self.dashing then
-            self.offset.x = 12
             self:changeAnim("jump")
 
             --[[if math.abs(self.vel.y) < self.jump_height / 4 then
@@ -171,12 +204,14 @@ function Player:update(dt)
                 self.anims.cur:setCurrentFrame(3)
             end]]--
         elseif self.running and not self.hit_vertical_surface or self.dashing then
-            self.offset.x = 12
             self:changeAnim("run")
         else
-            self.offset.x = 40
             self:changeAnim("idle")
         end
+    end
+
+    if not self.anims.cur then
+        self.anims.cur = self.anims.idle.anim
     end
 
     self.anims.cur:update(dt)
@@ -248,9 +283,11 @@ function Player:onDeath()
 end
 
 function Player:changeAnim(anim)
-    if self.anims.cur == self.anims[anim] then return end
+    if self.anims.cur == self.anims[anim].anim then return end
 
-    self.anims.cur = self.anims[anim]
+    self.offset = self.anims[anim].offset
+
+    self.anims.cur = self.anims[anim].anim
     self.anims.cur:restart()
 end
 
@@ -302,6 +339,8 @@ function Player:attack(ecs_world, type, num)
 
     local attack = self.attacks[type][num]
 
+    self:changeAnim("light")
+    self.combo_time = 0
     self.can_attack = false
     if type == "heavy" then
         self.attacks.heavy.used = true
@@ -310,7 +349,7 @@ function Player:attack(ecs_world, type, num)
     end
     
     if type == "special" and num == 2 then
-        ecs_world:add(LaserAttack(attack.offset.x, attack.offset.y, attack.duration, self))
+        ecs_world:add(LaserAttack(attack.offset.x, attack.offset.y, attack.duration, self.laser_charge_time, self))
     else
         ecs_world:add(Attack(attack.offset.x, attack.offset.y, attack.hitbox.w, attack.hitbox.h, attack.duration, attack.dmg, self))
     end

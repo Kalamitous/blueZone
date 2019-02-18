@@ -124,10 +124,26 @@ function PlayerControlSystem:process(e, dt)
             end
         end
     elseif input:pressed("special") then
-        if self.combo == 0 then
-            e:attack(self.ecs_world, "special", 2)
+        if e.combo ~= 0 then
+            if e:attack(self.ecs_world, "special", 1) then
+                e.combo = 0
+            end
         else
-            e:attack(self.ecs_world, "special", 1)
+            if e.grounded and not e.running and e.can_attack then
+                e.laser_charge_time = e.laser_charge_time + dt
+            end
+        end
+    elseif input:down("special") then
+        if e.grounded and not e.running and e.can_attack and e.laser_charge_time > 0 then
+            e.laser_charge_time = math.min(e.laser_charge_time + dt, 4)
+        else
+            e.laser_charge_time = 0
+        end
+    elseif input:released("special") then
+        if e.laser_charge_time > 0 then
+            e:attack(self.ecs_world, "special", 2)
+
+            e.laser_charge_time = 0
         end
     end
 end

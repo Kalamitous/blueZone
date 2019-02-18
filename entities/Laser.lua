@@ -29,6 +29,9 @@ function Laser:new(x, y, owner, target)
     self.end_pos = {}
     self.end_pos.x = self.pos.x + (self.vel.x * self.lifetime)
     self.end_pos.y = self.pos.y + (self.vel.y * self.lifetime)
+    
+    self.thickness = 3
+    self.age = 0
 
     self.is_laser = true
     
@@ -79,6 +82,14 @@ function Laser:filter(e)
     if not e or not e.is_enemy then
         return "cross"
     end
+end
+
+function Laser:draw()
+    love.graphics.setColor(1, 0.1, 0.1, 0.9)
+    love.graphics.setLineWidth(self.thickness)
+    love.graphics.line(self.pos.x, self.pos.y, self.ending.x, self.ending.y)
+    love.graphics.setLineWidth(1)
+    love.graphics.setColor(1, 1, 1, 1)
 end
 
 function Laser:onCollide(cols, len)

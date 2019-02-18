@@ -26,7 +26,7 @@ function Attack:update(dt)
 end
 
 function Attack:draw()
-    love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
+    love.graphics.rectangle("line", self.pos.x, self.pos.y, self.hitbox.w, self.hitbox.h)
 end
 
 function Attack:onCollide(cols, len)

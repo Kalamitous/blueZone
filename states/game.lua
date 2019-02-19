@@ -10,7 +10,7 @@ local update_filter = tiny.filter("!isDrawSystem")
 local draw_filter = tiny.filter("isDrawSystem")
 
 function game:init()
-    self:stage("assets/maps/stage_3")
+    self:stage("assets/maps/stage_1")
 
     assets.sounds.music.BGM_3:play()
     assets.sounds.music.BGM_3:setVolume(0)

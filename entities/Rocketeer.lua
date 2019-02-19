@@ -4,7 +4,8 @@ function Rocketeer:new(spawn_platform)
     Rocketeer.super.new(self, spawn_platform)
 
     self.max_speed = 200
-
+    self.max_health = 125
+    self.health = self.max_health
     self.view_box = {}
     self.view_box.idle_size = {w = 500, h = 500}
     self.view_box.lock_size = {w = 1000, h = 1000}
@@ -35,9 +36,17 @@ function Rocketeer:new(spawn_platform)
             }, 1 / 1),
             offset = {x = 0, y = 0},
             draw_offset = {x = 0, y = 0}
+        },
+        death = {
+            anim = animator.newAnimation({
+                assets.enemy[3].death[1],
+            }, 1 / 1),
+            offset = {x = 0, y = 0},
+            draw_offset = {x = 0, y = 0}
         }
     }
     self.anims.idle.anim:setLooping(true)
+    self.anims.death.anim:setLooping(true)
     self.anims.attack.anim:setActive(false)
     self.anims.attack.anim:setOnAnimationEnd(function()
         self:changeAnim("idle")
@@ -45,11 +54,27 @@ function Rocketeer:new(spawn_platform)
     self.anims.cur = self.anims.idle
 end
 
+function Rocketeer:onDeath()
+    if not self.dead then
+        self.dead = true
+        self.anims.cur = self.anims.death
+        self.sounds.death:play()
+
+        tick.delay(function()
+            self.remove = true
+        end, 1)
+    end
+end
+
 function Rocketeer:update(dt)
-    if not self.anims.attack.anim:isActive() then
+    if self.dead then
+        self.pos.y = self.pos.y + 300 * dt
+    end
+
+    if not self.anims.attack.anim:isActive() and not self.dead then
         self:changeAnim("idle")
 
-        if self.vel.y < 0 then
+        if self.vel.y > 0 then
             self.anims.idle.anim:setCurrentFrame(1)
         else
             self.anims.idle.anim:setCurrentFrame(2)
@@ -143,11 +168,23 @@ function Rocketeer:shoot(ecs_world)
     self.can_shoot = false
     self:changeAnim("attack")
 
+    if self.target then
+        if self.target.pos.x < self.pos.x then
+            if self.dir == 1 then
+                self:moveTo(self.pos.x - self.dir, self.pos.y)
+            end
+        elseif self.target.pos.x > self.pos.x then
+            if self.dir == -1 then
+                self:moveTo(self.pos.x - self.dir, self.pos.y)
+            end
+        end
+    end
+
     tick.delay(function()
         if self.health == 0 or self.stunned then return end
 
-        -- TODO: make enemy face target
         if self.target then
+            self.sounds.blast:play()
             ecs_world:add(Missile(68, -20, self, self.target))
         end
 

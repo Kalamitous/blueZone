@@ -6,7 +6,9 @@ function Beamer:new(spawn_platform)
     self.reload_time = 2
     self.in_attack = false
     self.color = {1, 1, 0.8}
-
+    self.max_health = 125
+    self.view_dist = 600
+    self.health = self.max_health
     self.anims = {
         scale = 1,
         idle = {
@@ -32,10 +34,18 @@ function Beamer:new(spawn_platform)
             }, 1 / 4),
             offset = {x = 0, y = 0},
             draw_offset = {x = 24, y = 0}
+        },
+        death = {
+            anim = animator.newAnimation({
+                assets.enemy[2].death[1],
+            }, 1 / 1),
+            offset = {x = 0, y = 0},
+            draw_offset = {x = 0, y = 0}
         }
     }
     self.anims.idle.anim:setLooping(true)
     self.anims.run.anim:setLooping(true)
+    self.anims.death.anim:setLooping(true)
     self.anims.attack.anim:setActive(false)
     self.anims.attack.anim:setOnAnimationEnd(function()
         self:changeAnim("idle")
@@ -78,7 +88,18 @@ function Beamer:shoot(ecs_world)
     tick.delay(function()
         if self.health == 0 or self.stunned then return end
 
-        -- TODO: make enemy face target
+        if self.target then
+            if self.target.pos.x < self.pos.x then
+                if self.dir == 1 then
+                    self:moveTo(self.pos.x - self.dir, self.pos.y)
+                end
+            elseif self.target.pos.x > self.pos.x then
+                if self.dir == -1 then
+                    self:moveTo(self.pos.x - self.dir, self.pos.y)
+                end
+            end
+        end
+
         local laser_duration = 1.5 + 2
         if self.target then
             ecs_world:add(Laser(52, -16, self, self.target))

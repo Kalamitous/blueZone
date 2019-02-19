@@ -16,7 +16,7 @@ function viewConeFilter(item)
 end
 
 function AISystem:process(e, dt)
-    if e.stunned then
+    if e.stunned or e.dead then
         return
     end
 

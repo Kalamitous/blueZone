@@ -108,12 +108,12 @@ function Player:new(x, y)
             {
                 offset = {x = self.hitbox.w + 40, y = 0},
                 hitbox = {w = self.hitbox.w + 80, h = self.hitbox.h},
-                duration = 0.25,
+                duration = 0.10,
                 cooldown = 0.25,
                 dmg = 40
             },
             {
-                offset = {x = self.hitbox.w / 2, y = 0},
+                offset = {x = self.hitbox.w / 2 + 34, y = -22},
                 duration = 0.25,
                 cooldown = 0.25,
                 dmg = 40
@@ -160,17 +160,85 @@ function Player:new(x, y)
         },
         death = {
             anim = animator.newAnimation({
-                assets.player.idle[1]
+                assets.player.death[1]
             }, 1 / 1),
             offset = {x = 40, y = 0},
             draw_offset = {x = 0, y = 0}
         },
-        light = {
+        light1 = {
             anim = animator.newAnimation({
-                assets.player.attack.light[1],
-                assets.player.attack.light[2]
+                assets.player.attack.light[1][1],
+                assets.player.attack.light[1][2]
             }, 0.15 / 2),
             offset = {x = 40, y = 0},
+            draw_offset = {x = 0, y = 0}
+        },
+        light2 = {
+            anim = animator.newAnimation({
+                assets.player.attack.light[2][1],
+                assets.player.attack.light[2][2]
+            }, 0.15 / 2),
+            offset = {x = 40, y = 0},
+            draw_offset = {x = 0, y = 0}
+        },
+        light3 = {
+            anim = animator.newAnimation({
+                assets.player.attack.light[3][1],
+                assets.player.attack.light[3][2]
+            }, 0.15 / 2),
+            offset = {x = 53, y = 0},
+            draw_offset = {x = 0, y = 0}
+        },
+        light4 = {
+            anim = animator.newAnimation({
+                assets.player.attack.light[4][1],
+                assets.player.attack.light[4][2]
+            }, 0.15 / 2),
+            offset = {x = 53, y = 0},
+            draw_offset = {x = 0, y = 0}
+        },
+        heavy1 = {
+            anim = animator.newAnimation({
+                assets.player.attack.heavy[1][1],
+                assets.player.attack.heavy[1][2],
+                assets.player.attack.heavy[1][3]
+            }, 0.2 / 3),
+            offset = {x = 40, y = 0},
+            draw_offset = {x = 0, y = 0}
+        },
+        heavy2 = {
+            anim = animator.newAnimation({
+                assets.player.attack.heavy[2][1],
+                assets.player.attack.heavy[2][2],
+                assets.player.attack.heavy[2][3]
+            }, 0.2 / 3),
+            offset = {x = 40, y = 0},
+            draw_offset = {x = 0, y = 0}
+        },
+        heavy3 = {
+            anim = animator.newAnimation({
+                assets.player.attack.heavy[3][1],
+                assets.player.attack.heavy[3][2],
+                assets.player.attack.heavy[3][3]
+            }, 0.2 / 3),
+            offset = {x = 53, y = 0},
+            draw_offset = {x = 0, y = 0}
+        },
+        heavy4 = {
+            anim = animator.newAnimation({
+                assets.player.attack.heavy[4][1],
+                assets.player.attack.heavy[4][2],
+                assets.player.attack.heavy[4][3]
+            }, 0.2 / 3),
+            offset = {x = 53, y = 0},
+            draw_offset = {x = 0, y = 0}
+        },
+        special = {
+            anim = animator.newAnimation({
+                assets.player.attack.special[1],
+                assets.player.attack.special[2]
+            }, 1 / 1),
+            offset = {x = 61, y = 0},
             draw_offset = {x = 0, y = 0}
         }
     }
@@ -178,7 +246,34 @@ function Player:new(x, y)
     self.anims.run.anim:setLooping(true)
     self.anims.jump.anim:setLooping(true)
     self.anims.death.anim:setLooping(true)
-    self.anims.light.anim:setOnAnimationEnd(function()
+
+    self.anims.light1.anim:setOnAnimationEnd(function()
+        self:changeAnim("idle")
+    end)
+    self.anims.light2.anim:setOnAnimationEnd(function()
+        self:changeAnim("idle")
+    end)
+    self.anims.light3.anim:setOnAnimationEnd(function()
+        self:changeAnim("idle")
+    end)
+    self.anims.light4.anim:setOnAnimationEnd(function()
+        self:changeAnim("idle")
+    end)
+
+    self.anims.heavy1.anim:setOnAnimationEnd(function()
+        self:changeAnim("idle")
+    end)
+    self.anims.heavy2.anim:setOnAnimationEnd(function()
+        self:changeAnim("idle")
+    end)
+    self.anims.heavy3.anim:setOnAnimationEnd(function()
+        self:changeAnim("idle")
+    end)
+    self.anims.heavy4.anim:setOnAnimationEnd(function()
+        self:changeAnim("idle")
+    end)
+
+    self.anims.special.anim:setOnAnimationEnd(function()
         self:changeAnim("idle")
     end)
     self.anims.cur = self.anims.idle
@@ -188,18 +283,23 @@ function Player:new(x, y)
         dash = ripple.newSound(assets.sounds.player.dash, {volume = 1}),
         emp = ripple.newSound(assets.sounds.player.emp, {volume = 1}),
         enemy_hit = ripple.newSound(assets.sounds.player.jump, {volume = 1}),
-        footstep = ripple.newSound(assets.sounds.player.footstep, {volume = 1}),
+        footstep1 = ripple.newSound(assets.sounds.player.footstep1, {volume = 0.15}),
+        footstep2 = ripple.newSound(assets.sounds.player.footstep2, {volume = 0.15}),
         heavy_attack = ripple.newSound(assets.sounds.player.heavy_attack, {volume = 1}),
-        heavy_finisher = ripple.newSound(assets.sounds.player.heavy_finisher, {volume = 1}),
+        heavy_finisher = ripple.newSound(assets.sounds.player.heavy_finisher, {volume = 0.9}),
         jump = ripple.newSound(assets.sounds.player.jump, {volume = 1}),
         land = ripple.newSound(assets.sounds.player.land, {volume = 1}),
-        laser_blast = ripple.newSound(assets.sounds.player.laser_blast, {volume = 0.5}),
-        laser_charge = ripple.newSound(assets.sounds.player.laser_charge, {volume = 0.1}),
+        laser_blast = ripple.newSound(assets.sounds.player.laser_blast, {volume = 0.9}),
+        laser_charge = ripple.newSound(assets.sounds.player.laser_charge, {volume = 0.7}),
         light_attack = ripple.newSound(assets.sounds.player.light_attack, {volume = 0.3}),
-        light_finisher = ripple.newSound(assets.sounds.player.light_finisher, {volume = 1}),
+        light_finisher = ripple.newSound(assets.sounds.player.light_finisher, {volume = 0.5}),
         player_death = ripple.newSound(assets.sounds.player.player_death, {volume = 1}),
-        player_hit = ripple.newSound(assets.sounds.player.player_hit, {volume = 1}),
+        player_hit = ripple.newSound(assets.sounds.player.player_hit, {volume = 0.5}),
     }
+
+    self.footstep1_played = false
+    self.footstep2_played = false
+    self.laser_charge_played = false
 end
 
 function Player:update(dt)
@@ -212,7 +312,7 @@ function Player:update(dt)
         self.attacks.heavy.used = false
     end
 
-    if self.health > 0 and self.can_attack then
+    if self.health > 0 and self.can_attack and self.laser_charge_time == 0 then
         if not self.grounded and not self.dashing then
             self:changeAnim("jump")
 
@@ -225,6 +325,19 @@ function Player:update(dt)
             end]]--
         elseif self.running and not self.hit_vertical_surface or self.dashing then
             self:changeAnim("run")
+            if self.anims.cur.anim:getCurrentFrame() == 1 then
+                if not self.footstep1_played then
+                    self.sounds.footstep1:play()
+                    self.footstep1_played = true
+                    self.footstep2_played = false
+                end
+            elseif self.anims.cur.anim:getCurrentFrame() == 4 then
+                if not self.footstep2_played then
+                    self.sounds.footstep2:play()
+                    self.footstep2_played = true
+                    self.footstep1_played = false
+                end
+            end
         else
             self:changeAnim("idle")
         end
@@ -314,8 +427,8 @@ function Player:changeAnim(anim)
     self.anims.cur.anim:restart()
 end
 
-function Player:takeDamage(dmg)
-    if self.dashing or self.invincible or self.dead then return end
+function Player:takeDamage(dmg, bypass)
+    if (self.dashing and not bypass) or self.invincible or self.dead then return end
 
     self.health = math.max(self.health - dmg, 0)
     game.points = math.max(game.points - dmg * 100, 0)
@@ -363,7 +476,6 @@ function Player:attack(ecs_world, type, num)
 
     local attack = self.attacks[type][num]
 
-    self:changeAnim("light")
     self.combo_time = 0
     self.can_attack = false
     if type == "heavy" then
@@ -375,12 +487,25 @@ function Player:attack(ecs_world, type, num)
     if type == "special" and num == 2 then
         ecs_world:add(LaserAttack(attack.offset.x, attack.offset.y, attack.duration, self.laser_charge_time, self))
     else
-        ecs_world:add(Attack(attack.offset.x, attack.offset.y, attack.hitbox.w, attack.hitbox.h, attack.duration, attack.dmg, self))
+        if type == "special" and num == 1 then
+            ecs_world:add(Attack(attack.offset.x, attack.offset.y, attack.hitbox.w, attack.hitbox.h, attack.duration, attack.dmg * ((self.combo + 1) / 4), self))
+        else
+            ecs_world:add(Attack(attack.offset.x, attack.offset.y, attack.hitbox.w, attack.hitbox.h, attack.duration, attack.dmg, self))
+        end
     end
 
     tick.delay(function() 
         self.can_attack = true
     end, attack.duration + attack.cooldown)
+
+    if type == "light" then
+        self:changeAnim("light" .. tostring(num))
+    elseif type == "heavy" then
+        self:changeAnim("heavy" .. tostring(num))
+    elseif type == "special" then
+        self:changeAnim("special")
+        self.anims.cur.anim:setCurrentFrame(num)
+    end
 
     return true
 end

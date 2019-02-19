@@ -35,7 +35,7 @@ return {
         local style = attributes.style
         
         table.insert(self.draw_table, function()
-            love.graphics.setColor(unpack(style.color))
+            love.graphics.setColor(unpack(style.text_color))
             love.graphics.draw(attributes.text, attributes.x, attributes.y) 
             love.graphics.setColor(1, 1, 1, 1)
         end)

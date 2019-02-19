@@ -1,8 +1,9 @@
 local PlayerControlSystem = tiny.processingSystem(Object:extend())
 PlayerControlSystem.filter = tiny.filter("is_player")
 
-function PlayerControlSystem:new(ecs_world)
+function PlayerControlSystem:new(ecs_world, camera)
     self.ecs_world = ecs_world
+    self.camera = camera
 end
 
 function PlayerControlSystem:process(e, dt)
@@ -137,6 +138,7 @@ function PlayerControlSystem:process(e, dt)
             if e:attack(self.ecs_world, "special", 1) then
                 e.combo = 0
                 e.sounds.emp:play()
+                self.camera:shake(15, 0.25, 144)
             end
         else
             if e.grounded and not e.running and e.can_attack then
@@ -146,26 +148,39 @@ function PlayerControlSystem:process(e, dt)
     elseif input:down("special") then
         if e.grounded and not e.running and e.can_attack and e.laser_charge_time > 0 then
             e.laser_charge_time = math.min(e.laser_charge_time + dt, 4)
-            e.sounds.laser_charge:play()
+            if not e.laser_charge_played then
+                e.sounds.laser_charge:play()
+                e.laser_charge_played = true
+            end
 
             if e.laser_charge_time == 4 then
+                self.camera:shake(e.laser_charge_time * 10, 1, 144)
                 e:attack(self.ecs_world, "special", 2)
                 e.laser_charge_time = 0
-
+                e.laser_charge_played = false
                 e.sounds.laser_charge:stop()
                 e.sounds.laser_blast:play()
             end
+
+            e:changeAnim("special")
+            e.anims.cur.anim:setCurrentFrame(2)
         else
             e.laser_charge_time = 0
         end
     elseif input:released("special") then
         if e.laser_charge_time > 0 then
+            self.camera:shake(e.laser_charge_time * 10, 1, 144)
             e:attack(self.ecs_world, "special", 2)
             e.laser_charge_time = 0
 
+            e.laser_charge_played = false
             e.sounds.laser_charge:stop()
             e.sounds.laser_blast:play()
         end
+    end
+
+    if e.laser_charge_time == 0 then
+        e.sounds.laser_charge:stop()
     end
 end
 

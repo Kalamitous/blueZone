@@ -42,6 +42,7 @@ LaserSystem = require "systems.LaserSystem"
 game = require "states.game"
 menu = require "states.menu"
 pause = require "states.pause"
+game_over = require "states.game_over"
 
 assets = cargo.init("assets")
 input = baton.new {
@@ -61,11 +62,16 @@ input = baton.new {
     joystick = love.joystick.getJoysticks()[1],
 }
 
+opacity = 0
+fade_out = false
+fade_in = false
+
 function love.load()
+    love.window.setFullscreen(true)
+    
     math.randomseed(os.time())
     math.random(); math.random(); math.random()
 
-    -- temporary
     love.graphics.setDefaultFilter("nearest", "nearest")
 
     Gamestate.switch(menu)
@@ -76,8 +82,45 @@ function love.update(dt)
     tick.update(dt)
 
     Gamestate.update(dt)
+
+    if fade_in then
+        opacity = math.min(opacity + dt, 1)
+
+        if opacity == 1 then
+            fade_in = false
+        end
+
+        if game.stage_num == 1 then
+            assets.sounds.music.BGM_2:setVolume(opacity / 2)
+        elseif game.stage_num == 2 then
+            assets.sounds.music.BGM_3:setVolume(opacity / 2)
+        end
+    elseif fade_out then
+        opacity = math.max(opacity - dt, 0)
+
+        if opacity == 0 then
+            fade_out = false
+        end
+
+        if game.stage_num == 2 then
+            assets.sounds.music.BGM_1:setVolume(opacity / 2)
+        elseif game.stage_num == 3 then
+            assets.sounds.music.BGM_2:setVolume(opacity / 2)
+        elseif game.stage_num == 0 then
+            assets.sounds.music.BGM_3:setVolume(opacity / 2)
+        end
+    end
 end
 
 function love.draw()
+    local window_w, window_h = love.graphics.getDimensions()
+    local bg_w, bg_h = assets.objects.bg:getDimensions()
+
+    love.graphics.draw(assets.objects.bg, 0, 0, 0, window_w / 1800, window_w / 1800)
+
     Gamestate.draw(dt)
+
+    love.graphics.setColor(0, 0, 0, opacity)
+    love.graphics.rectangle("fill", 0, 0, window_w, window_h)
+    love.graphics.setColor(1, 1, 1, 1)
 end

@@ -28,8 +28,13 @@ function menu:init()
     play_button:setStyle(button_style)
     play_button:updatePosition()
     play_button.onRelease = function()
-        Gamestate.switch(game)
-        game:init()
+        fade_in = true
+
+        tick.delay(function() 
+            Gamestate.switch(game)
+            game:init()
+            fade_out = true
+        end, 1)
     end
 
     local fs_button = menu.panel:create("Button", "fs-button")

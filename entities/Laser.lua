@@ -15,9 +15,9 @@ function Laser:new(x, y, owner, target)
     self.vel = {}
     self.vel.x, self.vel.y = lume.vector(self.ang, self.max_speed)
 
-    self.dmg = 30
-    self.charge_time = 1.5
-    self.lifetime = 2
+    self.dmg = 25
+    self.charge_time = 2
+    self.lifetime = 1.5
     self.charging = true
     self.flash_state = false
     self.flash_delay = 0.10
@@ -43,6 +43,11 @@ function Laser:new(x, y, owner, target)
 
     end, self.charge_time)
     self:flash()
+
+    self.sound_played = false
+    self.sounds = {
+        laser = ripple.newSound(assets.sounds.objects.enemy_laser, {volume = 0.5}),
+    }
 end
 
 function Laser:flash()
@@ -66,6 +71,11 @@ function Laser:update(dt)
     if not self.charging then
         self.end_pos.x = self.end_pos.x + self.vel.x * dt
         self.end_pos.y = self.end_pos.y + self.vel.y * dt
+
+        if not self.sound_played then
+            self.sound_played = true
+            self.sounds.laser:play()
+        end
     else
         --self.pos.x = self.owner.pos.x + self.owner.hitbox.w / 2
         --self.pos.y = self.owner.pos.y + self.owner.hitbox.h / 2
@@ -91,7 +101,7 @@ function Laser:onCollide(cols, len)
         elseif e.is_player and not e.invincible and not e.dead and not self.charging then
             e:takeDamage(self.dmg)
 
-            if e.dead then
+            if e.health == 0 then
                 e.vel.x, self.vel.y = lume.vector(self.ang, 800)
             end
 

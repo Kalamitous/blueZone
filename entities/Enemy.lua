@@ -18,7 +18,7 @@ function Enemy:new(spawn_platform)
     self.move_timer = nil
     self.wait_timer = nil
 
-    self.reaction_time = 0.5
+    self.reaction_time = 1
 
     self.dir = 1
     self.view_dist = 450
@@ -36,13 +36,21 @@ function Enemy:new(spawn_platform)
     self.health_height = 10
     self.health_hover = 25
     self.stunned = false
-    self.stun_time = 1.5
+    self.stun_time = 1
 
     self.last_hit = nil
     self.attack_indicator = false
 
     self.sprite = true
     self.is_enemy = true
+    self.dead = false
+
+    self.dizzy = animator.newAnimation({
+        assets.objects.dizzy[1],
+        assets.objects.dizzy[2],
+        assets.objects.dizzy[3]
+    }, 1 / 3)
+    self.dizzy:setLooping(true)
 
     self.anims = {
         scale = 1,
@@ -63,6 +71,13 @@ function Enemy:new(spawn_platform)
             offset = {x = 0, y = 0},
             draw_offset = {x = 0, y = 0}
         },
+        death = {
+            anim = animator.newAnimation({
+                assets.enemy[1].death[1],
+            }, 1 / 1),
+            offset = {x = 0, y = 0},
+            draw_offset = {x = 0, y = 0}
+        },
         attack = {
             anim = animator.newAnimation({
                 assets.enemy[1].attack[1],
@@ -77,11 +92,17 @@ function Enemy:new(spawn_platform)
     }
     self.anims.idle.anim:setLooping(true)
     self.anims.run.anim:setLooping(true)
+    self.anims.death.anim:setLooping(true)
     self.anims.attack.anim:setActive(false)
     self.anims.attack.anim:setOnAnimationEnd(function()
         self:changeAnim("idle")
     end)
     self.anims.cur = self.anims.idle
+
+    self.sounds = {
+        death = ripple.newSound(assets.sounds.enemy.enemy_death, {volume = 0.5}),
+        blast = ripple.newSound(assets.sounds.enemy.enemy_blast, {volume = 0.2}),
+    }
 end
 
 function Enemy:update(dt)
@@ -94,6 +115,10 @@ function Enemy:update(dt)
     end
 
     self.anims.cur.anim:update(dt)
+
+    if self.stunned then
+        self.dizzy:update(dt)
+    end
 
     local new_x = self.pos.x + self.vel.x * dt
     local new_y = self.pos.y + self.vel.y * dt
@@ -122,11 +147,14 @@ function Enemy:draw()
 end
 
 function Enemy:drawHealthbar()
+    if self.dead then return end
+    
     center_x = self.pos.x + self.hitbox.w / 2
     indicatorWidth = self.health_width * (self.health / self.max_health)
-
+    love.graphics.setColor(0,0,0)
+    love.graphics.rectangle("fill", center_x - self.health_width / 2 - 1, self.pos.y - self.health_hover - self.health_height - 1, self.health_width + 2, self.health_height + 2)
+    love.graphics.setColor(1,1,1)
     love.graphics.rectangle("fill", center_x - self.health_width / 2, self.pos.y - self.health_hover - self.health_height, self.health_width, self.health_height)
-
     love.graphics.setColor(1,0,0)
     love.graphics.rectangle("fill", center_x - self.health_width / 2, self.pos.y - self.health_hover - self.health_height, indicatorWidth, self.health_height)
     love.graphics.setColor(1,1,1)
@@ -169,13 +197,23 @@ function Enemy:shoot(ecs_world)
     self.can_shoot = false
     self:changeAnim("attack")
 
-    -- if loses sight of target after tick delay
-    local target = self.target
-
+    if self.target then
+        if self.target.pos.x < self.pos.x then
+            if self.dir == 1 then
+                self:moveTo(self.pos.x - self.dir, self.pos.y)
+            end
+        elseif self.target.pos.x > self.pos.x then
+            if self.dir == -1 then
+                self:moveTo(self.pos.x - self.dir, self.pos.y)
+            end
+        end
+    end
+    
     tick.delay(function()
         if self.health == 0 or self.stunned then return end
 
         if self.target then
+            self.sounds.blast:play()
             ecs_world:add(Projectile(68, -20, self, self.target))
         end
 
@@ -228,7 +266,15 @@ function Enemy:stun(time)
 end
 
 function Enemy:onDeath()
-    self.remove = true
+    if not self.dead then
+        self.dead = true
+        self.anims.cur.anim = self.anims.death.anim
+        self.sounds.death:play()
+
+        tick.delay(function()
+            self.remove = true
+        end, 1)
+    end
 end
 
 function Enemy:changeAnim(anim)

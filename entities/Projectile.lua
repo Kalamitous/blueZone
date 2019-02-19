@@ -18,7 +18,7 @@ function Projectile:new(x, y, owner, target)
     self.vel.x, self.vel.y = lume.vector(self.ang, self.max_speed)
 
     self.health = 1
-    self.dmg = 20
+    self.dmg = 15
     self.sprite = true
     self.img = assets.objects.orb
     self.is_projectile = true
@@ -33,9 +33,7 @@ end
 
 function Projectile:filter(e)
     if not e then return end
-    if e.is_projectile then
-        return "slide"
-    end
+
     if e.is_player then
         return "cross"
     end
@@ -55,7 +53,7 @@ function Projectile:onCollide(cols, len)
         elseif e.is_player and not e.invincible and not e.dead then
             e:takeDamage(self.dmg)
 
-            if e.dead then
+            if e.health == 0 then
                 e.vel.x, self.vel.y = lume.vector(self.ang, 800)
             end
 

@@ -28,11 +28,19 @@ function SpriteSystem:process(e, dt)
             local cur_anim = e.anims.cur.anim
             local x = e.pos.x + e.hitbox.w / 2 + (e.offset.x + draw_offset.x) * e.dir - cur_anim:getWidth() * scale / 2 * e.dir
             local y = e.pos.y + e.hitbox.h + (e.offset.y + draw_offset.y) - cur_anim:getHeight() * scale
-            
+
             love.graphics.push()
             love.graphics.translate(x, y)
             love.graphics.scale(scale * e.dir, scale)
                 cur_anim:draw()
+            love.graphics.pop()
+
+            love.graphics.push()
+            love.graphics.translate(x, y)
+            love.graphics.scale(scale * e.dir, scale)
+                if e.stunned and not e.dead then
+                    e.dizzy:draw()
+                end
             love.graphics.pop()
         end
 

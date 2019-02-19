@@ -67,8 +67,6 @@ fade_out = false
 fade_in = false
 
 function love.load()
-    love.window.setFullscreen(true)
-    
     math.randomseed(os.time())
     math.random(); math.random(); math.random()
 
